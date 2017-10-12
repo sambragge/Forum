@@ -12,7 +12,7 @@ import (
 
 	"gopkg.in/mgo.v2/bson"
 
-	"sambragge/theForum/models"
+	"sambragge/forum/models"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"

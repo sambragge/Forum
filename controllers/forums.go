@@ -6,7 +6,7 @@ import (
 	"log"
 	"net/http"
 
-	"sambragge/theForum/models"
+	"sambragge/forum/models"
 
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"

@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"sambragge/theForum/controllers"
-	"sambragge/theForum/routes"
+	"sambragge/forum/controllers"
+	"sambragge/forum/routes"
 
 	mgo "gopkg.in/mgo.v2"
 )

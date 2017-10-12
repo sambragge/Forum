@@ -3,7 +3,7 @@ package routes
 import (
 	"net/http"
 
-	"sambragge/theForum/controllers"
+	"sambragge/forum/controllers"
 
 	"github.com/gorilla/mux"
 )
