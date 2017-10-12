@@ -104,11 +104,15 @@ func (fc *ForumController) CreatePost(w http.ResponseWriter, r *http.Request) {
 
 }
 func (fc *ForumController) GetPosts(w http.ResponseWriter, r *http.Request) {
+	log.Print("In GetPosts")
 	results := make([]*models.Post, 0)
 	if err := fc.posts.Find(bson.M{}).All(&results); err != nil {
 		SendAsJSON(w, false, []string{"Error getting all posts", err.Error()})
 		return
 	}
+	// for _, post := range results {
+	// 	post.Populate(fc.users, fc.comments)
+	// }
 	SendAsJSON(w, true, results)
 }
 

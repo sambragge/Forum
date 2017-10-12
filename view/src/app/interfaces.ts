@@ -2,22 +2,26 @@
 //=== !APLICATION STATE! ===\\ : high level
 export interface IAppState {
     user: IUser,
-    users: IUser[],
     forums: IForum[],
+    loading:boolean
 }
 //==========================\\
 
 // header
 export interface IHeaderProps {
     logout: Function,
+    forums:IForum[],
     user: IUser,
 }
 export interface IAuthbarProps {
     logout: Function,
     user: IUser,
 }
+export interface INavbarProps {
+    forums:IForum[],
+}
 
-// loginPage
+// LoginPage
 export interface ILoginPageState {
     email: string,
     password: string,
@@ -28,11 +32,12 @@ export interface ILoginPageProps {
 
 // HomePage
 export interface IHomePageProps {
-    users: IUser[],
-    goToProfile: Function,
+    user:IUser,
+    goToPostPage: Function,
 }
 export interface IHomePageState {
     filter: string,
+    posts:IPost[],
 }
 
 // ProfilePage
@@ -43,25 +48,21 @@ export interface IProfilePageProps {
     user: IUser,
     goHome: Function,
     goToProfile: Function,
-    followUser: Function,
-    unFollowUser: Function,
     match?: any,
 }
 
 // RegisterPage
 export interface IRegisterPageState {
     gender: string,
-    firstName: string,
-    lastName: string,
+    username:string,
     email: string,
     state: string,
     city: string,
-    zip: string,
     password: string,
     confirmPassword: string,
 }
 export interface IRegisterPageProps {
-    createUser: Function,
+    history?:any,
 }
 
 // ForumsPage
@@ -81,14 +82,11 @@ export interface IForumsPageProps {
 export interface IForumPageState {
     data: IForum,
     filter: string,
-    title: string,
-    content: string,
 }
 export interface IForumPageProps {
     user: IUser,
-    createPost: Function,
     goToPostPage: Function,
-    goToForumsPage: Function,
+    goHome: Function,
     match?: any,
 }
 
@@ -99,10 +97,7 @@ export interface IPostPageState {
 }
 export interface IPostPageProps {
     user: IUser,
-    createComment: Function,
-    deleteComment: Function,
-    deletePost: Function,
-    goToForumsPage: Function,
+    goHome: Function,
     match?: any,
 }
 
@@ -110,17 +105,14 @@ export interface IPostPageProps {
 export interface IUserEditPageState {
     data: IUser,
     updateDisabled:boolean,
-    firstName: string,
-    lastName: string,
+    username:string,
     state: string,
     city: string,
-    zip: string,
 }
 export interface IUserEditPageProps {
     match?:any,
     history?:any,
-    deleteUser: Function,
-    updateUserInfo:Function,
+    goHome:Function,
 }
 
 // ForumEditPage
@@ -142,8 +134,7 @@ export interface IForumEditPageState {
 export interface IUser {
     _id?: string,
     gender: string,
-    firstName: string,
-    lastName: string,
+    username:string,
     email: string,
     location: ILocation,
     _following?: string[],
@@ -178,7 +169,7 @@ export interface IForumProps {
     edit: boolean,
 }
 
-// ForumPost
+// Post
 export interface IPost {
     _id?: string,
     title: string,
@@ -193,11 +184,11 @@ export interface IPost {
 export interface IPostProps {
     data: IPost,
     className: string,
-    goToForumPostPage: Function,
-    edit: boolean,
+    goToPostPage: Function,
+    editable: boolean,
 }
 
-// ForumComment
+// Comment
 export interface IComment {
     _id?: string,
     content: string,
@@ -210,8 +201,7 @@ export interface IComment {
 export interface ICommentProps {
     data: IComment,
     className: string,
-    deleteComment: Function,
-    edit: boolean,
+    editable: boolean,
 }
 
 //=== Misc..
@@ -230,12 +220,10 @@ export interface ILoginCredentials {
 export interface ILocation {
     state: string,
     city: string,
-    zip: string,
 }
 export interface IUpdateUserInfoRequest {
     _id:string,
-    firstName:string,
-    lastName:string,
+    username:string,
     location:ILocation
 }
 

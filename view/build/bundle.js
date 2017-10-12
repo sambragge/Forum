@@ -3610,10 +3610,17 @@ exports.api = {
     },
     // Posts
     getPost: (id) => {
-        return axios_1.default.get("/api-forums/posts/" + id)
+        return axios_1.default.get("/api-posts/" + id)
             .then(res => res.data)
             .catch(err => {
             console.error("=== Error in (util) getForumPost", err);
+        });
+    },
+    getPosts: () => {
+        return axios_1.default.get("/api-posts")
+            .then(res => res.data)
+            .catch(err => {
+            console.error(new Error("=== Error in (util) getForumPost: " + err));
         });
     },
     deletePost: (id) => {
@@ -12676,17 +12683,12 @@ class User extends React.Component {
         return (React.createElement("div", { className: this.props.className, onClick: this.handleClick.bind(this) },
             React.createElement("ul", null,
                 React.createElement("li", null, x.gender),
-                React.createElement("li", null,
-                    x.firstName,
-                    " ",
-                    x.lastName),
+                React.createElement("li", null, x.username),
                 React.createElement("li", null, x.email),
                 React.createElement("li", null,
                     x.location.city,
                     " ",
-                    x.location.state,
-                    ", ",
-                    x.location.zip))));
+                    x.location.state))));
     }
     handleClick() {
         console.log("=== User data is: ", this.props.data);
@@ -27936,6 +27938,7 @@ const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(24);
 const util_1 = __webpack_require__(27);
 const header_1 = __webpack_require__(263);
+const loading_1 = __webpack_require__(21);
 // Pages
 const home_page_1 = __webpack_require__(266);
 const forums_page_1 = __webpack_require__(267);
@@ -27958,12 +27961,12 @@ class App extends React.Component {
     componentDidMount() {
         this.authenticate()
             .then(() => {
-            this.getUsers()
+            this.getForums()
                 .then(() => {
-                this.getForums();
+                this.setState(() => ({ loading: false }));
             });
         });
-        console.log("=== App mountes!", this);
+        console.log("=== App mounted!", this);
     }
     //===== Private Methods =====\\
     bindActions() {
@@ -27978,21 +27981,10 @@ class App extends React.Component {
         this.goBack = this.goBack.bind(this);
         this.goToPostPage = this.goToPostPage.bind(this);
         this.goToForumsPage = this.goToForumsPage.bind(this);
-        //user crud
-        this.unFollowUser = this.unFollowUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.createUser = this.createUser.bind(this);
-        this.getUsers = this.getUsers.bind(this);
-        this.followUser = this.followUser.bind(this);
-        this.updateUserInfo = this.updateUserInfo.bind(this);
         //forum crud
         this.createForum = this.createForum.bind(this);
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
-        this.createComment = this.createComment.bind(this);
-        this.createPost = this.createPost.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
-        this.deletePost = this.deletePost.bind(this);
     }
     authenticate() {
         return new Promise((resolve) => {
@@ -28009,16 +28001,6 @@ class App extends React.Component {
                 this.setState(() => ({ user: null }));
                 resolve(false);
             }
-        });
-    }
-    getUsers() {
-        return new Promise((resolve) => {
-            util_1.api
-                .getUsers()
-                .then(res => {
-                res.success ? this.setState(() => ({ users: res.payload })) : util_1.errors.handle(res.payload);
-                resolve(res.success);
-            });
         });
     }
     getForums() {
@@ -28057,58 +28039,6 @@ class App extends React.Component {
     goBack() {
         this.props.history.pop();
     }
-    // Users
-    followUser(followRequest) {
-        util_1.api.followUser(followRequest)
-            .then(res => {
-            res.success ?
-                this.setState(() => ({ user: res.payload })) : util_1.errors.handle(res.payload);
-        });
-    }
-    unFollowUser(followRequest) {
-        util_1.api.unFollowUser(followRequest)
-            .then(res => {
-            res.success ?
-                this.setState(() => ({ user: res.payload })) : util_1.errors.handle(res.payload);
-        });
-    }
-    updateUserInfo(updateReq) {
-        return new Promise((resolve) => {
-            util_1.api.updateUserInfo(updateReq)
-                .then((res) => {
-                res.success ?
-                    this.getUsers() :
-                    util_1.errors.handle(res.payload);
-                resolve(res.success);
-            });
-        });
-    }
-    createUser(user) {
-        util_1.api.createUser(user)
-            .then(res => {
-            if (res.success) {
-                this.setState((state) => ({ users: [...state.users, res.payload] }));
-                this.goHome();
-            }
-            else {
-                util_1.errors.handle(res.payload);
-            }
-        });
-    }
-    deleteUser(id) {
-        console.log("== In deleteUser ( app )", id);
-        util_1.api.deleteUser(id)
-            .then(res => {
-            res.success ?
-                this.logout()
-                    .then(() => {
-                    this.getUsers()
-                        .then(() => {
-                        this.getForums();
-                    });
-                }) : util_1.errors.handle(res.payload);
-        });
-    }
     // Forums
     createForum(forum) {
         util_1.api.createForum(forum)
@@ -28128,38 +28058,6 @@ class App extends React.Component {
                     this.getForums();
                 }) :
                 util_1.errors.handle(res.payload);
-        });
-    }
-    createPost(post) {
-        util_1.api.createPost(post)
-            .then(res => {
-            res.success ?
-                this.getForums() :
-                util_1.errors.handle(res.payload);
-        });
-    }
-    deletePost(id) {
-        util_1.api.deletePost(id)
-            .then(res => {
-            res.success ?
-                this.goToForumsPage()
-                    .then(() => {
-                    this.getForums();
-                }) : util_1.errors.handle(res.payload);
-        });
-    }
-    createComment(comment) {
-        util_1.api.createComment(comment)
-            .then(res => {
-            res.success ?
-                this.getForums() :
-                util_1.errors.handle(res.payload);
-        });
-    }
-    deleteComment(id) {
-        util_1.api.deleteComment(id)
-            .then(res => {
-            res.success ? this.getForums() : util_1.errors.handle(res.payload);
         });
     }
     // Auth
@@ -28194,28 +28092,24 @@ class App extends React.Component {
             });
         });
     }
-    // Views
-    render() {
+    main() {
         const headerProps = {
             logout: this.logout,
+            forums: this.state.forums,
             user: this.state.user,
         };
         const loginPageProps = {
             login: this.login,
         };
-        const registerPageProps = {
-            createUser: this.createUser,
-        };
+        const registerPageProps = {};
         const homePageProps = {
-            users: this.state.users,
-            goToProfile: this.goToProfile,
+            user: this.state.user,
+            goToPostPage: this.goToPostPage,
         };
         const profilePageProps = {
             user: this.state.user,
             goHome: this.goHome,
             goToProfile: this.goToProfile,
-            followUser: this.followUser,
-            unFollowUser: this.unFollowUser,
         };
         const forumsPageProps = {
             user: this.state.user,
@@ -28225,20 +28119,15 @@ class App extends React.Component {
         };
         const forumPageProps = {
             user: this.state.user,
-            goToForumsPage: this.goToForumsPage,
-            createPost: this.createPost,
+            goHome: this.goHome,
             goToPostPage: this.goToPostPage,
         };
         const postPageProps = {
             user: this.state.user,
-            createComment: this.createComment,
-            deletePost: this.deletePost,
-            goToForumsPage: this.goToForumsPage,
-            deleteComment: this.deleteComment,
+            goHome: this.goHome,
         };
         const userEditPageProps = {
-            deleteUser: this.deleteUser,
-            updateUserInfo: this.updateUserInfo,
+            goHome: this.goHome,
         };
         const forumEditPageProps = {
             deleteForum: this.deleteForum,
@@ -28258,11 +28147,15 @@ class App extends React.Component {
                 React.createElement(react_router_dom_1.Route, { path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props, registerPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { path: "/profile/:id", component: (props) => React.createElement(profile_page_1.default, Object.assign({}, props, profilePageProps)) }))));
     }
+    // Views
+    render() {
+        return !this.state.loading ? this.main() : React.createElement(loading_1.default, null);
+    }
 }
 App.initialState = {
     user: null,
-    users: null,
     forums: null,
+    loading: true,
 };
 exports.default = react_router_dom_1.withRouter(App);
 
@@ -29157,8 +29050,11 @@ class Header extends React.Component {
             logout: this.props.logout,
             user: this.props.user,
         };
+        const navbarProps = {
+            forums: this.props.forums,
+        };
         return (React.createElement("div", { className: "header row" },
-            React.createElement(navbar_1.default, null),
+            React.createElement(navbar_1.default, Object.assign({}, navbarProps)),
             React.createElement(authbar_1.default, Object.assign({}, authbarProps))));
     }
 }
@@ -29174,22 +29070,22 @@ exports.default = Header;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(24);
+const loading_1 = __webpack_require__(21);
 class Navbar extends React.Component {
-    constructor() {
-        super(...arguments);
-        this.pages = [
-            { name: "Home", link: "/" },
-            { name: "Forums", link: "/forums" },
-            { name: "Blog", link: "/blog" },
-            { name: "About Us", link: "/about" },
-        ];
+    main() {
+        let forums = this.props.forums.map((forum, i) => {
+            return React.createElement("li", { key: 'forum' + i },
+                React.createElement(react_router_dom_1.NavLink, { activeClassName: "activePage", to: "/forum/" + forum._id }, forum.topic));
+        });
+        return (React.createElement("ul", { className: "navbar eight columns" },
+            React.createElement("li", null,
+                React.createElement(react_router_dom_1.NavLink, { exact: true, activeClassName: "activePage", to: "/" }, "Home")),
+            forums.length > 0 ? forums : React.createElement("li", null, "No Forums..."),
+            React.createElement("li", { className: "creationLink" },
+                React.createElement("a", { href: "#" }, "create a forum"))));
     }
     render() {
-        let navs = this.pages.map((page, i) => {
-            return React.createElement("li", { key: 'page' + i },
-                React.createElement(react_router_dom_1.NavLink, { exact: true, activeClassName: "activePage", to: page.link }, page.name));
-        });
-        return (React.createElement("ul", { className: "navbar eight columns" }, navs));
+        return this.props.forums ? this.main() : React.createElement(loading_1.default, null);
     }
 }
 exports.default = Navbar;
@@ -29239,52 +29135,68 @@ exports.default = Authbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const user_1 = __webpack_require__(113);
+const util_1 = __webpack_require__(27);
+const post_1 = __webpack_require__(270);
 const loading_1 = __webpack_require__(21);
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             filter: null,
+            posts: null,
         };
+        this.getPosts = this.getPosts.bind(this);
     }
     componentDidMount() {
+        this.getPosts();
         console.log("Homepage mounted ", this);
     }
-    handleChange(e) {
-        const newState = this.state;
-        newState[e.target.name] = e.target.value;
-        this.setState(() => newState);
+    getPosts() {
+        return new Promise((resolve) => {
+            util_1.api.getPosts()
+                .then(res => {
+                res.success ? this.setState(() => ({ posts: res.payload })) : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
     }
-    filterMethod(user) {
+    handleFilterChange(e) {
+        this.setState(() => ({
+            filter: e.target.value
+        }));
+    }
+    header() {
+        return (React.createElement("div", { className: "pageHeader" },
+            React.createElement("input", { onChange: this.handleFilterChange.bind(this), type: "text", placeholder: "Search...", name: "filter" })));
+    }
+    filterMethod(post) {
         if (this.state.filter) {
-            return user.firstName.toLowerCase().startsWith(this.state.filter.toLowerCase()) ||
-                user.lastName.toLowerCase().startsWith(this.state.filter.toLowerCase());
+            return post.title.toLowerCase().startsWith(this.state.filter.toLowerCase());
         }
         else {
             return true;
         }
     }
-    header() {
-        return (React.createElement("div", { className: "pageHeader row" },
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "filter", placeholder: "Search..." })));
-    }
-    userList() {
-        const users = this.props.users.filter(this.filterMethod.bind(this)).map((user, i) => {
+    postList() {
+        const posts = this.state.posts.filter(this.filterMethod.bind(this)).map((post, i) => {
             const props = {
-                data: user,
-                className: "standardUser",
-                goToProfile: this.props.goToProfile,
+                data: post,
+                className: "standardPost",
+                goToPostPage: this.props.goToPostPage,
+                editable: this.props.user && post._creator === this.props.user._id,
             };
-            return React.createElement("li", { key: 'user' + i },
-                React.createElement(user_1.default, Object.assign({}, props)));
+            return React.createElement("li", { key: 'post' + i },
+                React.createElement(post_1.default, Object.assign({}, props)));
         });
-        return (React.createElement("ul", null, users.length > 0 ? users : React.createElement("li", null, "No users here...")));
+        return (React.createElement("ul", null, posts.length > 0 ? posts : React.createElement("li", null, "No Posts...")));
     }
-    render() {
+    main() {
         return (React.createElement("div", { className: "homePage" },
             this.header(),
-            this.props.users ? this.userList() : React.createElement(loading_1.default, null)));
+            this.postList()));
+    }
+    render() {
+        return this.state.posts ? this.main() : React.createElement(loading_1.default, null);
     }
 }
 exports.default = HomePage;
@@ -29393,9 +29305,7 @@ class Forum extends React.Component {
                     x.posts ? x.posts.length : '0'),
                 React.createElement("li", null,
                     "By: ",
-                    x.creator.firstName,
-                    " ",
-                    x.creator.lastName))));
+                    x.creator.username))));
     }
     handleClick(e) {
         this.props.goToForumPage(this.props.data._id);
@@ -29428,8 +29338,6 @@ class ForumPage extends React.Component {
         this.state = {
             data: null,
             filter: null,
-            title: "",
-            content: "",
         };
         this.getForum = this.getForum.bind(this);
     }
@@ -29439,31 +29347,15 @@ class ForumPage extends React.Component {
     }
     // ==== PRIVATE METHODS ====\\
     handleChange(e) {
-        const n = e.target.name, v = e.target.value, newState = this.state;
-        newState[n] = v;
+        const newState = this.state;
+        newState[e.target.name] = e.target.value;
         this.setState(() => newState);
     }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.createPost({
-            _creator: this.props.user._id,
-            _parent: this.state.data._id,
-            title: this.state.title,
-            content: this.state.content,
-        });
-    }
     getForum() {
-        console.log("=== Getting user with id : ", this.props.match.params.id);
         util_1.api.getForum(this.props.match.params.id)
             .then(res => {
-            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goToForumsPage().then(() => { alert(res.payload); });
+            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(() => { alert(res.payload); });
         });
-    }
-    createPostForm() {
-        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "title", placeholder: "Title..." }),
-            React.createElement("textarea", { onChange: this.handleChange.bind(this), name: "content", placeholder: "Content..." }),
-            React.createElement("input", { type: "submit", value: "post it" })));
     }
     isMyForum() {
         return this.state.data._creator === this.props.user._id;
@@ -29493,8 +29385,8 @@ class ForumPage extends React.Component {
                 const props = {
                     data: post,
                     className: "standardForumPost",
-                    goToForumPostPage: this.props.goToPostPage,
-                    edit: this.props.user && post._creator === this.props.user._id
+                    goToPostPage: this.props.goToPostPage,
+                    editable: this.props.user && post._creator === this.props.user._id
                 };
                 return React.createElement("li", { key: 'post' + i },
                     React.createElement(post_1.default, Object.assign({}, props)));
@@ -29514,7 +29406,6 @@ class ForumPage extends React.Component {
         return (React.createElement("div", { className: "forumPage" },
             this.header(),
             this.content(),
-            this.props.user && this.createPostForm(),
             this.posts()));
     }
     render() {
@@ -29545,7 +29436,7 @@ class ForumPost extends React.Component {
     }
     handleClick(e) {
         console.log("ForumPost Component calling goToForumPostPage with id as: ", this.props.data._id);
-        this.props.goToForumPostPage(this.props.data._id);
+        this.props.goToPostPage(this.props.data._id);
     }
     shortContent() {
         const characterMax = 30;
@@ -29575,6 +29466,7 @@ class ForumPostPage extends React.Component {
             data: null,
             comment: "",
         };
+        this.createComment = this.createComment.bind(this);
     }
     componentDidMount() {
         console.log("=== PostPage Mounted: ", this);
@@ -29583,32 +29475,36 @@ class ForumPostPage extends React.Component {
     getPost() {
         util_1.api.getPost(this.props.match.params.id)
             .then(res => {
-            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goToForumsPage().then(() => { alert(res.payload); });
+            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(() => { alert(res.payload); });
+        });
+    }
+    createComment() {
+        return new Promise((resolve) => {
+            util_1.api.createComment({
+                _creator: this.props.user._id,
+                _parent: this.state.data._id,
+                content: this.state.comment,
+            }).then(res => {
+                res.success ? this.forceUpdate() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
         });
     }
     handleSubmit(e) {
         e.preventDefault();
-        this.props.createComment({
-            _creator: this.props.user._id,
-            _parent: this.state.data._id,
-            content: this.state.comment,
-        });
+        this.createComment();
     }
     handleChange(e) {
         const newState = this.state;
         newState[e.target.name] = e.target.value;
         this.setState(() => (newState));
     }
-    handleDelete() {
-        this.props.deletePost(this.state.data._id);
-    }
     comments() {
         const comments = this.state.data.comments.map((comment, i) => {
             const props = {
                 data: comment,
-                deleteComment: this.props.deleteComment,
                 className: "standardComment",
-                edit: this.props.user && comment._creator === this.props.user._id
+                editable: this.props.user && comment._creator === this.props.user._id
             };
             return React.createElement("li", { key: 'comment' + i },
                 React.createElement(comment_1.default, Object.assign({}, props)));
@@ -29643,9 +29539,7 @@ class ForumPostPage extends React.Component {
             React.createElement("li", null, x.content),
             React.createElement("li", null,
                 "By: ",
-                x.creator.firstName,
-                " ",
-                x.creator.lastName)));
+                x.creator.username)));
     }
     render() {
         return this.state.data ? this.main() : React.createElement(loading_1.default, null);
@@ -29670,13 +29564,8 @@ class ForumComment extends React.Component {
                 React.createElement("li", null, x.content),
                 React.createElement("li", null,
                     "By: ",
-                    x.creator.firstName,
-                    " ",
-                    x.creator.lastName)),
-            this.props.edit && this.edit()));
-    }
-    delete() {
-        this.props.deleteComment(this.props.data._id);
+                    x.creator.username)),
+            this.props.editable && this.edit()));
     }
     edit() {
         return React.createElement("a", { className: "edit", href: "#" }, "Edit");
@@ -29763,6 +29652,7 @@ exports.default = LoginPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
+const util_1 = __webpack_require__(27);
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29774,31 +29664,35 @@ class RegisterPage extends React.Component {
                 React.createElement("select", { name: "gender", onChange: this.handleChange.bind(this) },
                     React.createElement("option", { value: "male" }, "Male"),
                     React.createElement("option", { value: "female" }, "Female")),
-                React.createElement("input", { type: "text", name: "firstName", placeholder: "First Name...", onChange: this.handleChange.bind(this) }),
-                React.createElement("input", { type: "text", name: "lastName", placeholder: "Last Name...", onChange: this.handleChange.bind(this) }),
+                React.createElement("input", { type: "text", name: "username", placeholder: "Username...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "text", name: "email", placeholder: "Email...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "text", name: "state", placeholder: "State...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "text", name: "city", placeholder: "City...", onChange: this.handleChange.bind(this) }),
-                React.createElement("input", { type: "text", name: "zip", placeholder: "Zip...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "password", name: "password", placeholder: "Password...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "password", name: "confirmPassword", placeholder: "Confirm Password...", onChange: this.handleChange.bind(this) }),
                 React.createElement("input", { type: "submit", value: "register" }))));
     }
+    createUser() {
+        return new Promise((resolve) => {
+            util_1.api.createUser({
+                gender: this.state.gender,
+                username: this.state.username,
+                email: this.state.email,
+                location: {
+                    state: this.state.state,
+                    city: this.state.city,
+                },
+                password: this.state.password,
+                confirmPassword: this.state.confirmPassword,
+            }).then(res => {
+                res.success ? this.props.history.push("/") : util_1.errors.handle(res.payload);
+                resolve(res.payload);
+            });
+        });
+    }
     handleSubmit(e) {
         e.preventDefault();
-        this.props.createUser({
-            gender: this.state.gender,
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
-            email: this.state.email,
-            location: {
-                state: this.state.state,
-                city: this.state.city,
-                zip: this.state.zip,
-            },
-            password: this.state.password,
-            confirmPassword: this.state.confirmPassword,
-        });
+        this.createUser();
     }
     handleChange(e) {
         let newState = this.state;
@@ -29808,12 +29702,10 @@ class RegisterPage extends React.Component {
 }
 RegisterPage.initialState = {
     gender: "male",
-    firstName: "",
-    lastName: "",
+    username: "",
     email: "",
     state: "",
     city: "",
-    zip: "",
     password: "",
     confirmPassword: "",
 };
@@ -29865,30 +29757,37 @@ class ProfilePage extends React.Component {
         });
     }
     followUser() {
-        this.props.followUser({
-            user1: this.props.user._id,
-            user2: this.state.data._id,
+        return new Promise((resolve) => {
+            util_1.api.followUser({
+                user1: this.props.user._id,
+                user2: this.state.data._id,
+            }).then(res => {
+                res.success ? this.forceUpdate() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
         });
     }
     unFollowUser() {
-        this.props.unFollowUser({
-            user1: this.props.user._id,
-            user2: this.state.data._id,
+        return new Promise((resolve) => {
+            util_1.api.unFollowUser({
+                user1: this.props.user._id,
+                user2: this.state.data._id,
+            }).then(res => {
+                res.success ? this.forceUpdate() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
         });
     }
     //===== VIEWS =====\\
     info(className) {
         const x = this.state.data;
         return (React.createElement("ul", { className: className },
-            React.createElement("li", null, x.firstName),
-            React.createElement("li", null, x.lastName),
+            React.createElement("li", null, x.username),
             React.createElement("li", null, x.email),
             React.createElement("li", null,
                 x.location.city,
                 " ",
-                x.location.state,
-                " ",
-                x.location.zip),
+                x.location.state),
             React.createElement("li", null,
                 "Following ",
                 x.following ? x.following.length : '0',
@@ -29896,7 +29795,7 @@ class ProfilePage extends React.Component {
             React.createElement("li", null,
                 x.followers ? x.followers.length : '0',
                 " users following ",
-                x.firstName,
+                x.username,
                 "."),
             this.props.user && !this.isMyProfile() && this.followButton()));
     }
@@ -29948,7 +29847,7 @@ class ProfilePage extends React.Component {
     }
     avatar(className) {
         return (React.createElement("div", { className: className },
-            React.createElement("img", { src: this.state.data.gender === 'male' ? defaultAvatarMale : defaultAvatarFemale, alt: this.state.data.firstName + 's avatar' })));
+            React.createElement("img", { src: this.state.data.gender === 'male' ? defaultAvatarMale : defaultAvatarFemale, alt: this.state.data.username + 's avatar' })));
     }
     header() {
         return (React.createElement("div", { className: "pageHeader" }, this.props.user && this.isMyProfile() && this.edit()));
@@ -29991,11 +29890,16 @@ class UserEditPage extends React.Component {
         });
     }
     // Private Methods
+    bindActions() {
+        this.goBack = this.goBack.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
+        this.delete = this.delete.bind(this);
+    }
     header() {
         return (React.createElement("div", { className: "pageHeader row" },
             React.createElement("ul", null,
                 React.createElement("li", null,
-                    React.createElement("button", { onClick: this.goBack.bind(this) }, "Cancel")),
+                    React.createElement("button", { onClick: this.goBack }, "Cancel")),
                 React.createElement("li", null,
                     React.createElement("button", { disabled: this.state.updateDisabled, onClick: this.handleDelete.bind(this) }, "Delete Account")))));
     }
@@ -30012,19 +29916,26 @@ class UserEditPage extends React.Component {
             });
         });
     }
+    updateInfo(updateReq) {
+        return new Promise((resolve) => {
+            util_1.api.updateUserInfo(updateReq)
+                .then(res => {
+                !res.success ? util_1.errors.handle(res.payload) : this.goBack;
+                resolve(res.success);
+            });
+        });
+    }
     handleSubmit(e) {
         e.preventDefault();
         this.setState(() => ({ updateDisabled: true }));
         const confirmation = confirm("Are you sure you want to save these changes?");
         confirmation &&
-            this.props.updateUserInfo({
+            this.updateInfo({
                 _id: this.state.data._id,
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
+                username: this.state.username,
                 location: {
                     state: this.state.state,
                     city: this.state.city,
-                    zip: this.state.zip,
                 }
             });
     }
@@ -30033,19 +29944,26 @@ class UserEditPage extends React.Component {
         newState[e.target.name] = e.target.value;
         this.setState(() => newState);
     }
+    delete() {
+        return new Promise((resolve) => {
+            util_1.api.deleteUser(this.state.data._id)
+                .then(res => {
+                res.success ? this.props.goHome() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
     handleDelete() {
         const confirmation = confirm("Are you sure? This will delete any Forums, Posts and Comments you have created as well.");
         confirmation &&
-            this.props.deleteUser(this.state.data._id);
+            this.delete();
     }
     // Views
     content() {
         return (React.createElement("form", { className: "updateForm" },
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "firstName", defaultValue: this.state.data.firstName }),
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "lastName", defaultValue: this.state.data.lastName }),
+            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "username", defaultValue: this.state.data.username }),
             React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "state", defaultValue: this.state.data.location.state }),
             React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "city", defaultValue: this.state.data.location.city }),
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "zip", defaultValue: this.state.data.location.zip }),
             React.createElement("input", { type: "submit", value: "update user" })));
     }
     main() {
@@ -30060,11 +29978,9 @@ class UserEditPage extends React.Component {
 UserEditPage.initialState = {
     data: null,
     updateDisabled: false,
-    firstName: "",
-    lastName: "",
+    username: "",
     state: "",
     city: "",
-    zip: "",
 };
 exports.default = UserEditPage;
 
@@ -30191,7 +30107,7 @@ exports.i(__webpack_require__(282), "");
 exports.i(__webpack_require__(283), "");
 
 // module
-exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumPost {\n  cursor: pointer;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n  .standardForumPost:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: #4D9FA5; }\n\n.app {\n  height: 100vh; }\n  .app .header {\n    height: 10%; }\n    .app .header ul {\n      height: 100%;\n      display: flex;\n      justify-content: space-around;\n      list-style-type: none; }\n      .app .header ul li {\n        align-self: center;\n        display: inline-block;\n        cursor: pointer; }\n        .app .header ul li a {\n          text-decoration: none;\n          color: #B35078; }\n          .app .header ul li a:hover {\n            color: #4D9FA5; }\n        .app .header ul li .activePage {\n          font-weight: bold;\n          color: #4D9FA5; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center;\n    border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
+exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.navbar, .authbar {\n  overflow-x: scroll;\n  height: 100%;\n  display: flex;\n  justify-content: space-around;\n  list-style-type: none; }\n  .navbar li, .authbar li {\n    align-self: center;\n    display: inline-block;\n    cursor: pointer; }\n    .navbar li a, .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .navbar li a:hover, .authbar li a:hover {\n        color: deepskyblue; }\n    .navbar li .activePage, .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n\n.navbar .creationLink {\n  color: rgba(0, 128, 0, 0.5); }\n  .navbar .creationLink:hover {\n    color: lime; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumPost {\n  cursor: pointer;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n  .standardForumPost:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .header {\n    height: 10%; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center;\n    border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
 
 // exports
 

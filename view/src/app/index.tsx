@@ -31,10 +31,10 @@ import ForumEditPage from './components/pages/forum_edit_page';
 
 class App extends React.Component<any, IAppState> {
 
-    static initialState:IAppState = {
+    static initialState: IAppState = {
         user: null,
-        users: null,
         forums: null,
+        loading:true,
     }
 
     constructor(props: any) {
@@ -46,13 +46,13 @@ class App extends React.Component<any, IAppState> {
 
     componentDidMount() {
         this.authenticate()
-            .then(()=>{
-                this.getUsers()
+            .then(() => {
+                this.getForums()
                     .then(()=>{
-                        this.getForums()
+                        this.setState(()=>({loading:false}));
                     })
             })
-        console.log("=== App mountes!", this);
+        console.log("=== App mounted!", this);
     }
 
     //===== Private Methods =====\\
@@ -68,21 +68,11 @@ class App extends React.Component<any, IAppState> {
         this.goBack = this.goBack.bind(this);
         this.goToPostPage = this.goToPostPage.bind(this);
         this.goToForumsPage = this.goToForumsPage.bind(this);
-        //user crud
-        this.unFollowUser = this.unFollowUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.createUser = this.createUser.bind(this);
-        this.getUsers = this.getUsers.bind(this);
-        this.followUser = this.followUser.bind(this);
-        this.updateUserInfo = this.updateUserInfo.bind(this);
         //forum crud
         this.createForum = this.createForum.bind(this);
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
-        this.createComment = this.createComment.bind(this);
-        this.createPost = this.createPost.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
-        this.deletePost = this.deletePost.bind(this);
+
     }
 
     private authenticate(): Promise<boolean> {
@@ -102,17 +92,7 @@ class App extends React.Component<any, IAppState> {
 
         });
     }
-    private getUsers(): Promise<boolean> {
-        return new Promise((resolve) => {
-            api
-                .getUsers()
-                .then(res => {
-                    res.success ? this.setState(() => ({ users: res.payload })) : errors.handle(res.payload);
-                    resolve(res.success);
-                });
-        });
 
-    }
     private getForums(): Promise<boolean> {
         return new Promise((resolve) => {
             api
@@ -139,7 +119,7 @@ class App extends React.Component<any, IAppState> {
         });
     }
     public goToForumPage(id: string): Promise<void> {
-        return new Promise((resolve)=>{
+        return new Promise((resolve) => {
             this.props.history.push("/forum/" + id);
             resolve();
         });
@@ -149,60 +129,6 @@ class App extends React.Component<any, IAppState> {
     }
     public goBack(): void {
         this.props.history.pop();
-    }
-
-    // Users
-    public followUser(followRequest: IFollowRequest): void {
-        api.followUser(followRequest)
-            .then(res => {
-                res.success ?
-                    this.setState(() => ({ user: res.payload })) : errors.handle(res.payload);
-            });
-    }
-    public unFollowUser(followRequest: IFollowRequest): void {
-        api.unFollowUser(followRequest)
-            .then(res => {
-                res.success ?
-                    this.setState(() => ({ user: res.payload })) : errors.handle(res.payload);
-            });
-    }
-
-    public updateUserInfo(updateReq:IUpdateUserInfoRequest):Promise<boolean>{
-        return new Promise((resolve)=>{
-            api.updateUserInfo(updateReq)
-                .then((res)=>{
-                    res.success ?
-                        this.getUsers():
-                        errors.handle(res.payload)
-                    resolve(res.success);
-                })
-        });
-    }
-    
-    public createUser(user: IUser): void {
-        api.createUser(user)
-            .then(res => {
-                if (res.success) {
-                    this.setState((state) => ({ users: [...state.users, res.payload] }));
-                    this.goHome();
-                } else {
-                    errors.handle(res.payload);
-                }
-            })
-    }
-    public deleteUser(id: string): void {
-        console.log("== In deleteUser ( app )", id);
-        api.deleteUser(id)
-            .then(res => {
-                res.success ?
-                    this.logout()
-                        .then(() => {
-                            this.getUsers()
-                                .then(() => {
-                                    this.getForums();
-                                })
-                        }) : errors.handle(res.payload);
-            });
     }
 
     // Forums
@@ -219,46 +145,10 @@ class App extends React.Component<any, IAppState> {
             .then(res => {
                 res.success ?
                     this.goToForumsPage()
-                        .then(()=>{
-                            this.getForums()
-                        }):
-                    errors.handle(res.payload);
-            });
-    }
-
-    public createPost(post: IPost): void {
-        api.createPost(post)
-            .then(res => {
-                res.success ?
-                    this.getForums() :
-                    errors.handle(res.payload);
-            });
-    }
-
-    public deletePost(id: string): void {
-        api.deletePost(id)
-            .then(res => {
-                res.success ?
-                    this.goToForumsPage()
                         .then(() => {
                             this.getForums()
-                        }) : errors.handle(res.payload)
-
-            });
-    }
-
-    public createComment(comment: IComment): void {
-        api.createComment(comment)
-            .then(res => {
-                res.success ?
-                    this.getForums() :
+                        }) :
                     errors.handle(res.payload);
-            });
-    }
-    public deleteComment(id: string): void {
-        api.deleteComment(id)
-            .then(res => {
-                res.success ? this.getForums() : errors.handle(res.payload);
             });
     }
 
@@ -295,30 +185,27 @@ class App extends React.Component<any, IAppState> {
         });
 
     }
-
-    // Views
-    public render() {
-
+    private main():JSX.Element{
         const headerProps = {
             logout: this.logout,
+            forums:this.state.forums,
             user: this.state.user,
         }
         const loginPageProps = {
             login: this.login,
         }
         const registerPageProps = {
-            createUser: this.createUser,
+           
         }
         const homePageProps = {
-            users: this.state.users,
-            goToProfile: this.goToProfile,
+            user:this.state.user,
+            goToPostPage: this.goToPostPage,
         }
         const profilePageProps = {
             user: this.state.user,
             goHome: this.goHome,
             goToProfile: this.goToProfile,
-            followUser: this.followUser,
-            unFollowUser: this.unFollowUser,
+
         }
         const forumsPageProps = {
             user: this.state.user,
@@ -328,20 +215,16 @@ class App extends React.Component<any, IAppState> {
         }
         const forumPageProps = {
             user: this.state.user,
-            goToForumsPage:this.goToForumsPage,
-            createPost: this.createPost,
+            goHome: this.goHome,
             goToPostPage: this.goToPostPage,
         }
         const postPageProps = {
             user: this.state.user,
-            createComment: this.createComment,
-            deletePost:this.deletePost,
-            goToForumsPage:this.goToForumsPage,
-            deleteComment: this.deleteComment,
+            goHome: this.goHome,
+       
         }
         const userEditPageProps = {
-            deleteUser: this.deleteUser,
-            updateUserInfo:this.updateUserInfo,
+            goHome:this.goHome,
         }
         const forumEditPageProps = {
             deleteForum: this.deleteForum,
@@ -355,10 +238,10 @@ class App extends React.Component<any, IAppState> {
                         component={(props) => <HomePage {...props}  {...homePageProps} />} />
                     <Route
                         path="/user/:id/edit"
-                        component={(props) => <UserEditPage {...props} {...userEditPageProps}  />} />
+                        component={(props) => <UserEditPage {...props} {...userEditPageProps} />} />
                     <Route
                         path="/forum/:id/edit"
-                        component={(props) => <ForumEditPage {...props} {...forumEditPageProps}  />} />
+                        component={(props) => <ForumEditPage {...props} {...forumEditPageProps} />} />
                     <Route
                         path="/forums"
                         component={(props) => <ForumsPage {...props} {...forumsPageProps} />} />
@@ -387,6 +270,11 @@ class App extends React.Component<any, IAppState> {
                 </Switch>
             </div>
         );
+    }
+
+    // Views
+    public render():JSX.Element {
+        return !this.state.loading ? this.main():<Loading/>
     }
 }
 

@@ -109,10 +109,17 @@ export const api = {
     },
     // Posts
     getPost:(id:string):Promise<IStandardResponse>=>{
-        return axios.get("/api-forums/posts/"+id)
+        return axios.get("/api-posts/"+id)
         .then(res=>res.data)
         .catch(err=>{
             console.error("=== Error in (util) getForumPost", err);
+        });
+    },
+    getPosts:():Promise<IStandardResponse>=>{
+        return axios.get("/api-posts")
+        .then(res=>res.data)
+        .catch(err=>{
+            console.error(new Error("=== Error in (util) getForumPost: "+err));
         });
     },
     deletePost:(id:string):Promise<IStandardResponse>=>{

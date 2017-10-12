@@ -18,7 +18,7 @@ export default class ForumPost extends React.Component<IPostProps, any> {
 
     private handleClick(e:Event){
         console.log("ForumPost Component calling goToForumPostPage with id as: ", this.props.data._id);
-        this.props.goToForumPostPage(this.props.data._id);
+        this.props.goToPostPage(this.props.data._id);
     }
 
     private shortContent():string{

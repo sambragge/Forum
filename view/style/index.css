@@ -10,6 +10,30 @@ ul {
   ul li {
     margin: 0; }
 
+.navbar, .authbar {
+  overflow-x: scroll;
+  height: 100%;
+  display: flex;
+  justify-content: space-around;
+  list-style-type: none; }
+  .navbar li, .authbar li {
+    align-self: center;
+    display: inline-block;
+    cursor: pointer; }
+    .navbar li a, .authbar li a {
+      text-decoration: none;
+      color: blue; }
+      .navbar li a:hover, .authbar li a:hover {
+        color: deepskyblue; }
+    .navbar li .activePage, .authbar li .activePage {
+      font-weight: bold;
+      color: deepskyblue; }
+
+.navbar .creationLink {
+  color: rgba(0, 128, 0, 0.5); }
+  .navbar .creationLink:hover {
+    color: lime; }
+
 form * {
   display: block; }
 form textarea {
@@ -56,29 +80,12 @@ form textarea {
 
 .edit {
   text-decoration: none;
-  color: #4D9FA5; }
+  color: deepskyblue; }
 
 .app {
   height: 100vh; }
   .app .header {
     height: 10%; }
-    .app .header ul {
-      height: 100%;
-      display: flex;
-      justify-content: space-around;
-      list-style-type: none; }
-      .app .header ul li {
-        align-self: center;
-        display: inline-block;
-        cursor: pointer; }
-        .app .header ul li a {
-          text-decoration: none;
-          color: #B35078; }
-          .app .header ul li a:hover {
-            color: #4D9FA5; }
-        .app .header ul li .activePage {
-          font-weight: bold;
-          color: #4D9FA5; }
   .app .pageHeader {
     border-bottom: 1px groove rgba(0, 0, 0, 0.5);
     margin-bottom: 2%; }

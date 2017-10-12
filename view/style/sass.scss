@@ -2,8 +2,8 @@
 @import "./skeleton.css";
 
 // Color Scheme
-$primary:#4D9FA5;
-$secondary:#B35078;
+$primary:deepskyblue;
+$secondary:blue;
 $success:rgba(green, .5);
 $danger:rgba(red, 1);
 $light:rgba(white, .5);
@@ -23,6 +23,38 @@ ul {
     list-style-type: none;
     li {
         margin:0;
+    }
+}
+
+.navbar, .authbar {
+    overflow-x: scroll;
+    height:100%;
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    li {
+        align-self: center;
+        display: inline-block;
+        cursor:pointer;
+        a {
+            text-decoration: none;
+            color:$secondary;
+            &:hover {
+                color:$primary;
+            }
+        }
+        .activePage {
+            font-weight: bold;
+            color:$primary;
+        }
+    }
+}
+.navbar {
+    .creationLink {
+        color:$success;
+        &:hover {
+            color:lime;
+        }
     }
 }
 
@@ -101,32 +133,8 @@ form {
 // App level rules
 .app {
     height:100vh;
-
     .header {
         height:10%;
-       
-        ul {
-            height:100%;
-            display: flex;
-            justify-content: space-around;
-            list-style-type: none;
-            li {
-                align-self: center;
-                display: inline-block;
-                cursor:pointer;
-                a {
-                    text-decoration: none;
-                    color:$secondary;
-                    &:hover {
-                        color:$primary;
-                    }
-                }
-                .activePage {
-                    font-weight: bold;
-                    color:$primary;
-                }
-            }
-        }
     }// End Header
 
     //===== PAGES ====\\

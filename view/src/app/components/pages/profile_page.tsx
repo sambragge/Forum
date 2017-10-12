@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as FormData from 'form-data';
 import { IProfilePageProps, IProfilePageState } from '../../interfaces';
 import { Link } from 'react-router-dom';
-import { api, helpers } from '../../util';
+import { api, helpers, errors } from '../../util';
 import Loading from '../loading';
 import User from '../user';
 
@@ -48,18 +48,28 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
             })
     }
 
-    private followUser(): void {
-        this.props.followUser({
-            user1: this.props.user._id,
-            user2: this.state.data._id,
+    private followUser():Promise<boolean> {
+        return new Promise((resolve)=>{
+            api.followUser({
+                user1: this.props.user._id,
+                user2: this.state.data._id,
+            }).then(res=>{
+                res.success ? this.forceUpdate():errors.handle(res.payload);
+                resolve(res.success);
+            });
         });
 
     }
 
-    private unFollowUser(): void {
-        this.props.unFollowUser({
-            user1: this.props.user._id,
-            user2: this.state.data._id,
+    private unFollowUser(): Promise<boolean> {
+        return new Promise((resolve)=>{
+            api.unFollowUser({
+                user1: this.props.user._id,
+                user2: this.state.data._id,
+            }).then(res=>{
+                res.success ? this.forceUpdate():errors.handle(res.payload);
+                resolve(res.success);
+            });
         });
     }
 
@@ -69,12 +79,11 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
         const x = this.state.data;
         return (
             <ul className={className}>
-                <li>{x.firstName}</li>
-                <li>{x.lastName}</li>
+                <li>{x.username}</li>
                 <li>{x.email}</li>
-                <li>{x.location.city} {x.location.state} {x.location.zip}</li>
+                <li>{x.location.city} {x.location.state}</li>
                 <li>Following {x.following ? x.following.length : '0'} users.</li>
-                <li>{x.followers ? x.followers.length : '0'} users following {x.firstName}.</li>
+                <li>{x.followers ? x.followers.length : '0'} users following {x.username}.</li>
                 {this.props.user && !this.isMyProfile() && this.followButton()}
             </ul>
         );
@@ -150,7 +159,7 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
         return(
             <div className={className}>
                 <img src={this.state.data.gender === 'male' ? defaultAvatarMale:defaultAvatarFemale} 
-                alt={this.state.data.firstName+'s avatar'}/>
+                alt={this.state.data.username+'s avatar'}/>
             </div>
         );
     }

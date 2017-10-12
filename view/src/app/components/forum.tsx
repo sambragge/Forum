@@ -10,7 +10,7 @@ export default class Forum extends React.Component <IForumProps, any> {
                     <li>{x.topic}</li>
                     <li>{this.shortDescription()}</li>
                     <li>Posts: {x.posts ? x.posts.length:'0'}</li>
-                    <li>By: {x.creator.firstName} {x.creator.lastName}</li>
+                    <li>By: {x.creator.username}</li>
                 </ul>
             </div>
         );

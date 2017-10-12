@@ -12,8 +12,6 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
         this.state = {
             data:null,
             filter:null,
-            title:"",
-            content:"",
         }
         this.getForum = this.getForum.bind(this);
     }
@@ -25,36 +23,15 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
 
     // ==== PRIVATE METHODS ====\\
     private handleChange(e:any):void{
-        const n:string = e.target.name,
-            v:string = e.target.value,
-            newState:any = this.state;
-        newState[n] = v;
+        const newState:any = this.state;
+        newState[e.target.name] = e.target.value;
         this.setState(()=>newState);
     }
-    private handleSubmit(e:Event){
-        e.preventDefault();
-        this.props.createPost({
-            _creator:this.props.user._id,
-            _parent:this.state.data._id,
-            title:this.state.title,
-            content:this.state.content,
-        });
-    }
     private getForum():void{
-        console.log("=== Getting user with id : ", this.props.match.params.id);
         api.getForum(this.props.match.params.id)
         .then(res=>{
-            res.success ? this.setState(()=>({data:res.payload})):this.props.goToForumsPage().then(()=>{alert(res.payload)});
+            res.success ? this.setState(()=>({data:res.payload})):this.props.goHome().then(()=>{alert(res.payload)});
         });
-    }
-    private createPostForm():JSX.Element{
-        return(
-            <form onSubmit={this.handleSubmit.bind(this)}>
-                <input onChange={this.handleChange.bind(this)} type="text" name="title" placeholder="Title..."/>
-                <textarea onChange={this.handleChange.bind(this)} name="content" placeholder="Content..."></textarea>
-                <input type="submit" value="post it"/>
-            </form>
-        );
     }
     private isMyForum():boolean{
         return this.state.data._creator === this.props.user._id;
@@ -89,8 +66,8 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
                 const props = {
                     data:post,
                     className:"standardForumPost",
-                    goToForumPostPage:this.props.goToPostPage,
-                    edit:this.props.user && post._creator === this.props.user._id
+                    goToPostPage:this.props.goToPostPage,
+                    editable:this.props.user && post._creator === this.props.user._id
                 }
                 return <li key={'post'+i}><Post {...props} /></li>
             });
@@ -120,7 +97,6 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
             <div className="forumPage">
                 {this.header()}
                 {this.content()}
-                {this.props.user && this.createPostForm()}
                 {this.posts()}
             </div>
         );

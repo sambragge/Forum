@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IPostPageState, IPostPageProps, IComment } from '../../interfaces';
-import { api } from '../../util';
+import { api, errors } from '../../util';
 import Loading from '../loading';
 import Comment from '../comment';
 
@@ -12,6 +12,7 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
             data: null,
             comment:"",
         }
+        this.createComment = this.createComment.bind(this);
     }
 
     componentDidMount() {
@@ -23,17 +24,26 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
         
         api.getPost(this.props.match.params.id)
             .then(res => {
-                res.success ? this.setState(() => ({ data: res.payload })) : this.props.goToForumsPage().then(()=>{alert(res.payload)});
+                res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(()=>{alert(res.payload)});
             });
+    }
+
+    private createComment():Promise<boolean>{
+        return new Promise((resolve)=>{
+            api.createComment({
+                _creator:this.props.user._id,
+                _parent:this.state.data._id,
+                content:this.state.comment,
+            }).then(res=>{
+                res.success ? this.forceUpdate():errors.handle(res.payload);
+                resolve(res.success);
+            })
+        });
     }
 
     private handleSubmit(e:Event):void{
         e.preventDefault();
-        this.props.createComment({
-            _creator:this.props.user._id,
-            _parent:this.state.data._id,
-            content:this.state.comment,
-        });
+        this.createComment();
     }
 
     private handleChange(e:any){
@@ -42,17 +52,12 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
         this.setState(()=>(newState));
     }
 
-    private handleDelete():void{
-        this.props.deletePost(this.state.data._id)
-    }
-
     private comments():JSX.Element{
         const comments = this.state.data.comments.map((comment, i)=>{
             const props = {
                 data:comment,
-                deleteComment:this.props.deleteComment,
                 className:"standardComment",
-                edit:this.props.user && comment._creator === this.props.user._id
+                editable:this.props.user && comment._creator === this.props.user._id
             }
             return <li key={'comment'+i}><Comment {...props} /></li>
         });
@@ -108,7 +113,7 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
             <ul className="itemContent">
                 <li>{x.title}</li>
                 <li>{x.content}</li>
-                <li>By: {x.creator.firstName} {x.creator.lastName}</li>
+                <li>By: {x.creator.username}</li>
             </ul>
         );
     }

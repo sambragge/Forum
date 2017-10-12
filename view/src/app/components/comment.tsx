@@ -9,15 +9,11 @@ export default class ForumComment extends React.Component<ICommentProps, {}> {
             <div className={this.props.className}>
                 <ul>
                     <li>{x.content}</li>
-                    <li>By: {x.creator.firstName} {x.creator.lastName}</li>
+                    <li>By: {x.creator.username}</li>
                 </ul>
-                {this.props.edit && this.edit()}
+                {this.props.editable && this.edit()}
             </div>
         );
-    }
-
-    private delete():void{
-        this.props.deleteComment(this.props.data._id);
     }
 
     private edit():JSX.Element{

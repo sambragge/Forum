@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { api, errors } from '../../util';
-import { IUserEditPageState, IUserEditPageProps } from '../../interfaces';
+import { IUserEditPageState, IUserEditPageProps, IUpdateUserInfoRequest } from '../../interfaces';
 import Loading from '../loading';
 
 export default class UserEditPage extends React.Component<IUserEditPageProps, IUserEditPageState> {
@@ -8,17 +8,17 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
     static initialState: IUserEditPageState = {
         data: null,
         updateDisabled:false,
-        firstName: "",
-        lastName: "",
+        username:"",
         state: "",
         city: "",
-        zip: "",
     }
 
     constructor(props: IUserEditPageProps) {
         super(props);
         this.state = UserEditPage.initialState;
         this.getUser = this.getUser.bind(this);
+
+        
     }
 
     componentDidMount(): void {
@@ -28,11 +28,16 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
     }
 
     // Private Methods
+    private bindActions():void{
+        this.goBack = this.goBack.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
+        this.delete = this.delete.bind(this);
+    }
     private header(): JSX.Element {
         return (
             <div className="pageHeader row">
                 <ul>
-                    <li><button onClick={this.goBack.bind(this)} >Cancel</button></li>
+                    <li><button onClick={this.goBack} >Cancel</button></li>
                     <li><button disabled={this.state.updateDisabled} onClick={this.handleDelete.bind(this)}>Delete Account</button></li>
                 </ul>
             </div>
@@ -51,19 +56,28 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
                 });
         });
     }
+
+    private updateInfo(updateReq:IUpdateUserInfoRequest):Promise<boolean>{
+        return new Promise((resolve)=>{
+            api.updateUserInfo(updateReq)
+            .then(res=>{
+                !res.success ? errors.handle(res.payload):this.goBack;
+                resolve(res.success)
+            });
+        });
+    }
+
     private handleSubmit(e: Event): void {
         e.preventDefault();
         this.setState(()=>({updateDisabled:true}));
         const confirmation = confirm("Are you sure you want to save these changes?");
         confirmation &&
-            this.props.updateUserInfo({
+            this.updateInfo({
                 _id: this.state.data._id,
-                firstName: this.state.firstName,
-                lastName: this.state.lastName,
+                username:this.state.username,
                 location: {
                     state: this.state.state,
                     city: this.state.city,
-                    zip: this.state.zip,
                 }
             });
     }
@@ -72,20 +86,29 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
         newState[e.target.name] = e.target.value;
         this.setState(() => newState);
     }
+
+    private delete():Promise<boolean>{
+        return new Promise((resolve)=>{
+            api.deleteUser(this.state.data._id)
+            .then(res=>{
+                res.success ? this.props.goHome():errors.handle(res.payload);
+                resolve(res.success)
+            });
+        });
+    }
+
     private handleDelete(): void {
         const confirmation = confirm("Are you sure? This will delete any Forums, Posts and Comments you have created as well.")
         confirmation &&
-            this.props.deleteUser(this.state.data._id);
+            this.delete();
     }
     // Views
     private content(): JSX.Element {
         return (
             <form className="updateForm">
-                <input onChange={this.handleChange.bind(this)} type="text" name="firstName" defaultValue={this.state.data.firstName} />
-                <input onChange={this.handleChange.bind(this)} type="text" name="lastName" defaultValue={this.state.data.lastName} />
+                <input onChange={this.handleChange.bind(this)} type="text" name="username" defaultValue={this.state.data.username} />
                 <input onChange={this.handleChange.bind(this)} type="text" name="state" defaultValue={this.state.data.location.state} />
                 <input onChange={this.handleChange.bind(this)} type="text" name="city" defaultValue={this.state.data.location.city} />
-                <input onChange={this.handleChange.bind(this)} type="text" name="zip" defaultValue={this.state.data.location.zip} />
                 <input type="submit" value="update user" />
             </form>
         );

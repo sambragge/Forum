@@ -11,9 +11,9 @@ export default class User extends React.Component<IUserProps, {}>{
             <div className={this.props.className} onClick={this.handleClick.bind(this)}>
                 <ul>
                     <li>{x.gender}</li>
-                    <li>{x.firstName} {x.lastName}</li>
+                    <li>{x.username}</li>
                     <li>{x.email}</li>
-                    <li>{x.location.city} {x.location.state}, {x.location.zip}</li>
+                    <li>{x.location.city} {x.location.state}</li>
                 </ul>
             </div>
         );

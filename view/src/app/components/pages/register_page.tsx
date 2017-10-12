@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { IRegisterPageProps, IRegisterPageState } from '../../interfaces';
+import { api, errors } from '../../util';
 
 export default class RegisterPage extends React.Component<IRegisterPageProps, IRegisterPageState> {
 
     static initialState:IRegisterPageState = {
         gender:"male",
-        firstName:"",
-        lastName:"",
+        username:"",
         email:"",
         state:"",
         city:"",
-        zip:"",
         password:"",
         confirmPassword:"",
     }
@@ -32,15 +31,10 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
 
                     <input 
                     type="text" 
-                    name="firstName" 
-                    placeholder="First Name..." 
+                    name="username" 
+                    placeholder="Username..." 
                     onChange={this.handleChange.bind(this)}/>
 
-                    <input 
-                    type="text" 
-                    name="lastName" 
-                    placeholder="Last Name..." 
-                    onChange={this.handleChange.bind(this)}/>
 
                     <input 
                     type="text" 
@@ -61,12 +55,6 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
                     onChange={this.handleChange.bind(this)}/>
 
                     <input 
-                    type="text" 
-                    name="zip" 
-                    placeholder="Zip..." 
-                    onChange={this.handleChange.bind(this)}/>
-
-                    <input 
                     type="password" 
                     name="password" 
                     placeholder="Password..." 
@@ -84,21 +72,28 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
         );
     }
 
+    private createUser():Promise<boolean>{
+        return new Promise((resolve)=>{
+            api.createUser({
+                gender: this.state.gender,
+                username:this.state.username,
+                email:this.state.email,
+                location:{
+                    state:this.state.state,
+                    city:this.state.city,
+                },
+                password:this.state.password,
+                confirmPassword:this.state.confirmPassword,
+            }).then(res=>{
+                res.success ? this.props.history.push("/"):errors.handle(res.payload);
+                resolve(res.payload);
+            });
+        });
+    }
+
     private handleSubmit(e:Event):void{
         e.preventDefault();
-        this.props.createUser({
-            gender: this.state.gender,
-            firstName:this.state.firstName,
-            lastName:this.state.lastName,
-            email:this.state.email,
-            location:{
-                state:this.state.state,
-                city:this.state.city,
-                zip:this.state.zip,
-            },
-            password:this.state.password,
-            confirmPassword:this.state.confirmPassword,
-        });
+        this.createUser();
 
     }
     private handleChange(e:any):void{

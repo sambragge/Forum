@@ -19,6 +19,7 @@ func serveView(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./view/index.html")
 }
 
+// Router : handles incomming requests and routes them to the proper handler
 func Router(_users *controllers.UserController, _forums *controllers.ForumController, _auth *controllers.AuthController) *mux.Router {
 
 	r := mux.NewRouter()
@@ -39,14 +40,14 @@ func Router(_users *controllers.UserController, _forums *controllers.ForumContro
 	r.Methods(delete).Path("/api-forums/{id}").HandlerFunc(_forums.Delete)
 
 	// Posts
-	r.Methods(get).Path("/api-forums/posts").HandlerFunc(_forums.GetPosts)
-	r.Methods(post).Path("/api-forums/posts").HandlerFunc(_forums.CreatePost)
-	r.Methods(get).Path("/api-forums/posts/{id}").HandlerFunc(_forums.GetPost)
-	r.Methods(delete).Path("/api-forums/posts/{id}").HandlerFunc(_forums.DeletePost)
+	r.Methods(get).Path("/api-posts").HandlerFunc(_forums.GetPosts)
+	r.Methods(post).Path("/api-posts").HandlerFunc(_forums.CreatePost)
+	r.Methods(get).Path("/api-posts/{id}").HandlerFunc(_forums.GetPost)
+	r.Methods(delete).Path("/api-posts/{id}").HandlerFunc(_forums.DeletePost)
 
 	// Comments
-	r.Methods(post).Path("/api-forums/comments").HandlerFunc(_forums.CreateComment)
-	r.Methods(delete).Path("/api-forums/comments/{id}").HandlerFunc(_forums.DeleteComment)
+	r.Methods(post).Path("/api-comments").HandlerFunc(_forums.CreateComment)
+	r.Methods(delete).Path("/api-comments/{id}").HandlerFunc(_forums.DeleteComment)
 
 	// Auth
 	r.Methods(post).Path("/api-auth").HandlerFunc(_auth.Login)

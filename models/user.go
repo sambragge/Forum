@@ -16,25 +16,24 @@ import (
 type Location struct {
 	State string `json:"state" bson:"state"`
 	City  string `json:"city" bson:"city"`
-	Zip   string `json:"zip" bson:"zip"`
 }
 
 //User Data Model
 type User struct {
-	ID              bson.ObjectId   `json:"_id" bson:"_id"`
-	Gender          string          `json:"gender" bson:"gender"`
-	FirstName       string          `json:"firstName" bson:"firstName"`
-	LastName        string          `json:"lastName" bson:"lastName"`
-	Email           string          `json:"email" bson:"email"`
-	Location        Location        `json:"location" bson:"location"`
-	FollowingIDs    []bson.ObjectId `json:"_following" bson:"_following"`
-	Password        string          `json:"password" bson:"password"`
-	ConfirmPassword string          `json:"confirmPassword,omitempty" bson:"confirmPassword,omitempty"`
-	CreatedAt       time.Time       `json:"_createdAt" bson:"_createdAt"`
-	UpdatedAt       time.Time       `json:"_updatedAt" bson:"_updatedAt"`
-	// Populated fields
-	Following []*User `json:"following,omitempty" bson:"-"`
-	Followers []*User `json:"followers,omitempty" bson:"-"`
+	ID           bson.ObjectId   `json:"_id" bson:"_id"`
+	Gender       string          `json:"gender" bson:"gender"`
+	Username     string          `json:"username" bson:"username"`
+	Email        string          `json:"email" bson:"email"`
+	Birthday     time.Time       `json:"birthday" bson:"birthday"`
+	Location     Location        `json:"location" bson:"location"`
+	FollowingIDs []bson.ObjectId `json:"_following" bson:"_following"`
+	Password     string          `json:"password" bson:"password"`
+	CreatedAt    time.Time       `json:"_createdAt" bson:"_createdAt"`
+	UpdatedAt    time.Time       `json:"_updatedAt" bson:"_updatedAt"`
+	// Client Only ( Ignored by MongoDB )
+	Following       []*User `json:"following,omitempty" bson:"-"`
+	Followers       []*User `json:"followers,omitempty" bson:"-"`
+	ConfirmPassword string  `json:"confirmPassword,omitempty" bson:"_"`
 }
 
 // Sync : use bson.ObjectId to generate the rest of the model
@@ -60,10 +59,10 @@ func (u *User) Populate(_users *mgo.Collection) {
 
 }
 
-// UpdatePersonalInfo : update users firstName, lastName, location
+// UpdateInfo : update users firstName, lastName, location
 func (u *User) UpdateInfo(_users *mgo.Collection) error {
 	query := bson.M{"_id": u.ID}
-	change := bson.M{"$set": bson.M{"firstName": u.FirstName, "lastName": u.LastName, "location": u.Location, "_updatedAt": time.Now()}}
+	change := bson.M{"$set": bson.M{"username": u.Username, "location": u.Location, "_updatedAt": time.Now()}}
 	err := _users.Update(query, change)
 	return err
 }
@@ -156,11 +155,8 @@ func (u *User) validate(c *mgo.Collection) []string {
 	if u.Gender == "" {
 		errors = append(errors, "Gender is required!")
 	}
-	if u.FirstName == "" {
-		errors = append(errors, "First name is required!")
-	}
-	if u.LastName == "" {
-		errors = append(errors, "Last name is required!")
+	if u.Username == "" {
+		errors = append(errors, "Username is required!")
 	}
 	if u.Email == "" {
 		errors = append(errors, "Email is required!")
@@ -170,9 +166,6 @@ func (u *User) validate(c *mgo.Collection) []string {
 	}
 	if u.Location.State == "" {
 		errors = append(errors, "State is required!")
-	}
-	if u.Location.Zip == "" {
-		errors = append(errors, "Zip is required!")
 	}
 	if string(u.Password) == "" {
 		errors = append(errors, "Password is required!")
@@ -238,7 +231,7 @@ func (u *User) Save(c *mgo.Collection) []string {
 func (u *User) SayHello() {
 	log.Print("==== START USER ===")
 	log.Print("Gender: ", u.Gender)
-	log.Print("Name: ", u.FirstName+" "+u.LastName)
+	log.Print("Username: ", u.Username)
 	log.Print("Followers: ", u.Followers)
 	log.Print("Following: ", u.Following)
 	log.Print("==== END USER ===")
