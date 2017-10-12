@@ -1,0 +1,112 @@
+@import url(./normalize.css);
+@import url(./skeleton.css);
+.flexrow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; }
+
+ul {
+  list-style-type: none; }
+  ul li {
+    margin: 0; }
+
+form * {
+  display: block; }
+form textarea {
+  width: 100%;
+  resize: vertical; }
+
+.button-danger {
+  color: red;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px solid red; }
+  .button-danger:hover {
+    color: rgba(255, 255, 255, 0.5);
+    background-color: red;
+    border: 1px solid rgba(0, 0, 0, 0.5); }
+
+.standardForum {
+  cursor: pointer;
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }
+  .standardForum:hover {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }
+
+.standardForumPost {
+  cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);
+  text-align: center; }
+  .standardForumPost:hover {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }
+
+.standardForumComment {
+  padding: 10px;
+  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);
+  text-align: center; }
+
+.standardUser {
+  cursor: pointer;
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }
+  .standardUser:Hover {
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }
+
+.edit {
+  text-decoration: none;
+  color: #4D9FA5; }
+
+.app {
+  height: 100vh; }
+  .app .header {
+    height: 10%; }
+    .app .header ul {
+      height: 100%;
+      display: flex;
+      justify-content: space-around;
+      list-style-type: none; }
+      .app .header ul li {
+        align-self: center;
+        display: inline-block;
+        cursor: pointer; }
+        .app .header ul li a {
+          text-decoration: none;
+          color: #B35078; }
+          .app .header ul li a:hover {
+            color: #4D9FA5; }
+        .app .header ul li .activePage {
+          font-weight: bold;
+          color: #4D9FA5; }
+  .app .pageHeader {
+    border-bottom: 1px groove rgba(0, 0, 0, 0.5);
+    margin-bottom: 2%; }
+  .app .itemContent {
+    text-align: center;
+    border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }
+  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {
+    padding: 1%; }
+  .app .profilePage {
+    height: 100%; }
+    .app .profilePage .avatar {
+      display: inline-block;
+      height: 250px;
+      width: 250px;
+      padding: 5px; }
+      .app .profilePage .avatar img {
+        height: 100%;
+        width: 100%; }
+    .app .profilePage .info {
+      display: inline-block; }
+    .app .profilePage .connections {
+      height: 50%;
+      padding: 1%; }
+      .app .profilePage .connections .connectionBox {
+        height: 100%; }
+        .app .profilePage .connections .connectionBox ul {
+          height: 100%;
+          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+          overflow-y: scroll; }
+
+/*# sourceMappingURL=index.css.map */
