@@ -24,7 +24,12 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
         
         api.getPost(this.props.match.params.id)
             .then(res => {
-                res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(()=>{alert(res.payload)});
+                if(res.success){
+                    this.setState(() => ({ data: res.payload }))
+                }else{
+                    this.props.history.push("/");
+                    alert(res.payload);
+                }
             });
     }
 

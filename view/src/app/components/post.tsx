@@ -1,24 +1,39 @@
 import * as React from 'react';
 import { IPostProps } from '../interfaces';
+import { withRouter } from 'react-router-dom';
 
-export default class ForumPost extends React.Component<IPostProps, any> {
+class Post extends React.Component<IPostProps, any> {
 
-    public render(){
+    private content():JSX.Element{
         const x = this.props.data;
         return(
-            <div className={this.props.className} onClick={this.handleClick.bind(this)}>
-                <ul>
-                    <li>{x.title}</li>
-                    <li>{this.shortContent()}</li>
-                    <li>Comments: {x.comments ? x.comments.length:'0'}</li>
-                </ul>
-            </div>
+            <ul>
+                {x.parent && <li><a className="itemLink" onClick={this.handleParentClick.bind(this)} >{'/'+x.parent.topic}</a></li>}
+                <li>{x.title}</li>
+                <li>{x.content}</li>
+
+                <li><a className="itemLink" onClick={this.handleCommentsClick.bind(this)} >Comments</a> {x.comments ? x.comments.length:'0'}</li>
+                <li>by: <a className="itemLink" onClick={this.handleUserClick.bind(this)} >{x.creator.username}</a></li>
+            </ul>
         );
     }
 
-    private handleClick(e:Event){
-        console.log("ForumPost Component calling goToForumPostPage with id as: ", this.props.data._id);
-        this.props.goToPostPage(this.props.data._id);
+    public render(){
+        
+        return(
+            <div className={this.props.className}>
+                {this.content()}
+            </div>
+        );
+    }
+    private handleParentClick(e:Event):void{
+        this.props.history.push("/forum/"+this.props.data._parent);
+    }
+    private handleCommentsClick(e:Event):void{
+        this.props.history.push("/post/"+this.props.data._id);
+    }
+    private handleUserClick(e:Event):void{
+        this.props.history.push("/profile/"+this.props.data._creator);
     }
 
     private shortContent():string{
@@ -28,3 +43,5 @@ export default class ForumPost extends React.Component<IPostProps, any> {
         this.props.data.content;
     }
 }
+
+export default withRouter(Post);

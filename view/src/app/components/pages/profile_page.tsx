@@ -43,7 +43,7 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
                     this.setState((state) => ({ data: res.payload }));
                 } else {
                     alert(res.payload);
-                    this.props.goHome();
+                    this.props.history.push("/");
                 }
             })
     }
@@ -96,7 +96,6 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
                 const props = {
                     data: user,
                     className: "standardUser",
-                    goToProfile: this.props.goToProfile,
                 }
                 return <li key={'follower' + i}><User {...props} /></li>
             });
@@ -117,7 +116,6 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
             users = this.state.data.following.map((user, i) => {
                 const props = {
                     data: user,
-                    goToProfile: this.props.goToProfile,
                     className: "standardUser",
                 }
                 return <li key={'following' + i}><User {...props} /></li>;

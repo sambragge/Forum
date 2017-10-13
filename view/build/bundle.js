@@ -393,7 +393,7 @@ module.exports = warning;
 "use strict";
 
 
-module.exports = __webpack_require__(22);
+module.exports = __webpack_require__(24);
 
 
 /***/ }),
@@ -556,7 +556,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 var _prodInvariant = __webpack_require__(4);
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var ReactDOMComponentFlags = __webpack_require__(83);
 
 var invariant = __webpack_require__(1);
@@ -865,7 +865,7 @@ module.exports = warning;
 
 
 
-var _prodInvariant = __webpack_require__(23);
+var _prodInvariant = __webpack_require__(25);
 
 var ReactCurrentOwner = __webpack_require__(15);
 
@@ -1767,9 +1767,9 @@ var _prodInvariant = __webpack_require__(4),
     _assign = __webpack_require__(5);
 
 var CallbackQueue = __webpack_require__(87);
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 var ReactFeatureFlags = __webpack_require__(88);
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 var Transaction = __webpack_require__(38);
 
 var invariant = __webpack_require__(1);
@@ -2022,7 +2022,7 @@ module.exports = ReactUpdates;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 
 var emptyFunction = __webpack_require__(10);
 var warning = __webpack_require__(2);
@@ -2280,6 +2280,22 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+class Loading extends React.Component {
+    render() {
+        return (React.createElement("h1", null, "Loading..."));
+    }
+}
+exports.default = Loading;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -2491,7 +2507,213 @@ module.exports = DOMProperty;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 19 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __webpack_require__(244);
+exports.api = {
+    // Users
+    login: (creds) => {
+        return axios_1.default
+            .post("/api-auth", creds)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in login!", err);
+        });
+    },
+    getUsers: () => {
+        return axios_1.default
+            .get("/api-users")
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in getUsers!", err);
+        });
+    },
+    getUser: (id) => {
+        console.log("Getting user with id of: ", id);
+        return axios_1.default
+            .get("/api-users/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(err);
+        });
+    },
+    createUser: (user) => {
+        return axios_1.default.post("/api-users", user)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createUser", err);
+        });
+    },
+    updateUserInfo: (updateReq) => {
+        return axios_1.default.put("/api-users", updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updateUserInfo", err);
+        });
+    },
+    deleteUser: (id) => {
+        console.log("== In deleteUser ( util )", id);
+        return axios_1.default.delete("/api-users/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deleteUser", err);
+        });
+    },
+    followUser: (followRequest) => {
+        console.log("Getting to followUser in util");
+        return axios_1.default.post("/api-users/follow", followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) followUser", err);
+        });
+    },
+    unFollowUser: (followRequest) => {
+        return axios_1.default.post("/api-users/unfollow", followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) unFollowUser", err);
+        });
+    },
+    // Forums
+    getForums: () => {
+        return axios_1.default.get("/api-forums")
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForums", err);
+        });
+    },
+    getForum: (id) => {
+        return axios_1.default.get("/api-forums/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForum", err);
+        });
+    },
+    createForum: (forum) => {
+        return axios_1.default.post("/api-forums", forum)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForum", err);
+        });
+    },
+    deleteForum: (id) => {
+        return axios_1.default.delete("/api-forums/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("Error deleting Forum", err);
+        });
+    },
+    // Posts
+    getPost: (id) => {
+        return axios_1.default.get("/api-posts/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForumPost", err);
+        });
+    },
+    getPosts: () => {
+        return axios_1.default.get("/api-posts")
+            .then(res => res.data)
+            .catch(err => {
+            console.error(new Error("=== Error in (util) getForumPost: " + err));
+        });
+    },
+    deletePost: (id) => {
+        return axios_1.default.delete("/api-forums/posts/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deletePost", err);
+        });
+    },
+    createPost: (post) => {
+        return axios_1.default.post("/api-forums/posts", post)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForumPost", err);
+        });
+    },
+    // Comments
+    createComment: (comment) => {
+        return axios_1.default.post("/api-forums/comments", comment)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) createForumComment", err);
+        });
+    },
+    deleteComment: (id) => {
+        return axios_1.default.delete("/api-forums/comments/" + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) deleteComment", err);
+        });
+    },
+};
+exports.jwt = {
+    check: () => {
+        const token = localStorage.getItem('token');
+        return token ? true : false;
+    },
+    authenticate: (token) => {
+        console.log("authenticating token: ", { token: token });
+        return axios_1.default
+            .get("/api-auth/" + token)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== err getting user id from token!", err);
+            return;
+        });
+    },
+    set: (token) => {
+        localStorage.setItem('token', token);
+        return;
+    },
+    get: () => {
+        const token = localStorage.getItem('token');
+        return token;
+    },
+    remove: () => {
+        return new Promise((resolve) => {
+            localStorage.removeItem('token');
+            resolve();
+        });
+    },
+};
+function capitalizeOne(data) {
+    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
+}
+exports.helpers = {
+    inArray: (str, arr) => {
+        for (let i = 0; i < arr.length; i++) {
+            if (str === arr[i]) {
+                return true;
+            }
+        }
+        return false;
+    },
+    capitalize: (data) => {
+        const split = data.split(" ");
+        for (let i in split) {
+            split[i] = capitalizeOne(split[i]);
+        }
+        return split.join(" ");
+    },
+};
+exports.errors = {
+    handle: (errors) => {
+        for (let errString of errors) {
+            console.error(new Error(errString));
+        }
+        alert(errors.join("\n"));
+    },
+};
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2838,7 +3060,66 @@ module.exports = ReactElement;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 22 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__ = __webpack_require__(130);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BrowserRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HashRouter__ = __webpack_require__(133);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "HashRouter", function() { return __WEBPACK_IMPORTED_MODULE_1__HashRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Link__ = __webpack_require__(79);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_2__Link__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__ = __webpack_require__(135);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NavLink__ = __webpack_require__(138);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "NavLink", function() { return __WEBPACK_IMPORTED_MODULE_4__NavLink__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Prompt__ = __webpack_require__(141);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_5__Prompt__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Redirect__ = __webpack_require__(143);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_6__Redirect__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Route__ = __webpack_require__(80);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_7__Route__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(47);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_8__Router__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__StaticRouter__ = __webpack_require__(149);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__StaticRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Switch__ = __webpack_require__(151);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_10__Switch__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__matchPath__ = __webpack_require__(153);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_11__matchPath__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__withRouter__ = __webpack_require__(154);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_12__withRouter__["a"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2956,23 +3237,7 @@ module.exports = PooledClass;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-class Loading extends React.Component {
-    render() {
-        return (React.createElement("h1", null, "Loading..."));
-    }
-}
-exports.default = Loading;
-
-
-/***/ }),
-/* 22 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2993,7 +3258,7 @@ var _assign = __webpack_require__(5);
 var ReactBaseClasses = __webpack_require__(69);
 var ReactChildren = __webpack_require__(116);
 var ReactDOMFactories = __webpack_require__(120);
-var ReactElement = __webpack_require__(19);
+var ReactElement = __webpack_require__(21);
 var ReactPropTypes = __webpack_require__(124);
 var ReactVersion = __webpack_require__(126);
 
@@ -3110,7 +3375,7 @@ module.exports = React;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 23 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3154,66 +3419,7 @@ function reactProdInvariant(code) {
 module.exports = reactProdInvariant;
 
 /***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__ = __webpack_require__(130);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BrowserRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HashRouter__ = __webpack_require__(133);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "HashRouter", function() { return __WEBPACK_IMPORTED_MODULE_1__HashRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Link__ = __webpack_require__(79);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_2__Link__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__ = __webpack_require__(135);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NavLink__ = __webpack_require__(138);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "NavLink", function() { return __WEBPACK_IMPORTED_MODULE_4__NavLink__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Prompt__ = __webpack_require__(141);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_5__Prompt__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Redirect__ = __webpack_require__(143);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_6__Redirect__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Route__ = __webpack_require__(80);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_7__Route__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(47);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_8__Router__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__StaticRouter__ = __webpack_require__(149);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__StaticRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Switch__ = __webpack_require__(151);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_10__Switch__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__matchPath__ = __webpack_require__(153);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_11__matchPath__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__withRouter__ = __webpack_require__(154);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_12__withRouter__["a"]; });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3385,7 +3591,7 @@ module.exports = ReactReconciler;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3506,212 +3712,6 @@ DOMLazyTree.queueHTML = queueHTML;
 DOMLazyTree.queueText = queueText;
 
 module.exports = DOMLazyTree;
-
-/***/ }),
-/* 27 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __webpack_require__(244);
-exports.api = {
-    // Users
-    login: (creds) => {
-        return axios_1.default
-            .post("/api-auth", creds)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in login!", err);
-        });
-    },
-    getUsers: () => {
-        return axios_1.default
-            .get("/api-users")
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in getUsers!", err);
-        });
-    },
-    getUser: (id) => {
-        console.log("Getting user with id of: ", id);
-        return axios_1.default
-            .get("/api-users/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(err);
-        });
-    },
-    createUser: (user) => {
-        return axios_1.default.post("/api-users", user)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createUser", err);
-        });
-    },
-    updateUserInfo: (updateReq) => {
-        return axios_1.default.put("/api-users", updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updateUserInfo", err);
-        });
-    },
-    deleteUser: (id) => {
-        console.log("== In deleteUser ( util )", id);
-        return axios_1.default.delete("/api-users/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deleteUser", err);
-        });
-    },
-    followUser: (followRequest) => {
-        console.log("Getting to followUser in util");
-        return axios_1.default.post("/api-users/follow", followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) followUser", err);
-        });
-    },
-    unFollowUser: (followRequest) => {
-        return axios_1.default.post("/api-users/unfollow", followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) unFollowUser", err);
-        });
-    },
-    // Forums
-    getForums: () => {
-        return axios_1.default.get("/api-forums")
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForums", err);
-        });
-    },
-    getForum: (id) => {
-        return axios_1.default.get("/api-forums/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForum", err);
-        });
-    },
-    createForum: (forum) => {
-        return axios_1.default.post("/api-forums", forum)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForum", err);
-        });
-    },
-    deleteForum: (id) => {
-        return axios_1.default.delete("/api-forums/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("Error deleting Forum", err);
-        });
-    },
-    // Posts
-    getPost: (id) => {
-        return axios_1.default.get("/api-posts/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForumPost", err);
-        });
-    },
-    getPosts: () => {
-        return axios_1.default.get("/api-posts")
-            .then(res => res.data)
-            .catch(err => {
-            console.error(new Error("=== Error in (util) getForumPost: " + err));
-        });
-    },
-    deletePost: (id) => {
-        return axios_1.default.delete("/api-forums/posts/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deletePost", err);
-        });
-    },
-    createPost: (post) => {
-        return axios_1.default.post("/api-forums/posts", post)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForumPost", err);
-        });
-    },
-    // Comments
-    createComment: (comment) => {
-        return axios_1.default.post("/api-forums/comments", comment)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) createForumComment", err);
-        });
-    },
-    deleteComment: (id) => {
-        return axios_1.default.delete("/api-forums/comments/" + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) deleteComment", err);
-        });
-    },
-};
-exports.jwt = {
-    check: () => {
-        const token = localStorage.getItem('token');
-        return token ? true : false;
-    },
-    authenticate: (token) => {
-        console.log("authenticating token: ", { token: token });
-        return axios_1.default
-            .get("/api-auth/" + token)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== err getting user id from token!", err);
-            return;
-        });
-    },
-    set: (token) => {
-        localStorage.setItem('token', token);
-        return;
-    },
-    get: () => {
-        const token = localStorage.getItem('token');
-        return token;
-    },
-    remove: () => {
-        return new Promise((resolve) => {
-            localStorage.removeItem('token');
-            resolve();
-        });
-    },
-};
-function capitalizeOne(data) {
-    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
-}
-exports.helpers = {
-    inArray: (str, arr) => {
-        for (let i = 0; i < arr.length; i++) {
-            if (str === arr[i]) {
-                return true;
-            }
-        }
-        return false;
-    },
-    capitalize: (data) => {
-        const split = data.split(" ");
-        for (let i in split) {
-            split[i] = capitalizeOne(split[i]);
-        }
-        return split.join(" ");
-    },
-};
-exports.errors = {
-    handle: (errors) => {
-        for (let errString of errors) {
-            console.error(new Error(errString));
-        }
-        alert(errors.join("\n"));
-    },
-};
-
 
 /***/ }),
 /* 28 */
@@ -6692,7 +6692,7 @@ module.exports = getEventModifierState;
 
 
 
-var DOMLazyTree = __webpack_require__(26);
+var DOMLazyTree = __webpack_require__(27);
 var Danger = __webpack_require__(177);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactInstrumentation = __webpack_require__(12);
@@ -6991,7 +6991,7 @@ var _prodInvariant = __webpack_require__(4);
 var ReactPropTypesSecret = __webpack_require__(96);
 var propTypesFactory = __webpack_require__(74);
 
-var React = __webpack_require__(22);
+var React = __webpack_require__(24);
 var PropTypes = propTypesFactory(React.isValidElement);
 
 var invariant = __webpack_require__(1);
@@ -8218,7 +8218,7 @@ function toComment(sourceMap) {
 
 
 
-var _prodInvariant = __webpack_require__(23),
+var _prodInvariant = __webpack_require__(25),
     _assign = __webpack_require__(5);
 
 var ReactNoopUpdateQueue = __webpack_require__(70);
@@ -8548,7 +8548,7 @@ module.exports = getIteratorFn;
 
 var ReactCurrentOwner = __webpack_require__(15);
 var ReactComponentTreeHook = __webpack_require__(9);
-var ReactElement = __webpack_require__(19);
+var ReactElement = __webpack_require__(21);
 
 var checkReactTypeSpec = __webpack_require__(121);
 
@@ -10033,7 +10033,7 @@ var _prodInvariant = __webpack_require__(4);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 
 var invariant = __webpack_require__(1);
 
@@ -10642,7 +10642,7 @@ module.exports = CSSProperty;
 
 
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactInstrumentation = __webpack_require__(12);
 
@@ -11249,7 +11249,7 @@ module.exports = instantiateReactComponent;
 
 var _prodInvariant = __webpack_require__(4);
 
-var React = __webpack_require__(22);
+var React = __webpack_require__(24);
 
 var invariant = __webpack_require__(1);
 
@@ -11840,9 +11840,9 @@ module.exports = getActiveElement;
 
 var _prodInvariant = __webpack_require__(4);
 
-var DOMLazyTree = __webpack_require__(26);
-var DOMProperty = __webpack_require__(18);
-var React = __webpack_require__(22);
+var DOMLazyTree = __webpack_require__(27);
+var DOMProperty = __webpack_require__(19);
+var React = __webpack_require__(24);
 var ReactBrowserEventEmitter = __webpack_require__(42);
 var ReactCurrentOwner = __webpack_require__(15);
 var ReactDOMComponentTree = __webpack_require__(6);
@@ -11852,7 +11852,7 @@ var ReactFeatureFlags = __webpack_require__(88);
 var ReactInstanceMap = __webpack_require__(33);
 var ReactInstrumentation = __webpack_require__(12);
 var ReactMarkupChecksum = __webpack_require__(235);
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 var ReactUpdateQueue = __webpack_require__(64);
 var ReactUpdates = __webpack_require__(16);
 
@@ -12677,26 +12677,43 @@ module.exports = Cancel;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-class User extends React.Component {
-    render() {
+const react_router_dom_1 = __webpack_require__(22);
+class Post extends React.Component {
+    content() {
         const x = this.props.data;
-        return (React.createElement("div", { className: this.props.className, onClick: this.handleClick.bind(this) },
-            React.createElement("ul", null,
-                React.createElement("li", null, x.gender),
-                React.createElement("li", null, x.username),
-                React.createElement("li", null, x.email),
-                React.createElement("li", null,
-                    x.location.city,
-                    " ",
-                    x.location.state))));
+        return (React.createElement("ul", null,
+            x.parent && React.createElement("li", null,
+                React.createElement("a", { className: "itemLink", onClick: this.handleParentClick.bind(this) }, '/' + x.parent.topic)),
+            React.createElement("li", null, x.title),
+            React.createElement("li", null, x.content),
+            React.createElement("li", null,
+                React.createElement("a", { className: "itemLink", onClick: this.handleCommentsClick.bind(this) }, "Comments"),
+                " ",
+                x.comments ? x.comments.length : '0'),
+            React.createElement("li", null,
+                "by: ",
+                React.createElement("a", { className: "itemLink", onClick: this.handleUserClick.bind(this) }, x.creator.username))));
     }
-    handleClick() {
-        console.log("=== User data is: ", this.props.data);
-        console.log("=== Going to profile with id: ", this.props.data._id);
-        this.props.goToProfile(this.props.data._id);
+    render() {
+        return (React.createElement("div", { className: this.props.className }, this.content()));
+    }
+    handleParentClick(e) {
+        this.props.history.push("/forum/" + this.props.data._parent);
+    }
+    handleCommentsClick(e) {
+        this.props.history.push("/post/" + this.props.data._id);
+    }
+    handleUserClick(e) {
+        this.props.history.push("/profile/" + this.props.data._creator);
+    }
+    shortContent() {
+        const characterMax = 30;
+        return this.props.data.content.length > characterMax ?
+            this.props.data.content.slice(0, characterMax) + '...' :
+            this.props.data.content;
     }
 }
-exports.default = User;
+exports.default = react_router_dom_1.withRouter(Post);
 
 
 /***/ }),
@@ -12714,7 +12731,7 @@ module.exports = __webpack_require__(115);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(24);
+const react_router_dom_1 = __webpack_require__(22);
 const react_dom_1 = __webpack_require__(157);
 const app_1 = __webpack_require__(243);
 __webpack_require__(280);
@@ -12742,7 +12759,7 @@ react_dom_1.render(main, root);
 
 
 var PooledClass = __webpack_require__(117);
-var ReactElement = __webpack_require__(19);
+var ReactElement = __webpack_require__(21);
 
 var emptyFunction = __webpack_require__(10);
 var traverseAllChildren = __webpack_require__(118);
@@ -12938,7 +12955,7 @@ module.exports = ReactChildren;
 
 
 
-var _prodInvariant = __webpack_require__(23);
+var _prodInvariant = __webpack_require__(25);
 
 var invariant = __webpack_require__(1);
 
@@ -13055,7 +13072,7 @@ module.exports = PooledClass;
 
 
 
-var _prodInvariant = __webpack_require__(23);
+var _prodInvariant = __webpack_require__(25);
 
 var ReactCurrentOwner = __webpack_require__(15);
 var REACT_ELEMENT_TYPE = __webpack_require__(71);
@@ -13301,7 +13318,7 @@ module.exports = KeyEscapeUtils;
 
 
 
-var ReactElement = __webpack_require__(19);
+var ReactElement = __webpack_require__(21);
 
 /**
  * Create a factory that creates HTML tag elements.
@@ -13476,7 +13493,7 @@ module.exports = ReactDOMFactories;
 
 
 
-var _prodInvariant = __webpack_require__(23);
+var _prodInvariant = __webpack_require__(25);
 
 var ReactPropTypeLocationNames = __webpack_require__(122);
 var ReactPropTypesSecret = __webpack_require__(123);
@@ -13622,7 +13639,7 @@ module.exports = ReactPropTypesSecret;
 
 
 
-var _require = __webpack_require__(19),
+var _require = __webpack_require__(21),
     isValidElement = _require.isValidElement;
 
 var factory = __webpack_require__(74);
@@ -13737,7 +13754,7 @@ module.exports = '15.6.1';
 var _require = __webpack_require__(69),
     Component = _require.Component;
 
-var _require2 = __webpack_require__(19),
+var _require2 = __webpack_require__(21),
     isValidElement = _require2.isValidElement;
 
 var ReactNoopUpdateQueue = __webpack_require__(70);
@@ -14641,9 +14658,9 @@ module.exports = factory;
  */
 
 
-var _prodInvariant = __webpack_require__(23);
+var _prodInvariant = __webpack_require__(25);
 
-var ReactElement = __webpack_require__(19);
+var ReactElement = __webpack_require__(21);
 
 var invariant = __webpack_require__(1);
 
@@ -17798,7 +17815,7 @@ module.exports = __webpack_require__(158);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactDefaultInjection = __webpack_require__(159);
 var ReactMount = __webpack_require__(106);
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 var ReactUpdates = __webpack_require__(16);
 var ReactVersion = __webpack_require__(237);
 
@@ -18471,7 +18488,7 @@ module.exports = BeforeInputEventPlugin;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 
 var getTextContentAccessor = __webpack_require__(86);
 
@@ -19812,7 +19829,7 @@ module.exports = EnterLeaveEventPlugin;
 
 
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 
 var MUST_USE_PROPERTY = DOMProperty.injection.MUST_USE_PROPERTY;
 var HAS_BOOLEAN_VALUE = DOMProperty.injection.HAS_BOOLEAN_VALUE;
@@ -20088,7 +20105,7 @@ module.exports = ReactComponentBrowserEnvironment;
 
 var _prodInvariant = __webpack_require__(4);
 
-var DOMLazyTree = __webpack_require__(26);
+var DOMLazyTree = __webpack_require__(27);
 var ExecutionEnvironment = __webpack_require__(7);
 
 var createNodesFromMarkup = __webpack_require__(178);
@@ -20507,9 +20524,9 @@ var _prodInvariant = __webpack_require__(4),
 
 var AutoFocusUtils = __webpack_require__(183);
 var CSSPropertyOperations = __webpack_require__(184);
-var DOMLazyTree = __webpack_require__(26);
+var DOMLazyTree = __webpack_require__(27);
 var DOMNamespaces = __webpack_require__(57);
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var DOMPropertyOperations = __webpack_require__(95);
 var EventPluginHub = __webpack_require__(31);
 var EventPluginRegistry = __webpack_require__(37);
@@ -22519,7 +22536,7 @@ module.exports = ReactDOMInput;
 
 var _assign = __webpack_require__(5);
 
-var React = __webpack_require__(22);
+var React = __webpack_require__(24);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactDOMSelect = __webpack_require__(97);
 
@@ -22818,7 +22835,7 @@ var ReactInstanceMap = __webpack_require__(33);
 var ReactInstrumentation = __webpack_require__(12);
 
 var ReactCurrentOwner = __webpack_require__(15);
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 var ReactChildReconciler = __webpack_require__(198);
 
 var emptyFunction = __webpack_require__(10);
@@ -23263,7 +23280,7 @@ module.exports = ReactMultiChild;
 
 
 
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 
 var instantiateReactComponent = __webpack_require__(98);
 var KeyEscapeUtils = __webpack_require__(63);
@@ -23425,14 +23442,14 @@ module.exports = ReactChildReconciler;
 var _prodInvariant = __webpack_require__(4),
     _assign = __webpack_require__(5);
 
-var React = __webpack_require__(22);
+var React = __webpack_require__(24);
 var ReactComponentEnvironment = __webpack_require__(60);
 var ReactCurrentOwner = __webpack_require__(15);
 var ReactErrorUtils = __webpack_require__(52);
 var ReactInstanceMap = __webpack_require__(33);
 var ReactInstrumentation = __webpack_require__(12);
 var ReactNodeTypes = __webpack_require__(99);
-var ReactReconciler = __webpack_require__(25);
+var ReactReconciler = __webpack_require__(26);
 
 if (process.env.NODE_ENV !== 'production') {
   var checkReactTypeSpec = __webpack_require__(200);
@@ -24633,7 +24650,7 @@ module.exports = flattenChildren;
 
 var _assign = __webpack_require__(5);
 
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 var Transaction = __webpack_require__(38);
 var ReactInstrumentation = __webpack_require__(12);
 var ReactServerUpdateQueue = __webpack_require__(207);
@@ -24874,7 +24891,7 @@ module.exports = ReactServerUpdateQueue;
 
 var _assign = __webpack_require__(5);
 
-var DOMLazyTree = __webpack_require__(26);
+var DOMLazyTree = __webpack_require__(27);
 var ReactDOMComponentTree = __webpack_require__(6);
 
 var ReactDOMEmptyComponent = function (instantiate) {
@@ -25083,7 +25100,7 @@ var _prodInvariant = __webpack_require__(4),
     _assign = __webpack_require__(5);
 
 var DOMChildrenOperations = __webpack_require__(56);
-var DOMLazyTree = __webpack_require__(26);
+var DOMLazyTree = __webpack_require__(27);
 var ReactDOMComponentTree = __webpack_require__(6);
 
 var escapeTextContentForBrowser = __webpack_require__(41);
@@ -25324,7 +25341,7 @@ var _assign = __webpack_require__(5);
 
 var EventListener = __webpack_require__(103);
 var ExecutionEnvironment = __webpack_require__(7);
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactUpdates = __webpack_require__(16);
 
@@ -25524,7 +25541,7 @@ module.exports = getUnboundedScrollPosition;
 
 
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var EventPluginHub = __webpack_require__(31);
 var EventPluginUtils = __webpack_require__(51);
 var ReactComponentEnvironment = __webpack_require__(60);
@@ -25566,7 +25583,7 @@ module.exports = ReactInjection;
 var _assign = __webpack_require__(5);
 
 var CallbackQueue = __webpack_require__(87);
-var PooledClass = __webpack_require__(20);
+var PooledClass = __webpack_require__(23);
 var ReactBrowserEventEmitter = __webpack_require__(42);
 var ReactInputSelection = __webpack_require__(104);
 var ReactInstrumentation = __webpack_require__(12);
@@ -27678,7 +27695,7 @@ module.exports = ReactMount.renderSubtreeIntoContainer;
 
 
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var EventPluginRegistry = __webpack_require__(37);
 var ReactComponentTreeHook = __webpack_require__(9);
 
@@ -27845,7 +27862,7 @@ module.exports = ReactDOMNullInputValuePropHook;
 
 
 
-var DOMProperty = __webpack_require__(18);
+var DOMProperty = __webpack_require__(19);
 var ReactComponentTreeHook = __webpack_require__(9);
 
 var warning = __webpack_require__(2);
@@ -27935,22 +27952,22 @@ module.exports = ReactDOMInvalidARIAHook;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(24);
-const util_1 = __webpack_require__(27);
+const react_router_dom_1 = __webpack_require__(22);
+const util_1 = __webpack_require__(20);
 const header_1 = __webpack_require__(263);
-const loading_1 = __webpack_require__(21);
+const loading_1 = __webpack_require__(18);
 // Pages
 const home_page_1 = __webpack_require__(266);
-const forums_page_1 = __webpack_require__(267);
 const forum_page_1 = __webpack_require__(269);
-const post_page_1 = __webpack_require__(271);
-const blog_page_1 = __webpack_require__(273);
-const about_page_1 = __webpack_require__(274);
-const login_page_1 = __webpack_require__(275);
-const register_page_1 = __webpack_require__(276);
-const profile_page_1 = __webpack_require__(277);
+const post_page_1 = __webpack_require__(270);
+const blog_page_1 = __webpack_require__(272);
+const about_page_1 = __webpack_require__(273);
+const login_page_1 = __webpack_require__(274);
+const register_page_1 = __webpack_require__(275);
+const profile_page_1 = __webpack_require__(276);
 const user_edit_page_1 = __webpack_require__(278);
 const forum_edit_page_1 = __webpack_require__(279);
+const forum_create_page_1 = __webpack_require__(287);
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -27974,14 +27991,7 @@ class App extends React.Component {
         this.login = this.login.bind(this);
         this.logout = this.logout.bind(this);
         this.authenticate = this.authenticate.bind(this);
-        // nav
-        this.goHome = this.goHome.bind(this);
-        this.goToProfile = this.goToProfile.bind(this);
-        this.goToForumPage = this.goToForumPage.bind(this);
-        this.goBack = this.goBack.bind(this);
-        this.goToPostPage = this.goToPostPage.bind(this);
-        this.goToForumsPage = this.goToForumsPage.bind(this);
-        //forum crud
+        //forum
         this.createForum = this.createForum.bind(this);
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
@@ -28014,31 +28024,6 @@ class App extends React.Component {
         });
     }
     //===== Public Methods =====\\
-    // === App Navigation Methods
-    goHome() {
-        this.props.history.push("/");
-    }
-    goToProfile(id) {
-        this.props.history.push("/profile/" + id);
-    }
-    goToForumsPage() {
-        return new Promise((resolve) => {
-            this.props.history.push("/forums");
-            resolve();
-        });
-    }
-    goToForumPage(id) {
-        return new Promise((resolve) => {
-            this.props.history.push("/forum/" + id);
-            resolve();
-        });
-    }
-    goToPostPage(id) {
-        this.props.history.push("/forum/post/" + id);
-    }
-    goBack() {
-        this.props.history.pop();
-    }
     // Forums
     createForum(forum) {
         util_1.api.createForum(forum)
@@ -28053,8 +28038,7 @@ class App extends React.Component {
         util_1.api.deleteForum(id)
             .then(res => {
             res.success ?
-                this.goToForumsPage()
-                    .then(() => {
+                this.props.history.push("/").then(() => {
                     this.getForums();
                 }) :
                 util_1.errors.handle(res.payload);
@@ -28071,7 +28055,7 @@ class App extends React.Component {
                     this.authenticate()
                         .then((authenticated) => {
                         authenticated &&
-                            this.goToProfile(this.state.user._id);
+                            this.props.history.push("/profile/" + this.state.user._id);
                         resolve();
                     });
                 }
@@ -28086,7 +28070,7 @@ class App extends React.Component {
         return new Promise((resolve) => {
             util_1.jwt.remove()
                 .then(() => {
-                this.goHome();
+                this.props.history.push("/");
                 this.setState(() => ({ user: null }));
                 resolve();
             });
@@ -28101,51 +28085,32 @@ class App extends React.Component {
         const loginPageProps = {
             login: this.login,
         };
-        const registerPageProps = {};
         const homePageProps = {
             user: this.state.user,
-            goToPostPage: this.goToPostPage,
         };
         const profilePageProps = {
             user: this.state.user,
-            goHome: this.goHome,
-            goToProfile: this.goToProfile,
-        };
-        const forumsPageProps = {
-            user: this.state.user,
-            createForum: this.createForum,
-            forums: this.state.forums,
-            goToForumPage: this.goToForumPage,
         };
         const forumPageProps = {
             user: this.state.user,
-            goHome: this.goHome,
-            goToPostPage: this.goToPostPage,
         };
         const postPageProps = {
             user: this.state.user,
-            goHome: this.goHome,
-        };
-        const userEditPageProps = {
-            goHome: this.goHome,
-        };
-        const forumEditPageProps = {
-            deleteForum: this.deleteForum,
         };
         return (React.createElement("div", { className: "app" },
             React.createElement(header_1.default, Object.assign({}, headerProps)),
             React.createElement(react_router_dom_1.Switch, null,
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/", component: (props) => React.createElement(home_page_1.default, Object.assign({}, props, homePageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/user/:id/edit", component: (props) => React.createElement(user_edit_page_1.default, Object.assign({}, props, userEditPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/forum/:id/edit", component: (props) => React.createElement(forum_edit_page_1.default, Object.assign({}, props, forumEditPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/forums", component: (props) => React.createElement(forums_page_1.default, Object.assign({}, props, forumsPageProps)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/user/:id/edit", component: (props) => React.createElement(user_edit_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:id/edit", component: (props) => React.createElement(forum_edit_page_1.default, Object.assign({}, props)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:id", component: (props) => React.createElement(forum_page_1.default, Object.assign({}, props, forumPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/forum/post/:id", component: (props) => React.createElement(post_page_1.default, Object.assign({}, props, postPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/blog", component: blog_page_1.default }),
-                React.createElement(react_router_dom_1.Route, { path: "/about", component: about_page_1.default }),
-                React.createElement(react_router_dom_1.Route, { path: "/login", component: (props) => React.createElement(login_page_1.default, Object.assign({}, props, loginPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props, registerPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { path: "/profile/:id", component: (props) => React.createElement(profile_page_1.default, Object.assign({}, props, profilePageProps)) }))));
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forums/create", component: (props) => React.createElement(forum_create_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/post/:id", component: (props) => React.createElement(post_page_1.default, Object.assign({}, props, postPageProps)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/blog", component: blog_page_1.default }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/about", component: about_page_1.default }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/login", component: (props) => React.createElement(login_page_1.default, Object.assign({}, props, loginPageProps)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/profile/:id", component: (props) => React.createElement(profile_page_1.default, Object.assign({}, props, profilePageProps)) }))));
     }
     // Views
     render() {
@@ -29052,6 +29017,7 @@ class Header extends React.Component {
         };
         const navbarProps = {
             forums: this.props.forums,
+            user: this.props.user,
         };
         return (React.createElement("div", { className: "header row" },
             React.createElement(navbar_1.default, Object.assign({}, navbarProps)),
@@ -29069,8 +29035,8 @@ exports.default = Header;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(24);
-const loading_1 = __webpack_require__(21);
+const react_router_dom_1 = __webpack_require__(22);
+const loading_1 = __webpack_require__(18);
 class Navbar extends React.Component {
     main() {
         let forums = this.props.forums.map((forum, i) => {
@@ -29081,8 +29047,8 @@ class Navbar extends React.Component {
             React.createElement("li", null,
                 React.createElement(react_router_dom_1.NavLink, { exact: true, activeClassName: "activePage", to: "/" }, "Home")),
             forums.length > 0 ? forums : React.createElement("li", null, "No Forums..."),
-            React.createElement("li", { className: "creationLink" },
-                React.createElement("a", { href: "#" }, "create a forum"))));
+            this.props.user && React.createElement("li", { className: "creationLink" },
+                React.createElement(react_router_dom_1.NavLink, { activeClassName: "activePage", to: "/forums/create" }, "...create a forum"))));
     }
     render() {
         return this.props.forums ? this.main() : React.createElement(loading_1.default, null);
@@ -29099,7 +29065,7 @@ exports.default = Navbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(24);
+const react_router_dom_1 = __webpack_require__(22);
 class Authbar extends React.Component {
     loggedOutView() {
         return (React.createElement("ul", { className: "authbar four columns" },
@@ -29135,9 +29101,9 @@ exports.default = Authbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
-const post_1 = __webpack_require__(270);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(20);
+const post_1 = __webpack_require__(113);
+const loading_1 = __webpack_require__(18);
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -29160,14 +29126,14 @@ class HomePage extends React.Component {
             });
         });
     }
-    handleFilterChange(e) {
-        this.setState(() => ({
-            filter: e.target.value
-        }));
+    handleChange(e) {
+        const newState = this.state;
+        newState[e.target.name] = e.target.value;
+        this.setState(() => newState);
     }
     header() {
         return (React.createElement("div", { className: "pageHeader" },
-            React.createElement("input", { onChange: this.handleFilterChange.bind(this), type: "text", placeholder: "Search...", name: "filter" })));
+            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", placeholder: "Search Posts...", name: "filter" })));
     }
     filterMethod(post) {
         if (this.state.filter) {
@@ -29182,7 +29148,6 @@ class HomePage extends React.Component {
             const props = {
                 data: post,
                 className: "standardPost",
-                goToPostPage: this.props.goToPostPage,
                 editable: this.props.user && post._creator === this.props.user._id,
             };
             return React.createElement("li", { key: 'post' + i },
@@ -29203,124 +29168,8 @@ exports.default = HomePage;
 
 
 /***/ }),
-/* 267 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-const loading_1 = __webpack_require__(21);
-const forum_1 = __webpack_require__(268);
-class ForumsPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = ForumsPage.initialState;
-    }
-    componentDidMount() {
-        console.log("ForumPage mounted", this);
-    }
-    // ==== PRIVATE METHODS ==== \\
-    handleChange(e) {
-        const n = e.target.name, v = e.target.value, newState = this.state;
-        newState[n] = v;
-        this.setState(newState);
-    }
-    handleSubmit(e) {
-        e.preventDefault();
-        this.props.createForum({
-            _creator: this.props.user._id,
-            topic: this.state.topic,
-            description: this.state.description,
-        });
-    }
-    //==== VIEWS ====\\
-    // Creation Form
-    creationForm() {
-        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this), className: "creationForm" },
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "topic", placeholder: "Topic..." }),
-            React.createElement("textarea", { className: "newForumDescription", onChange: this.handleChange.bind(this), name: "description", placeholder: "Description..." }),
-            React.createElement("input", { className: "button-primary", type: "submit", value: "create forum" })));
-    }
-    header() {
-        return (React.createElement("div", { className: "pageHeader row" },
-            React.createElement("input", { onChange: this.handleChange.bind(this), type: "text", name: "filter", placeholder: "Search..." })));
-    }
-    filterMethod(forum) {
-        if (this.state.filter) {
-            // return forum.topic.toLowerCase().indexOf(this.state.filter.toLowerCase()) !== -1;
-            return forum.topic.toLowerCase().startsWith(this.state.filter.toLowerCase());
-        }
-        else {
-            return true;
-        }
-    }
-    forumsList() {
-        const forums = this.props.forums.filter(this.filterMethod.bind(this)).map((forum, i) => {
-            const props = {
-                data: forum,
-                className: "standardForum",
-                goToForumPage: this.props.goToForumPage,
-                edit: this.props.user && forum._creator === this.props.user._id
-            };
-            return React.createElement("li", { key: 'forum' + i },
-                React.createElement(forum_1.default, Object.assign({}, props)));
-        });
-        return (React.createElement("ul", null, forums.length > 0 ? forums : React.createElement("li", null, "No forums here...")));
-    }
-    render() {
-        return (React.createElement("div", { className: "forumsPage" },
-            this.header(),
-            this.props.user && this.creationForm(),
-            this.props.forums ? this.forumsList() : React.createElement(loading_1.default, null)));
-    }
-    ;
-}
-ForumsPage.initialState = {
-    topic: "",
-    description: "",
-    filter: null,
-};
-exports.default = ForumsPage;
-;
-
-
-/***/ }),
-/* 268 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-class Forum extends React.Component {
-    render() {
-        const x = this.props.data;
-        return (React.createElement("div", { className: this.props.className, onClick: this.handleClick.bind(this) },
-            React.createElement("ul", null,
-                React.createElement("li", null, x.topic),
-                React.createElement("li", null, this.shortDescription()),
-                React.createElement("li", null,
-                    "Posts: ",
-                    x.posts ? x.posts.length : '0'),
-                React.createElement("li", null,
-                    "By: ",
-                    x.creator.username))));
-    }
-    handleClick(e) {
-        this.props.goToForumPage(this.props.data._id);
-    }
-    shortDescription() {
-        const characterMax = 30;
-        return this.props.data.description.length > characterMax ?
-            this.props.data.description.slice(0, characterMax) + '...' :
-            this.props.data.description;
-    }
-}
-exports.default = Forum;
-
-
-/***/ }),
+/* 267 */,
+/* 268 */,
 /* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29328,10 +29177,10 @@ exports.default = Forum;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
-const react_router_dom_1 = __webpack_require__(24);
-const loading_1 = __webpack_require__(21);
-const post_1 = __webpack_require__(270);
+const util_1 = __webpack_require__(20);
+const react_router_dom_1 = __webpack_require__(22);
+const loading_1 = __webpack_require__(18);
+const post_1 = __webpack_require__(113);
 class ForumPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29354,7 +29203,13 @@ class ForumPage extends React.Component {
     getForum() {
         util_1.api.getForum(this.props.match.params.id)
             .then(res => {
-            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(() => { alert(res.payload); });
+            if (res.success) {
+                this.setState(() => ({ data: res.payload }));
+            }
+            else {
+                this.props.history.push("/");
+                alert(res.payload);
+            }
         });
     }
     isMyForum() {
@@ -29384,8 +29239,7 @@ class ForumPage extends React.Component {
             posts = this.state.data.posts.filter(this.filterMethod.bind(this)).map((post, i) => {
                 const props = {
                     data: post,
-                    className: "standardForumPost",
-                    goToPostPage: this.props.goToPostPage,
+                    className: "standardPost",
                     editable: this.props.user && post._creator === this.props.user._id
                 };
                 return React.createElement("li", { key: 'post' + i },
@@ -29423,42 +29277,9 @@ exports.default = ForumPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-class ForumPost extends React.Component {
-    render() {
-        const x = this.props.data;
-        return (React.createElement("div", { className: this.props.className, onClick: this.handleClick.bind(this) },
-            React.createElement("ul", null,
-                React.createElement("li", null, x.title),
-                React.createElement("li", null, this.shortContent()),
-                React.createElement("li", null,
-                    "Comments: ",
-                    x.comments ? x.comments.length : '0'))));
-    }
-    handleClick(e) {
-        console.log("ForumPost Component calling goToForumPostPage with id as: ", this.props.data._id);
-        this.props.goToPostPage(this.props.data._id);
-    }
-    shortContent() {
-        const characterMax = 30;
-        return this.props.data.content.length > characterMax ?
-            this.props.data.content.slice(0, characterMax) + '...' :
-            this.props.data.content;
-    }
-}
-exports.default = ForumPost;
-
-
-/***/ }),
-/* 271 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
-const loading_1 = __webpack_require__(21);
-const comment_1 = __webpack_require__(272);
+const util_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(18);
+const comment_1 = __webpack_require__(271);
 class ForumPostPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29475,7 +29296,13 @@ class ForumPostPage extends React.Component {
     getPost() {
         util_1.api.getPost(this.props.match.params.id)
             .then(res => {
-            res.success ? this.setState(() => ({ data: res.payload })) : this.props.goHome().then(() => { alert(res.payload); });
+            if (res.success) {
+                this.setState(() => ({ data: res.payload }));
+            }
+            else {
+                this.props.history.push("/");
+                alert(res.payload);
+            }
         });
     }
     createComment() {
@@ -29549,7 +29376,7 @@ exports.default = ForumPostPage;
 
 
 /***/ }),
-/* 272 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29575,7 +29402,7 @@ exports.default = ForumComment;
 
 
 /***/ }),
-/* 273 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29592,7 +29419,7 @@ exports.default = BlogPage;
 
 
 /***/ }),
-/* 274 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29609,7 +29436,7 @@ exports.default = AboutPage;
 
 
 /***/ }),
-/* 275 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29645,14 +29472,14 @@ exports.default = LoginPage;
 
 
 /***/ }),
-/* 276 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
+const util_1 = __webpack_require__(20);
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29713,17 +29540,17 @@ exports.default = RegisterPage;
 
 
 /***/ }),
-/* 277 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(24);
-const util_1 = __webpack_require__(27);
-const loading_1 = __webpack_require__(21);
-const user_1 = __webpack_require__(113);
+const react_router_dom_1 = __webpack_require__(22);
+const util_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(18);
+const user_1 = __webpack_require__(277);
 const defaultAvatarMale = "https://i.imgur.com/Z80mud6.jpg", defaultAvatarFemale = "https://i.imgur.com/ZzdPYbE.jpg";
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -29752,7 +29579,7 @@ class ProfilePage extends React.Component {
             }
             else {
                 alert(res.payload);
-                this.props.goHome();
+                this.props.history.push("/");
             }
         });
     }
@@ -29806,7 +29633,6 @@ class ProfilePage extends React.Component {
                 const props = {
                     data: user,
                     className: "standardUser",
-                    goToProfile: this.props.goToProfile,
                 };
                 return React.createElement("li", { key: 'follower' + i },
                     React.createElement(user_1.default, Object.assign({}, props)));
@@ -29822,7 +29648,6 @@ class ProfilePage extends React.Component {
             users = this.state.data.following.map((user, i) => {
                 const props = {
                     data: user,
-                    goToProfile: this.props.goToProfile,
                     className: "standardUser",
                 };
                 return React.createElement("li", { key: 'following' + i },
@@ -29869,6 +29694,37 @@ exports.default = ProfilePage;
 
 
 /***/ }),
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+const react_router_dom_1 = __webpack_require__(22);
+class User extends React.Component {
+    render() {
+        const x = this.props.data;
+        return (React.createElement("div", { className: this.props.className, onClick: this.handleClick.bind(this) },
+            React.createElement("ul", null,
+                React.createElement("li", null, x.gender),
+                React.createElement("li", null, x.username),
+                React.createElement("li", null, x.email),
+                React.createElement("li", null,
+                    x.location.city,
+                    " ",
+                    x.location.state))));
+    }
+    handleClick() {
+        console.log("=== User data is: ", this.props.data);
+        console.log("=== Going to profile with id: ", this.props.data._id);
+        this.props.history.push("/profile/" + this.props.data._id);
+    }
+}
+exports.default = react_router_dom_1.withRouter(User);
+
+
+/***/ }),
 /* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -29876,8 +29732,8 @@ exports.default = ProfilePage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(18);
 class UserEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29948,7 +29804,8 @@ class UserEditPage extends React.Component {
         return new Promise((resolve) => {
             util_1.api.deleteUser(this.state.data._id)
                 .then(res => {
-                res.success ? this.props.goHome() : util_1.errors.handle(res.payload);
+                res.success ? this.props.history.push("/") :
+                    util_1.errors.handle(res.payload);
                 resolve(res.success);
             });
         });
@@ -29993,8 +29850,8 @@ exports.default = UserEditPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(27);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(18);
 class ForumEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30029,11 +29886,6 @@ class ForumEditPage extends React.Component {
         newState[e.target.name] = e.target.value;
         this.setState(() => newState);
     }
-    handleDelete() {
-        const confirmation = confirm("Are you sure? This will delete any children of this forum as well ( posts and comments ).");
-        confirmation &&
-            this.props.deleteForum(this.state.data._id);
-    }
     // Views
     header() {
         return (React.createElement("div", { className: "pageHeader row" },
@@ -30041,7 +29893,7 @@ class ForumEditPage extends React.Component {
                 React.createElement("li", null,
                     React.createElement("button", { onClick: this.goBack.bind(this) }, "Cancel")),
                 React.createElement("li", null,
-                    React.createElement("button", { disabled: this.state.updateDisabled, onClick: this.handleDelete.bind(this) }, "Delete Forum")))));
+                    React.createElement("button", { disabled: this.state.updateDisabled }, "Delete Forum")))));
     }
     content() {
         return (React.createElement("form", { className: "updateForm" },
@@ -30107,7 +29959,7 @@ exports.i(__webpack_require__(282), "");
 exports.i(__webpack_require__(283), "");
 
 // module
-exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.navbar, .authbar {\n  overflow-x: scroll;\n  height: 100%;\n  display: flex;\n  justify-content: space-around;\n  list-style-type: none; }\n  .navbar li, .authbar li {\n    align-self: center;\n    display: inline-block;\n    cursor: pointer; }\n    .navbar li a, .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .navbar li a:hover, .authbar li a:hover {\n        color: deepskyblue; }\n    .navbar li .activePage, .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n\n.navbar .creationLink {\n  color: rgba(0, 128, 0, 0.5); }\n  .navbar .creationLink:hover {\n    color: lime; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumPost {\n  cursor: pointer;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n  .standardForumPost:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .header {\n    height: 10%; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center;\n    border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
+exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.navbar, .authbar {\n  overflow-x: scroll;\n  height: 100%;\n  display: flex;\n  justify-content: space-around;\n  list-style-type: none; }\n  .navbar li, .authbar li {\n    align-self: center;\n    display: inline-block;\n    cursor: pointer; }\n    .navbar li a, .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .navbar li a:hover, .authbar li a:hover {\n        color: deepskyblue; }\n    .navbar li .activePage, .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n\n.navbar .creationLink {\n  color: rgba(0, 128, 0, 0.5); }\n  .navbar .creationLink:hover {\n    color: lime; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardPost {\n  padding: 5px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardPost .itemLink {\n    cursor: pointer; }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .header {\n    height: 10%; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center; }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
 
 // exports
 
@@ -30605,6 +30457,31 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
+
+
+/***/ }),
+/* 286 */,
+/* 287 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+class ForumCreatePage extends React.Component {
+    creationForm() {
+        return (React.createElement("form", null,
+            React.createElement("input", { name: "topic", type: "text", placeholder: "Topic..." }),
+            React.createElement("textarea", { name: "description", placeholder: "Description" })));
+    }
+    render() {
+        return (React.createElement("div", { className: "forumCreatePage" },
+            React.createElement("h1", null, "Can't find the right forum for you? Create your own!"),
+            React.createElement("h3", null, "Simply specify a unique topic, and give a short description of what the forum is about."),
+            this.creationForm()));
+    }
+}
+exports.default = ForumCreatePage;
 
 
 /***/ })

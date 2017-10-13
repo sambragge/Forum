@@ -46,7 +46,7 @@ func (fc *ForumController) GetAll(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	for _, forum := range forums {
-		forum.Populate(fc.users, fc.posts, fc.comments)
+		forum.Populate(fc.forums, fc.users, fc.posts, fc.comments)
 	}
 	SendAsJSON(w, true, forums)
 
@@ -60,7 +60,7 @@ func (fc *ForumController) GetOne(w http.ResponseWriter, r *http.Request) {
 		SendAsJSON(w, false, []string{"Error finding forum", err.Error()})
 		return
 	}
-	forum.Populate(fc.users, fc.posts, fc.comments)
+	forum.Populate(fc.forums, fc.users, fc.posts, fc.comments)
 	SendAsJSON(w, true, forum)
 }
 
@@ -70,7 +70,7 @@ func (fc *ForumController) Create(w http.ResponseWriter, r *http.Request) {
 		SendAsJSON(w, false, validationErrors)
 		return
 	}
-	forum.Populate(fc.users, fc.posts, fc.comments)
+	forum.Populate(fc.forums, fc.users, fc.posts, fc.comments)
 	SendAsJSON(w, true, forum)
 }
 
@@ -110,9 +110,9 @@ func (fc *ForumController) GetPosts(w http.ResponseWriter, r *http.Request) {
 		SendAsJSON(w, false, []string{"Error getting all posts", err.Error()})
 		return
 	}
-	// for _, post := range results {
-	// 	post.Populate(fc.users, fc.comments)
-	// }
+	for _, post := range results {
+		post.Populate(fc.forums, fc.users, fc.comments)
+	}
 	SendAsJSON(w, true, results)
 }
 
@@ -124,7 +124,7 @@ func (fc *ForumController) GetPost(w http.ResponseWriter, r *http.Request) {
 		SendAsJSON(w, false, []string{"Error getting one post", err.Error()})
 		return
 	}
-	post.Populate(fc.users, fc.comments)
+	post.Populate(fc.forums, fc.users, fc.comments)
 	SendAsJSON(w, true, post)
 }
 

@@ -11,15 +11,17 @@ import (
 // Post Data Model
 type Post struct {
 	ID        bson.ObjectId   `json:"_id" bson:"_id"`
-	Parent    bson.ObjectId   `json:"_parent" bson:"_parent"`
+	ParentID  bson.ObjectId   `json:"_parent" bson:"_parent"`
 	Title     string          `json:"title" bson:"title"`
 	Content   string          `json:"content" bson:"content"`
 	CreatorID bson.ObjectId   `json:"_creator" bson:"_creator"`
-	Creator   User            `json:"creator,omitempty" bson:"-"`
-	Comments  []*Comment      `json:"comments,omitempty" bson:"-"`
 	Likes     []bson.ObjectId `json:"_likes" bson:"_likes"`
 	CreatedAt time.Time       `json:"_createdAt" bson:"_createdAt"`
 	UpdatedAt time.Time       `json:"_updatedAt" bson:"_updatedAt"`
+	// Populated Fields
+	Creator  User       `json:"creator,omitempty" bson:"-"`
+	Comments []*Comment `json:"comments,omitempty" bson:"-"`
+	Parent   *Forum     `json:"parent" bson:"-"`
 }
 
 // Sync : use bson.ObjectId to generate the rest of the model
@@ -29,12 +31,15 @@ func (p *Post) Sync(_posts *mgo.Collection) error {
 }
 
 // Populate : populate fields
-func (p *Post) Populate(_users, _forumComments *mgo.Collection) {
+func (p *Post) Populate(_forums, _users, _comments *mgo.Collection) {
 	if err := _users.Find(bson.M{"_id": p.CreatorID}).One(&p.Creator); err != nil {
-		log.Fatal("Fata Error getting user in ForumPost Populate", err.Error())
+		log.Fatal("Fata Error getting user in Post Populate", err.Error())
 	}
-	if err := _forumComments.Find(bson.M{"_parent": p.ID}).All(&p.Comments); err != nil {
-		log.Fatal("Fata Error getting comments in ForumPost Populate", err.Error())
+	if err := _forums.FindId(p.ParentID).One(&p.Parent); err != nil {
+		log.Fatal("Fata Error getting parent in Post Populate", err.Error())
+	}
+	if err := _comments.Find(bson.M{"_parent": p.ID}).All(&p.Comments); err != nil {
+		log.Fatal("Fata Error getting comments in Post Populate", err.Error())
 	}
 	if len(p.Comments) > 0 {
 		for _, comment := range p.Comments {

@@ -19,6 +19,7 @@ export interface IAuthbarProps {
 }
 export interface INavbarProps {
     forums:IForum[],
+    user:IUser,
 }
 
 // LoginPage
@@ -33,7 +34,6 @@ export interface ILoginPageProps {
 // HomePage
 export interface IHomePageProps {
     user:IUser,
-    goToPostPage: Function,
 }
 export interface IHomePageState {
     filter: string,
@@ -46,9 +46,8 @@ export interface IProfilePageState {
 }
 export interface IProfilePageProps {
     user: IUser,
-    goHome: Function,
-    goToProfile: Function,
     match?: any,
+    history?:any,
 }
 
 // RegisterPage
@@ -75,7 +74,6 @@ export interface IForumsPageProps {
     user: IUser,
     createForum: Function,
     forums: IForum[],
-    goToForumPage: Function,
 }
 
 // ForumPage
@@ -85,9 +83,8 @@ export interface IForumPageState {
 }
 export interface IForumPageProps {
     user: IUser,
-    goToPostPage: Function,
-    goHome: Function,
     match?: any,
+    history?:any,
 }
 
 // PostPage
@@ -97,8 +94,8 @@ export interface IPostPageState {
 }
 export interface IPostPageProps {
     user: IUser,
-    goHome: Function,
     match?: any,
+    history?:any,
 }
 
 // UserEditPage
@@ -112,14 +109,12 @@ export interface IUserEditPageState {
 export interface IUserEditPageProps {
     match?:any,
     history?:any,
-    goHome:Function,
 }
 
 // ForumEditPage
 export interface IForumEditPageProps {
     match?:any,
     history?:any,
-    deleteForum:Function,
 }
 export interface IForumEditPageState {
     data:IForum,
@@ -148,7 +143,7 @@ export interface IUser {
 export interface IUserProps {
     data: IUser,
     className: string,
-    goToProfile: Function,
+    history?:any,
 }
 
 // Forum
@@ -165,8 +160,8 @@ export interface IForum {
 export interface IForumProps {
     data: IForum,
     className: string,
-    goToForumPage: Function,
     edit: boolean,
+    history?:any,
 }
 
 // Post
@@ -174,6 +169,7 @@ export interface IPost {
     _id?: string,
     title: string,
     _parent: string,
+    parent?:IForum,
     content: string,
     _creator: string,
     creator?: IUser,
@@ -184,8 +180,8 @@ export interface IPost {
 export interface IPostProps {
     data: IPost,
     className: string,
-    goToPostPage: Function,
     editable: boolean,
+    history?:any,
 }
 
 // Comment

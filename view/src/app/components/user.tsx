@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { IUserProps } from '../interfaces';
 import { helpers } from '../util';
+import { withRouter } from 'react-router-dom';
 
 
-export default class User extends React.Component<IUserProps, {}>{
+class User extends React.Component<IUserProps, {}>{
     public render(){
         const x = this.props.data;
 
@@ -23,6 +24,8 @@ export default class User extends React.Component<IUserProps, {}>{
     private handleClick():void{
         console.log("=== User data is: ", this.props.data);
         console.log("=== Going to profile with id: ", this.props.data._id)
-        this.props.goToProfile(this.props.data._id);
+        this.props.history.push("/profile/"+this.props.data._id);
     }
 }
+
+export default withRouter(User);

@@ -47,11 +47,7 @@ export default class ForumEditPage extends React.Component<IForumEditPageProps, 
         newState[e.target.name] = e.target.value;
         this.setState(() => newState);
     }
-    private handleDelete(): void {
-        const confirmation = confirm("Are you sure? This will delete any children of this forum as well ( posts and comments ).")
-        confirmation &&
-            this.props.deleteForum(this.state.data._id);
-    }
+    
 
     // Views
     private header(): JSX.Element {
@@ -59,7 +55,7 @@ export default class ForumEditPage extends React.Component<IForumEditPageProps, 
             <div className="pageHeader row">
                 <ul>
                     <li><button onClick={this.goBack.bind(this)}>Cancel</button></li>
-                    <li><button disabled={this.state.updateDisabled} onClick={this.handleDelete.bind(this)} >Delete Forum</button></li>
+                    <li><button disabled={this.state.updateDisabled} >Delete Forum</button></li>
                 </ul>
             </div>
         );

@@ -10,8 +10,10 @@ export default class Header extends React.Component<IHeaderProps, {}> {
             logout:this.props.logout,
             user:this.props.user,
         }
+
         const navbarProps = {
             forums:this.props.forums,
+            user:this.props.user,
         }
 
 

@@ -15,10 +15,11 @@ type Forum struct {
 	Topic       string        `json:"topic" bson:"topic"`
 	Description string        `json:"description" bson:"description"`
 	CreatorID   bson.ObjectId `json:"_creator" bson:"_creator"`
-	Creator     User          `json:"creator,omitempty" bson:"-"`
-	Posts       []*Post       `json:"posts,omitempty" bson:"-"`
 	CreatedAt   time.Time     `json:"_createdAt" bson:"_createdAt"`
 	UpdatedAt   time.Time     `json:"_updatedAt" bson:"_updatedAt"`
+	// Populated Fields
+	Creator User    `json:"creator,omitempty" bson:"-"`
+	Posts   []*Post `json:"posts,omitempty" bson:"-"`
 }
 
 // Sync : use bson.ObjectId to generate the rest of the forum
@@ -45,19 +46,19 @@ func (f *Forum) Delete(_forums, _posts, _comments *mgo.Collection) error {
 }
 
 // Populate : populate fields
-func (f *Forum) Populate(_users, _forumPosts, _forumComments *mgo.Collection) {
+func (f *Forum) Populate(_forums, _users, _posts, _comments *mgo.Collection) {
 
 	if err := _users.Find(bson.M{"_id": f.CreatorID}).One(&f.Creator); err != nil {
 		log.Fatal("Fatal Error getting user in Forum Populate method: ", err.Error())
 	}
 
-	if err := _forumPosts.Find(bson.M{"_parent": f.ID}).All(&f.Posts); err != nil {
+	if err := _posts.Find(bson.M{"_parent": f.ID}).All(&f.Posts); err != nil {
 		log.Fatal("Fatal Error getting posts in Forum Populate method: ", err.Error())
 	}
 
 	if len(f.Posts) > 0 {
 		for _, post := range f.Posts {
-			post.Populate(_users, _forumComments)
+			post.Populate(_forums, _users, _comments)
 		}
 	}
 }

@@ -35,16 +35,16 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
         });
     }
 
-    private handleFilterChange(e:any):void{
-        this.setState(()=>({
-            filter:e.target.value
-        }));
+    private handleChange(e:any):void{
+        const newState:any = this.state;
+        newState[e.target.name] = e.target.value;
+        this.setState(()=>newState);
     }
 
     private header():JSX.Element{
         return(
             <div className="pageHeader">
-                <input onChange={this.handleFilterChange.bind(this)} type="text" placeholder="Search..." name="filter"/>
+                <input onChange={this.handleChange.bind(this)} type="text" placeholder="Search Posts..." name="filter"/>
             </div>
         );
     }
@@ -61,7 +61,6 @@ export default class HomePage extends React.Component<IHomePageProps, IHomePageS
             const props = {
                 data:post,
                 className:"standardPost",
-                goToPostPage:this.props.goToPostPage,
                 editable:this.props.user && post._creator === this.props.user._id,
             }
 

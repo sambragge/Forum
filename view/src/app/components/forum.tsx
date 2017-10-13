@@ -17,7 +17,7 @@ export default class Forum extends React.Component <IForumProps, any> {
     }
 
     private handleClick(e:Event):void{
-        this.props.goToForumPage(this.props.data._id);
+        this.props.history.push("/forum/"+this.props.data._id);
     }
 
     private shortDescription():string{

@@ -57,13 +57,11 @@ form textarea {
   .standardForum:hover {
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }
 
-.standardForumPost {
-  cursor: pointer;
-  padding: 10px;
-  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);
-  text-align: center; }
-  .standardForumPost:hover {
-    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }
+.standardPost {
+  padding: 5px;
+  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }
+  .standardPost .itemLink {
+    cursor: pointer; }
 
 .standardForumComment {
   padding: 10px;
@@ -90,8 +88,7 @@ form textarea {
     border-bottom: 1px groove rgba(0, 0, 0, 0.5);
     margin-bottom: 2%; }
   .app .itemContent {
-    text-align: center;
-    border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }
+    text-align: center; }
   .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {
     padding: 1%; }
   .app .profilePage {

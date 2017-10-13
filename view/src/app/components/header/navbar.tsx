@@ -14,7 +14,7 @@ export default class Navbar extends React.Component<INavbarProps, {}> {
             <ul className="navbar eight columns">
                 <li><NavLink exact activeClassName="activePage" to="/">Home</NavLink></li>
                 {forums.length > 0 ? forums:<li>No Forums...</li>}
-                <li className="creationLink"><a href="#">create a forum</a></li>
+                {this.props.user && <li className="creationLink"><NavLink activeClassName="activePage" to="/forums/create">...create a forum</NavLink></li>}
             </ul>
         );
     }

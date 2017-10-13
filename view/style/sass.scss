@@ -26,6 +26,7 @@ ul {
     }
 }
 
+// Navbar + Authbar
 .navbar, .authbar {
     overflow-x: scroll;
     height:100%;
@@ -95,14 +96,13 @@ form {
     
 }
 
-// Forum Posts
-.standardForumPost {
-    cursor: pointer;
-    padding:10px;
+// Posts
+.standardPost {
+    padding:5px;
     border-bottom:1px ridge $dark;
-    text-align: center;
-    &:hover {
-        box-shadow:  5px 5px 15px $dark;
+
+    .itemLink {
+        cursor: pointer;
     }
 }
 
@@ -144,7 +144,6 @@ form {
     }
     .itemContent {
         text-align: center;
-        border-bottom:1px ridge $dark;
     }
     .homePage, .forumsPage, .forumPage, .forumPostPage, .profilePage {
         padding:1%;

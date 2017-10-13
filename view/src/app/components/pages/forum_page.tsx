@@ -30,7 +30,12 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
     private getForum():void{
         api.getForum(this.props.match.params.id)
         .then(res=>{
-            res.success ? this.setState(()=>({data:res.payload})):this.props.goHome().then(()=>{alert(res.payload)});
+            if(res.success){
+                this.setState(()=>({data:res.payload}))
+            }else{
+                this.props.history.push("/");
+                alert(res.payload);
+            }
         });
     }
     private isMyForum():boolean{
@@ -65,8 +70,7 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
             posts = this.state.data.posts.filter(this.filterMethod.bind(this)).map((post, i)=>{
                 const props = {
                     data:post,
-                    className:"standardForumPost",
-                    goToPostPage:this.props.goToPostPage,
+                    className:"standardPost",
                     editable:this.props.user && post._creator === this.props.user._id
                 }
                 return <li key={'post'+i}><Post {...props} /></li>

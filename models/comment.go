@@ -15,9 +15,10 @@ type Comment struct {
 	Parent    bson.ObjectId `json:"_parent" bson:"_parent"`
 	Content   string        `json:"content" bson:"content"`
 	CreatorID bson.ObjectId `json:"_creator" bson:"_creator"`
-	Creator   User          `json:"creator,omitempty" bson:"-"`
 	CreatedAt time.Time     `json:"_createdAt" bson:"_createdAt"`
 	UpdatedAt time.Time     `json:"_updatedAt" bson:"_updatedAt"`
+	// Populated Fields
+	Creator User `json:"creator,omitempty" bson:"-"`
 }
 
 // Sync : uses a bson.ObjectId to generate the rest of the user
