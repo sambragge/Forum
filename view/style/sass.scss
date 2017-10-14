@@ -26,38 +26,45 @@ ul {
     }
 }
 
-// Navbar + Authbar
-.navbar, .authbar {
-    overflow-x: scroll;
-    height:100%;
-    display: flex;
-    justify-content: space-around;
-    list-style-type: none;
-    li {
-        align-self: center;
-        display: inline-block;
-        cursor:pointer;
-        a {
-            text-decoration: none;
-            color:$secondary;
-            &:hover {
+.header {
+    // Navbar + Authbar
+    .navbar, .authbar {
+        list-style-type: none;
+        li {
+            border-right:1px groove $dark;
+            padding-right:1em;
+            margin:1em;
+            display: inline-block;
+            cursor:pointer;
+            a {
+                text-decoration: none;
+                color:$secondary;
+                &:hover {
+                    color:$primary;
+                }
+            }
+            .activePage {
+                font-weight: bold;
                 color:$primary;
             }
         }
-        .activePage {
-            font-weight: bold;
-            color:$primary;
+    }
+    .navbar {
+        white-space: nowrap;
+        overflow-x: scroll;
+        // border-bottom:1px groove $dark;
+        .creationLink {
+            color:$success;
+            &:hover {
+                color:lime;
+            }
         }
     }
-}
-.navbar {
-    .creationLink {
-        color:$success;
-        &:hover {
-            color:lime;
-        }
+    .authbar {
+        border:1px dotted red;
     }
 }
+
 
 
 // Forms
@@ -133,9 +140,7 @@ form {
 // App level rules
 .app {
     height:100vh;
-    .header {
-        height:10%;
-    }// End Header
+    
 
     //===== PAGES ====\\
     .pageHeader {

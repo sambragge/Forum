@@ -164,7 +164,6 @@ export const jwt = {
     },
 
     authenticate: (token: string): Promise<IStandardResponse> => {
-        console.log("authenticating token: ", { token: token });
         return axios
             .get("/api-auth/"+token)
             .then(res => res.data)

@@ -36,7 +36,7 @@ func Router(_users *controllers.UserController, _forums *controllers.ForumContro
 	//Forums
 	r.Methods(get).Path("/api-forums").HandlerFunc(_forums.GetAll)
 	r.Methods(post).Path("/api-forums").HandlerFunc(_forums.Create)
-	r.Methods(get).Path("/api-forums/{id}").HandlerFunc(_forums.GetOne)
+	r.Methods(get).Path("/api-forums/{topic}").HandlerFunc(_forums.GetOne)
 	r.Methods(delete).Path("/api-forums/{id}").HandlerFunc(_forums.Delete)
 
 	// Posts
@@ -58,6 +58,7 @@ func Router(_users *controllers.UserController, _forums *controllers.ForumContro
 	r.HandleFunc("/blog", serveView).Methods(get)
 	r.HandleFunc("/about", serveView).Methods(get)
 	r.HandleFunc("/forums", serveView).Methods(get)
+	r.HandleFunc("/forums/create", serveView).Methods(get)
 	r.HandleFunc("/forum/{id}", serveView).Methods(get)
 	r.HandleFunc("/forum/post/{id}", serveView).Methods(get)
 	r.HandleFunc("/profile/{id}", serveView).Methods(get)

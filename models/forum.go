@@ -2,6 +2,8 @@ package models
 
 import (
 	"log"
+	"regexp"
+	"strings"
 	"time"
 
 	"gopkg.in/mgo.v2"
@@ -25,6 +27,11 @@ type Forum struct {
 // Sync : use bson.ObjectId to generate the rest of the forum
 func (f *Forum) Sync(_forums *mgo.Collection) error {
 	err := _forums.FindId(f.ID).One(&f)
+	return err
+}
+func (f *Forum) SyncByTopic(_forums *mgo.Collection) error {
+	query := bson.M{"topic": f.Topic}
+	err := _forums.Find(query).One(&f)
 	return err
 }
 
@@ -64,15 +71,23 @@ func (f *Forum) Populate(_forums, _users, _posts, _comments *mgo.Collection) {
 }
 
 // Validate : pre save validation
-func (f *Forum) validate() []string {
+func (f *Forum) validate(_forums *mgo.Collection) []string {
+	topicRegex, _ := regexp.Compile("\\s")
 	errors := make([]string, 0)
+	f.Topic = strings.ToLower(f.Topic)
 	if f.Topic == "" {
 		errors = append(errors, "Topic is required")
 	}
 	if f.Description == "" {
 		errors = append(errors, "Description is required")
 	}
-
+	var existingForum *Forum
+	if err := _forums.Find(bson.M{"topic": f.Topic}).One(&existingForum); err == nil {
+		errors = append(errors, "A forum with that topic already exists, try posting there.")
+	}
+	if match := topicRegex.Match([]byte(f.Topic)); match {
+		errors = append(errors, "Topic may not contain whitespace, please use '-' or '_' instead. How did you even get back here?")
+	}
 	if len(errors) > 0 {
 		return errors
 	}
@@ -85,11 +100,12 @@ func (f *Forum) preSave() {
 	f.ID = bson.NewObjectId()
 	f.CreatedAt = time.Now()
 	f.UpdatedAt = time.Now()
+	f.Topic = strings.ToLower(f.Topic)
 }
 
 // Save : save data model to database
 func (f *Forum) Save(_forums *mgo.Collection) []string {
-	if errors := f.validate(); errors != nil {
+	if errors := f.validate(_forums); errors != nil {
 		return errors
 	}
 

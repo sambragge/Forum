@@ -54,9 +54,9 @@ func (fc *ForumController) GetAll(w http.ResponseWriter, r *http.Request) {
 
 func (fc *ForumController) GetOne(w http.ResponseWriter, r *http.Request) {
 	forum := &models.Forum{
-		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
+		Topic: mux.Vars(r)["topic"],
 	}
-	if err := forum.Sync(fc.forums); err != nil {
+	if err := forum.SyncByTopic(fc.forums); err != nil {
 		SendAsJSON(w, false, []string{"Error finding forum", err.Error()})
 		return
 	}

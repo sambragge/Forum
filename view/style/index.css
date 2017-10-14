@@ -10,29 +10,31 @@ ul {
   ul li {
     margin: 0; }
 
-.navbar, .authbar {
-  overflow-x: scroll;
-  height: 100%;
-  display: flex;
-  justify-content: space-around;
+.header .navbar, .header .authbar {
   list-style-type: none; }
-  .navbar li, .authbar li {
-    align-self: center;
+  .header .navbar li, .header .authbar li {
+    border-right: 1px groove rgba(0, 0, 0, 0.5);
+    padding-right: 1em;
+    margin: 1em;
     display: inline-block;
     cursor: pointer; }
-    .navbar li a, .authbar li a {
+    .header .navbar li a, .header .authbar li a {
       text-decoration: none;
       color: blue; }
-      .navbar li a:hover, .authbar li a:hover {
+      .header .navbar li a:hover, .header .authbar li a:hover {
         color: deepskyblue; }
-    .navbar li .activePage, .authbar li .activePage {
+    .header .navbar li .activePage, .header .authbar li .activePage {
       font-weight: bold;
       color: deepskyblue; }
-
-.navbar .creationLink {
-  color: rgba(0, 128, 0, 0.5); }
-  .navbar .creationLink:hover {
-    color: lime; }
+.header .navbar {
+  white-space: nowrap;
+  overflow-x: scroll; }
+  .header .navbar .creationLink {
+    color: rgba(0, 128, 0, 0.5); }
+    .header .navbar .creationLink:hover {
+      color: lime; }
+.header .authbar {
+  border: 1px dotted red; }
 
 form * {
   display: block; }
@@ -82,8 +84,6 @@ form textarea {
 
 .app {
   height: 100vh; }
-  .app .header {
-    height: 10%; }
   .app .pageHeader {
     border-bottom: 1px groove rgba(0, 0, 0, 0.5);
     margin-bottom: 2%; }

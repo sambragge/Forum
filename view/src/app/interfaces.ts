@@ -123,6 +123,16 @@ export interface IForumEditPageState {
     description:string,
 }
 
+export interface IForumCreatePageProps {
+    history?:any,
+    user:IUser,
+    createForum:Function,
+}
+export interface IForumCreatePageState {
+    topic:string,
+    description:string,
+}
+
 
 
 // User

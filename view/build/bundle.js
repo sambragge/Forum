@@ -2658,7 +2658,6 @@ exports.jwt = {
         return token ? true : false;
     },
     authenticate: (token) => {
-        console.log("authenticating token: ", { token: token });
         return axios_1.default
             .get("/api-auth/" + token)
             .then(res => res.data)
@@ -27971,6 +27970,32 @@ const forum_create_page_1 = __webpack_require__(287);
 class App extends React.Component {
     constructor(props) {
         super(props);
+        this.controller = {
+            setUser: (data) => {
+                return new Promise((resolve) => {
+                    this.setState(() => ({ user: data }));
+                    resolve();
+                });
+            },
+            setForums: (data) => {
+                return new Promise((resolve) => {
+                    this.setState(() => ({ forums: data }));
+                    resolve();
+                });
+            },
+            addForum: (data) => {
+                return new Promise((resolve) => {
+                    this.setState((state) => ({ forums: [...state.forums, data] }));
+                    resolve();
+                });
+            },
+            removeForum: (data) => {
+                return new Promise((resolve) => {
+                    this.setState((state) => ({ forums: state.forums.filter((forum) => forum._id !== data) }));
+                    resolve();
+                });
+            },
+        };
         this.state = App.initialState;
         this.bindActions();
     }
@@ -27995,15 +28020,17 @@ class App extends React.Component {
         this.createForum = this.createForum.bind(this);
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
+        for (let i in this.controller) {
+            this.controller[i] = this.controller[i].bind(this);
+        }
     }
     authenticate() {
         return new Promise((resolve) => {
             if (util_1.jwt.check()) {
                 const token = util_1.jwt.get();
-                console.log("authenticating user with token as: ", token);
                 util_1.jwt.authenticate(token)
                     .then(res => {
-                    res.success ? this.setState(() => ({ user: res.payload })) : util_1.errors.handle(res.payload);
+                    res.success ? this.controller.setUser(res.payload) : util_1.errors.handle(res.payload);
                     resolve(true);
                 });
             }
@@ -28018,7 +28045,7 @@ class App extends React.Component {
             util_1.api
                 .getForums()
                 .then(res => {
-                res.success ? this.setState(() => ({ forums: res.payload })) : util_1.errors.handle(res.payload);
+                res.success ? this.controller.setForums(res.payload) : util_1.errors.handle(res.payload);
                 resolve(res.success);
             });
         });
@@ -28029,7 +28056,9 @@ class App extends React.Component {
         util_1.api.createForum(forum)
             .then(res => {
             res.success ?
-                this.setState((state) => ({ forums: [...state.forums, res.payload] })) :
+                this.controller.addForum(res.payload).then(() => {
+                    this.props.history.push("/");
+                }) :
                 util_1.errors.handle(res.payload);
         });
     }
@@ -28038,8 +28067,8 @@ class App extends React.Component {
         util_1.api.deleteForum(id)
             .then(res => {
             res.success ?
-                this.props.history.push("/").then(() => {
-                    this.getForums();
+                this.controller.removeForum(res.payload).then(() => {
+                    this.props.history.push("/");
                 }) :
                 util_1.errors.handle(res.payload);
         });
@@ -28097,14 +28126,18 @@ class App extends React.Component {
         const postPageProps = {
             user: this.state.user,
         };
-        return (React.createElement("div", { className: "app" },
+        const createForumPageProps = {
+            user: this.state.user,
+            createForum: this.createForum,
+        };
+        return (React.createElement("div", { className: "app container" },
             React.createElement(header_1.default, Object.assign({}, headerProps)),
             React.createElement(react_router_dom_1.Switch, null,
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/", component: (props) => React.createElement(home_page_1.default, Object.assign({}, props, homePageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/user/:id/edit", component: (props) => React.createElement(user_edit_page_1.default, Object.assign({}, props)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:id/edit", component: (props) => React.createElement(forum_edit_page_1.default, Object.assign({}, props)) }),
-                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:id", component: (props) => React.createElement(forum_page_1.default, Object.assign({}, props, forumPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forums/create", component: (props) => React.createElement(forum_create_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:topic", component: (props) => React.createElement(forum_page_1.default, Object.assign({}, props, forumPageProps)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/forums/create", component: (props) => React.createElement(forum_create_page_1.default, Object.assign({}, props, createForumPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/post/:id", component: (props) => React.createElement(post_page_1.default, Object.assign({}, props, postPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/blog", component: blog_page_1.default }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/about", component: about_page_1.default }),
@@ -29041,7 +29074,7 @@ class Navbar extends React.Component {
     main() {
         let forums = this.props.forums.map((forum, i) => {
             return React.createElement("li", { key: 'forum' + i },
-                React.createElement(react_router_dom_1.NavLink, { activeClassName: "activePage", to: "/forum/" + forum._id }, forum.topic));
+                React.createElement(react_router_dom_1.NavLink, { activeClassName: "activePage", to: "/forum/" + forum.topic }, this.replaceUnderscoreWithWhitespace(forum.topic)));
         });
         return (React.createElement("ul", { className: "navbar eight columns" },
             React.createElement("li", null,
@@ -29049,6 +29082,9 @@ class Navbar extends React.Component {
             forums.length > 0 ? forums : React.createElement("li", null, "No Forums..."),
             this.props.user && React.createElement("li", { className: "creationLink" },
                 React.createElement(react_router_dom_1.NavLink, { activeClassName: "activePage", to: "/forums/create" }, "...create a forum"))));
+    }
+    replaceUnderscoreWithWhitespace(str) {
+        return str.split("_").join(" ");
     }
     render() {
         return this.props.forums ? this.main() : React.createElement(loading_1.default, null);
@@ -29201,7 +29237,7 @@ class ForumPage extends React.Component {
         this.setState(() => newState);
     }
     getForum() {
-        util_1.api.getForum(this.props.match.params.id)
+        util_1.api.getForum(this.props.match.params.topic)
             .then(res => {
             if (res.success) {
                 this.setState(() => ({ data: res.payload }));
@@ -29959,7 +29995,7 @@ exports.i(__webpack_require__(282), "");
 exports.i(__webpack_require__(283), "");
 
 // module
-exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.navbar, .authbar {\n  overflow-x: scroll;\n  height: 100%;\n  display: flex;\n  justify-content: space-around;\n  list-style-type: none; }\n  .navbar li, .authbar li {\n    align-self: center;\n    display: inline-block;\n    cursor: pointer; }\n    .navbar li a, .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .navbar li a:hover, .authbar li a:hover {\n        color: deepskyblue; }\n    .navbar li .activePage, .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n\n.navbar .creationLink {\n  color: rgba(0, 128, 0, 0.5); }\n  .navbar .creationLink:hover {\n    color: lime; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardPost {\n  padding: 5px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardPost .itemLink {\n    cursor: pointer; }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .header {\n    height: 10%; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center; }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
+exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.header .navbar, .header .authbar {\n  list-style-type: none; }\n  .header .navbar li, .header .authbar li {\n    border-right: 1px groove rgba(0, 0, 0, 0.5);\n    padding-right: 1em;\n    margin: 1em;\n    display: inline-block;\n    cursor: pointer; }\n    .header .navbar li a, .header .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .header .navbar li a:hover, .header .authbar li a:hover {\n        color: deepskyblue; }\n    .header .navbar li .activePage, .header .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n.header .navbar {\n  white-space: nowrap;\n  overflow-x: scroll; }\n  .header .navbar .creationLink {\n    color: rgba(0, 128, 0, 0.5); }\n    .header .navbar .creationLink:hover {\n      color: lime; }\n.header .authbar {\n  border: 1px dotted red; }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardPost {\n  padding: 5px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardPost .itemLink {\n    cursor: pointer; }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center; }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
 
 // exports
 
@@ -30469,10 +30505,31 @@ module.exports = function (css) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 class ForumCreatePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            topic: "",
+            description: "",
+        };
+    }
+    handleChange(e) {
+        const newState = this.state;
+        newState[e.target.name] = e.target.value;
+        this.setState(() => newState);
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        this.props.createForum({
+            _creator: this.props.user._id,
+            topic: this.state.topic,
+            description: this.state.description,
+        });
+    }
     creationForm() {
-        return (React.createElement("form", null,
-            React.createElement("input", { name: "topic", type: "text", placeholder: "Topic..." }),
-            React.createElement("textarea", { name: "description", placeholder: "Description" })));
+        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
+            React.createElement("input", { onChange: this.handleChange.bind(this), name: "topic", type: "text", placeholder: "Topic..." }),
+            React.createElement("textarea", { onChange: this.handleChange.bind(this), name: "description", placeholder: "Description" }),
+            React.createElement("input", { type: "submit", value: "create forum" })));
     }
     render() {
         return (React.createElement("div", { className: "forumCreatePage" },

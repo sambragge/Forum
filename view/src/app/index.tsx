@@ -36,7 +36,34 @@ class App extends React.Component<any, IAppState> {
         loading: true,
     }
 
-    constructor(props: any) {
+    private controller:any = {
+        setUser:(data:IUser):Promise<void>=>{
+            return new Promise((resolve)=>{
+                this.setState(()=>({user:data}));
+                resolve()
+            });
+        },
+        setForums:(data:IForum[]):Promise<void>=>{
+            return new Promise((resolve)=>{
+                this.setState(()=>({forums:data}));
+                resolve()
+            });
+        },
+        addForum:(data:IForum):Promise<void>=>{
+            return new Promise((resolve)=>{
+                this.setState((state)=>({forums:[...state.forums, data]}));
+                resolve();
+            });
+        },
+        removeForum:(data:string):Promise<void>=>{
+            return new Promise((resolve)=>{
+                this.setState((state)=>({forums:state.forums.filter((forum)=>forum._id !== data)}));
+                resolve();
+            });
+        },
+    }
+
+    constructor(props:any) {
         super(props)
         this.state = App.initialState;
         this.bindActions();
@@ -65,16 +92,19 @@ class App extends React.Component<any, IAppState> {
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
 
+        for(let i in this.controller){
+            this.controller[i] = this.controller[i].bind(this);
+        }
+
     }
 
     private authenticate(): Promise<boolean> {
         return new Promise((resolve) => {
             if (jwt.check()) {
                 const token = jwt.get()
-                console.log("authenticating user with token as: ", token);
                 jwt.authenticate(token)
                     .then(res => {
-                        res.success ? this.setState(() => ({ user: res.payload })) : errors.handle(res.payload);
+                        res.success ? this.controller.setUser(res.payload) : errors.handle(res.payload);
                         resolve(true);
                     });
             } else {
@@ -90,7 +120,7 @@ class App extends React.Component<any, IAppState> {
             api
                 .getForums()
                 .then(res => {
-                    res.success ? this.setState(() => ({ forums: res.payload })) : errors.handle(res.payload);
+                    res.success ? this.controller.setForums(res.payload) : errors.handle(res.payload);
                     resolve(res.success);
                 })
         });
@@ -102,7 +132,9 @@ class App extends React.Component<any, IAppState> {
         api.createForum(forum)
             .then(res => {
                 res.success ?
-                    this.setState((state) => ({ forums: [...state.forums, res.payload] })) :
+                    this.controller.addForum(res.payload).then(()=>{
+                        this.props.history.push("/");
+                    }) :
                     errors.handle(res.payload);
             })
     };
@@ -110,8 +142,8 @@ class App extends React.Component<any, IAppState> {
         api.deleteForum(id)
             .then(res => {
                 res.success ?
-                    this.props.history.push("/").then(() => {
-                        this.getForums()
+                    this.controller.removeForum(res.payload).then(()=>{
+                        this.props.history.push("/");
                     }) :
                     errors.handle(res.payload);
             });
@@ -173,8 +205,12 @@ class App extends React.Component<any, IAppState> {
             user: this.state.user,
 
         }
+        const createForumPageProps = {
+            user:this.state.user,
+            createForum:this.createForum,
+        }
         return (
-            <div className="app">
+            <div className="app container">
                 <Header {...headerProps} />
                 <Switch>
                     <Route
@@ -187,11 +223,11 @@ class App extends React.Component<any, IAppState> {
                         exact path="/forum/:id/edit"
                         component={(props) => <ForumEditPage {...props} />} />
                     <Route
-                        exact path="/forum/:id"
+                        exact path="/forum/:topic"
                         component={(props) => <ForumPage {...props} {...forumPageProps} />} />
                     <Route
                         exact path="/forums/create"
-                        component={(props) => <ForumCreatePage {...props}  />} />
+                        component={(props) => <ForumCreatePage {...props} {...createForumPageProps}  />} />
                     <Route
                         exact path="/post/:id"
                         component={(props) => <PostPage {...props} {...postPageProps} />} />

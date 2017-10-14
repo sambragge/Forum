@@ -7,7 +7,7 @@ export default class Navbar extends React.Component<INavbarProps, {}> {
 
     private main():JSX.Element{
         let forums = this.props.forums.map((forum, i)=>{
-            return <li key={'forum'+i}><NavLink activeClassName="activePage" to={"/forum/"+forum._id}>{forum.topic}</NavLink></li>
+            return <li key={'forum'+i}><NavLink activeClassName="activePage" to={"/forum/"+forum.topic}>{this.replaceUnderscoreWithWhitespace(forum.topic)}</NavLink></li>
         })
 
         return(
@@ -17,6 +17,9 @@ export default class Navbar extends React.Component<INavbarProps, {}> {
                 {this.props.user && <li className="creationLink"><NavLink activeClassName="activePage" to="/forums/create">...create a forum</NavLink></li>}
             </ul>
         );
+    }
+    private replaceUnderscoreWithWhitespace(str:string):string{
+        return str.split("_").join(" ");
     }
 
     public render():JSX.Element{

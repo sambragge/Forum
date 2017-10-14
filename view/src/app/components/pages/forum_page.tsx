@@ -28,7 +28,7 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
         this.setState(()=>newState);
     }
     private getForum():void{
-        api.getForum(this.props.match.params.id)
+        api.getForum(this.props.match.params.topic)
         .then(res=>{
             if(res.success){
                 this.setState(()=>({data:res.payload}))
