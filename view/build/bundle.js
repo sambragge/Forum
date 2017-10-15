@@ -28144,10 +28144,12 @@ class App extends React.Component {
         return new Promise((resolve) => {
             util_1.jwt.remove()
                 .then(() => {
-                this.goHome();
-                this.setState(() => ({ user: null }));
-                mode === 1 && this.getForums();
-                resolve();
+                this.goHome().then(() => {
+                    this.controller.setUser(null).then(() => {
+                        mode === 1 && this.getForums();
+                        resolve();
+                    });
+                });
             });
         });
     }
@@ -30720,7 +30722,7 @@ class PostEditPage extends React.Component {
             util_1.api.updatePost(Object.assign({}, this.state.inputs, { _id: this.state.data._id }))
                 .then(res => {
                 res.success ?
-                    this.goBack : util_1.errors.handle(res.payload);
+                    this.goBack() : util_1.errors.handle(res.payload);
                 resolve(res.success);
             });
         });
@@ -30753,7 +30755,10 @@ class PostEditPage extends React.Component {
         const confirmation = confirm("Are you sure you want to save these changes?");
         confirmation && this.updateInfo();
     }
-    handleDelete(e) { }
+    handleDelete(e) {
+        const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
+        confirmation && this.delete();
+    }
     updateForm() {
         return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
             React.createElement("input", { onChange: this.handleInputChange.bind(this), type: "text", name: "title", placeholder: "post title...", value: this.state.inputs.title }),

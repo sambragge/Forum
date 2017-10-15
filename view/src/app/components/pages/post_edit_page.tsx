@@ -58,7 +58,7 @@ export default class PostEditPage extends React.Component<any, any>{
             })
             .then(res=>{
                 res.success ?
-                this.goBack:errors.handle(res.payload);
+                this.goBack():errors.handle(res.payload);
                 resolve(res.success)
             });
         });
@@ -95,7 +95,10 @@ export default class PostEditPage extends React.Component<any, any>{
         const confirmation = confirm("Are you sure you want to save these changes?");
         confirmation && this.updateInfo();
     }
-    private handleDelete(e:Event):void{}
+    private handleDelete(e:Event):void{
+        const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
+        confirmation && this.delete();
+    }
 
 
     private updateForm():JSX.Element{

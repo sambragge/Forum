@@ -194,10 +194,12 @@ class App extends React.Component<any, IAppState> {
         return new Promise((resolve) => {
             jwt.remove()
                 .then(() => {
-                    this.goHome();
-                    this.setState(() => ({ user: null }));
-                    mode === 1 && this.getForums();
-                    resolve();
+                    this.goHome().then(()=>{
+                        this.controller.setUser(null).then(()=>{
+                            mode === 1 && this.getForums();
+                            resolve();
+                        })
+                    })
                 })
         });
 
