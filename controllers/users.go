@@ -13,6 +13,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// UserController : handles the user data model
 type UserController struct {
 	users    *mgo.Collection
 	forums   *mgo.Collection
@@ -20,6 +21,7 @@ type UserController struct {
 	comments *mgo.Collection
 }
 
+// NewUserController : creates and returns a pointer to a new user controller
 func NewUserController(db *mgo.Database) *UserController {
 	return &UserController{
 		users:    db.C("users"),
@@ -37,6 +39,7 @@ func (uc *UserController) decode(body io.Reader) *models.User {
 	return &user
 }
 
+// Create : creates a user
 func (uc *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	user := uc.decode(r.Body)
 	if validationErrors := user.Save(uc.users); validationErrors != nil {
@@ -46,6 +49,7 @@ func (uc *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, user)
 }
 
+// GetAll : gets all users
 func (uc *UserController) GetAll(w http.ResponseWriter, r *http.Request) {
 	users := make([]*models.User, 0)
 	if err := uc.users.Find(bson.M{}).All(&users); err != nil {
@@ -58,6 +62,7 @@ func (uc *UserController) GetAll(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, users)
 }
 
+// GetOne : gets one user
 func (uc *UserController) GetOne(w http.ResponseWriter, r *http.Request) {
 
 	user := &models.User{
@@ -72,6 +77,7 @@ func (uc *UserController) GetOne(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// UpdateInfo : updates users personal info
 func (uc *UserController) UpdateInfo(w http.ResponseWriter, r *http.Request) {
 	user := uc.decode(r.Body)
 	if err := user.UpdateInfo(uc.users); err != nil {
@@ -81,6 +87,7 @@ func (uc *UserController) UpdateInfo(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, user.ID)
 }
 
+// Delete : deletes a user
 func (uc *UserController) Delete(w http.ResponseWriter, r *http.Request) {
 	user := &models.User{
 		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
@@ -92,6 +99,7 @@ func (uc *UserController) Delete(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, user.ID)
 }
 
+// Follow : make a connection with another user
 func (uc *UserController) Follow(w http.ResponseWriter, r *http.Request) {
 	followRequest := DecodeFollowRequest(r.Body)
 	var user *models.User
@@ -107,6 +115,7 @@ func (uc *UserController) Follow(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// UnFollow : break a connection with another user
 func (uc *UserController) UnFollow(w http.ResponseWriter, r *http.Request) {
 	followRequest := DecodeFollowRequest(r.Body)
 	var user *models.User

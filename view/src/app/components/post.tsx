@@ -4,6 +4,33 @@ import { withRouter } from 'react-router-dom';
 
 class Post extends React.Component<IPostProps, any> {
 
+    constructor(props:IPostProps){
+        super(props);
+
+    }
+
+    // Lifecycle
+    componentDidMount(){
+
+        console.log("Post Mounted: ", this);
+    }
+
+    // Private Methods
+   
+    private handleParentClick(e:Event):void{
+        console.log("in handleParentClick with this.props.data.parent.topic as: ", this.props.data.parent.topic);
+        this.props.history.push("/forum/"+this.props.data.parent.topic);
+    }
+    private handleCommentsClick(e:Event):void{
+        console.log("in handleCommentsClick with this.props.data._id as: ", this.props.data._id);
+        this.props.history.push("/post/"+this.props.data._id);
+    }
+    private handleUserClick(e:Event):void{
+        this.props.history.push("/profile/"+this.props.data._creator);
+    }
+
+
+    // Views
     private content():JSX.Element{
         const x = this.props.data;
         return(
@@ -25,15 +52,6 @@ class Post extends React.Component<IPostProps, any> {
                 {this.content()}
             </div>
         );
-    }
-    private handleParentClick(e:Event):void{
-        this.props.history.push("/forum/"+this.props.data._parent);
-    }
-    private handleCommentsClick(e:Event):void{
-        this.props.history.push("/post/"+this.props.data._id);
-    }
-    private handleUserClick(e:Event):void{
-        this.props.history.push("/profile/"+this.props.data._creator);
     }
 
     private shortContent():string{

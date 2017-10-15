@@ -13,6 +13,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// ForumController : handles the forum, post and comment data models
 type ForumController struct {
 	users    *mgo.Collection
 	forums   *mgo.Collection
@@ -20,6 +21,7 @@ type ForumController struct {
 	comments *mgo.Collection
 }
 
+// NewForumController : creates and returns a pointer to a new forum controller
 func NewForumController(db *mgo.Database) *ForumController {
 	return &ForumController{
 		users:    db.C("users"),
@@ -39,6 +41,7 @@ func (fc *ForumController) decode(body io.Reader) *models.Forum {
 	return &forum
 }
 
+// GetAll : gets all the forums
 func (fc *ForumController) GetAll(w http.ResponseWriter, r *http.Request) {
 	forums := make([]*models.Forum, 0)
 	if err := fc.forums.Find(bson.M{}).All(&forums); err != nil {
@@ -52,6 +55,7 @@ func (fc *ForumController) GetAll(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// GetOne : gets one forum
 func (fc *ForumController) GetOne(w http.ResponseWriter, r *http.Request) {
 	forum := &models.Forum{
 		Topic: mux.Vars(r)["topic"],
@@ -64,6 +68,17 @@ func (fc *ForumController) GetOne(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, forum)
 }
 
+// Update : updates a forums info
+func (fc *ForumController) Update(w http.ResponseWriter, r *http.Request) {
+	forum := fc.decode(r.Body)
+	if errors := forum.Update(fc.forums); errors != nil {
+		SendAsJSON(w, false, errors)
+		return
+	}
+	SendAsJSON(w, true, forum.Topic)
+}
+
+// Create : creates a new forum
 func (fc *ForumController) Create(w http.ResponseWriter, r *http.Request) {
 	forum := fc.decode(r.Body)
 	if validationErrors := forum.Save(fc.forums); validationErrors != nil {
@@ -74,6 +89,7 @@ func (fc *ForumController) Create(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, forum)
 }
 
+// Delete : deletes a forum
 func (fc *ForumController) Delete(w http.ResponseWriter, r *http.Request) {
 	forum := &models.Forum{
 		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
@@ -94,6 +110,7 @@ func (fc *ForumController) decodePost(body io.Reader) *models.Post {
 	return &post
 }
 
+// CreatePost : creates a new post
 func (fc *ForumController) CreatePost(w http.ResponseWriter, r *http.Request) {
 	post := fc.decodePost(r.Body)
 	if validationErrors := post.Save(fc.posts); validationErrors != nil {
@@ -103,6 +120,17 @@ func (fc *ForumController) CreatePost(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, post)
 
 }
+
+func (fc *ForumController) UpdatePost(w http.ResponseWriter, r *http.Request) {
+	post := fc.decodePost(r.Body)
+	if errors := post.Update(fc.posts); errors != nil {
+		SendAsJSON(w, false, errors)
+		return
+	}
+	SendAsJSON(w, true, post.ID)
+}
+
+// GetPosts : gets all the posts
 func (fc *ForumController) GetPosts(w http.ResponseWriter, r *http.Request) {
 	log.Print("In GetPosts")
 	results := make([]*models.Post, 0)
@@ -116,6 +144,7 @@ func (fc *ForumController) GetPosts(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, results)
 }
 
+// GetPost : gets one post
 func (fc *ForumController) GetPost(w http.ResponseWriter, r *http.Request) {
 	post := &models.Post{
 		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
@@ -128,6 +157,7 @@ func (fc *ForumController) GetPost(w http.ResponseWriter, r *http.Request) {
 	SendAsJSON(w, true, post)
 }
 
+// DeletePost : deletes a post
 func (fc *ForumController) DeletePost(w http.ResponseWriter, r *http.Request) {
 	post := &models.Post{
 		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
@@ -147,6 +177,8 @@ func (fc *ForumController) decodeComment(body io.Reader) *models.Comment {
 	}
 	return &comment
 }
+
+// CreateComment : creates a new comment
 func (fc *ForumController) CreateComment(w http.ResponseWriter, r *http.Request) {
 	comment := fc.decodeComment(r.Body)
 	if validationErrors := comment.Save(fc.comments); validationErrors != nil {
@@ -156,6 +188,8 @@ func (fc *ForumController) CreateComment(w http.ResponseWriter, r *http.Request)
 	SendAsJSON(w, true, comment)
 
 }
+
+// DeleteComment : deletes a comment
 func (fc *ForumController) DeleteComment(w http.ResponseWriter, r *http.Request) {
 	comment := &models.Comment{
 		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),

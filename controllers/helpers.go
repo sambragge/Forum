@@ -16,11 +16,13 @@ type standardResponse struct {
 	Payload interface{} `json:"payload"`
 }
 
+// FollowRequest : a json object requesting a user connection / disconnection
 type FollowRequest struct {
 	User1 bson.ObjectId `json:"user1"`
 	User2 bson.ObjectId `json:"user2"`
 }
 
+// DecodeFollowRequest : decodes a json object requesting a user connection / disconnection
 func DecodeFollowRequest(body io.Reader) *FollowRequest {
 	var results *FollowRequest
 	if err := json.NewDecoder(body).Decode(&results); err != nil {
@@ -29,6 +31,7 @@ func DecodeFollowRequest(body io.Reader) *FollowRequest {
 	return results
 }
 
+// SendAsJSON : sends go data as json
 func SendAsJSON(w http.ResponseWriter, success bool, payload interface{}) {
 	_response := standardResponse{
 		Success: success,
@@ -41,6 +44,7 @@ func SendAsJSON(w http.ResponseWriter, success bool, payload interface{}) {
 	w.Write([]byte(response))
 }
 
+// DecodeUser : decodes a json user object
 func DecodeUser(body io.Reader) *models.User {
 	var user *models.User
 	if err := json.NewDecoder(body).Decode(&user); err != nil {

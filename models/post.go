@@ -81,6 +81,21 @@ func (p *Post) validate() []string {
 	return nil
 }
 
+// Update : updates a posts info
+func (p *Post) Update(_posts *mgo.Collection) []string {
+	if errors := p.validate(); errors != nil {
+		return errors
+	}
+	query := bson.M{"_id": p.ID}
+	change := bson.M{"$set": bson.M{"title": p.Title, "content": p.Content}}
+
+	if err := _posts.Update(query, change); err != nil {
+		return []string{"Error updating post", err.Error()}
+	}
+	return nil
+
+}
+
 // PreSave : anything that needs to happen before model is saved to the database
 func (p *Post) preSave() {
 	p.ID = bson.NewObjectId()

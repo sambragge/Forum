@@ -76,10 +76,16 @@ export interface IForumsPageProps {
     forums: IForum[],
 }
 
+interface IPostInputs {
+    title:string,
+    content:string,
+}
+ 
 // ForumPage
 export interface IForumPageState {
     data: IForum,
     filter: string,
+    inputs:IPostInputs
 }
 export interface IForumPageProps {
     user: IUser,
@@ -98,31 +104,42 @@ export interface IPostPageProps {
     history?:any,
 }
 
-// UserEditPage
-export interface IUserEditPageState {
-    data: IUser,
-    updateDisabled:boolean,
+interface IUserEditInputs {
     username:string,
     state: string,
     city: string,
 }
+
+// UserEditPage
+export interface IUserEditPageState {
+    data: IUser,
+    updateDisabled:boolean,
+    inputs:IUserEditInputs,
+}
 export interface IUserEditPageProps {
     match?:any,
     history?:any,
+    logout:Function,
 }
 
+interface IForumEditInputs {
+    topic:string,
+    description:string,
+}
 // ForumEditPage
 export interface IForumEditPageProps {
     match?:any,
     history?:any,
+    deleteForum:Function,
+    updateForum:Function,
 }
 export interface IForumEditPageState {
     data:IForum,
     updateDisabled:boolean,
-    topic:string,
-    description:string,
+    inputs:IForumEditInputs,
 }
 
+// ForumCreatePage
 export interface IForumCreatePageProps {
     history?:any,
     user:IUser,
@@ -231,5 +248,15 @@ export interface IUpdateUserInfoRequest {
     _id:string,
     username:string,
     location:ILocation
+}
+export interface IUpdateForumRequest {
+    _id:string,
+    topic:string,
+    description:string,
+}
+export interface IUpdatePostRequest {
+    _id:string,
+    title:string,
+    content:string,
 }
 

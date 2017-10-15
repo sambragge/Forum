@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { IPostPageState, IPostPageProps, IComment } from '../../interfaces';
+import { Link } from 'react-router-dom';
 import { api, errors } from '../../util';
 import Loading from '../loading';
 import Comment from '../comment';
@@ -21,9 +22,11 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
     }
 
     private getPost(): void {
-        
+        console.log("getting post with id of : ", this.props.match.params.id);
         api.getPost(this.props.match.params.id)
             .then(res => {
+                console.log(res);
+                
                 if(res.success){
                     this.setState(() => ({ data: res.payload }))
                 }else{
@@ -40,7 +43,7 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
                 _parent:this.state.data._id,
                 content:this.state.comment,
             }).then(res=>{
-                res.success ? this.forceUpdate():errors.handle(res.payload);
+                res.success ? this.getPost():errors.handle(res.payload);
                 resolve(res.success);
             })
         });
@@ -54,7 +57,7 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
     private handleChange(e:any){
         const newState:any = this.state;
         newState[e.target.name] = e.target.value;
-        this.setState(()=>(newState));
+        this.setState(()=>newState);
     }
 
     private comments():JSX.Element{
@@ -76,7 +79,8 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
     private header():JSX.Element{
         return(
             <div className="pageHeader row" >
-                {this.props.user && this.isMyPost() && this.edit() }
+                {this.props.user && this.isMyPost() && 
+                <Link className="edit" to={"/post/"+this.state.data._id+"/edit"}>Edit Post</Link> }
             </div>
         );
     }
@@ -94,11 +98,6 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
     private isMyPost():boolean{
         return this.state.data._creator === this.props.user._id;
     }
-
-    private edit():JSX.Element{
-        return <a className="edit" href="#">Edit</a>;
-    }
-
 
     private main(){
         

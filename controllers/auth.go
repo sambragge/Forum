@@ -23,12 +23,14 @@ const (
 	pubKeyPath  = "./keys/app.rsa.pub"
 )
 
+// AuthController : handles authentication and json web tokens
 type AuthController struct {
 	verifyKey *rsa.PublicKey
 	signKey   *rsa.PrivateKey
 	users     *mgo.Collection
 }
 
+// NewAuthController : creates and returns a pointer to a new auth controller
 func NewAuthController(db *mgo.Database) *AuthController {
 	controller := &AuthController{
 		users: db.C("users"),
@@ -76,6 +78,7 @@ func (ac *AuthController) createTokenString(id bson.ObjectId) (string, error) {
 	return tokenString, nil
 }
 
+// Login : validate credentials and return errors or a token.
 func (ac *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	_user := DecodeUser(r.Body)
 	user, errors := _user.ValidateLogin(ac.users)
@@ -90,6 +93,8 @@ func (ac *AuthController) Login(w http.ResponseWriter, r *http.Request) {
 	}
 	SendAsJSON(w, true, tokenString)
 }
+
+// GetUserFromToken : decodes a token string and returns the user associated with the _id inside the token.
 func (ac *AuthController) GetUserFromToken(w http.ResponseWriter, r *http.Request) {
 	var user *models.User
 	data, err := ac.getDataFromToken(mux.Vars(r)["token"])

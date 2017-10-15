@@ -25,7 +25,7 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Methods", "GET,POST,DELETE,PUT")
 	w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
 
-	log.Print("Serving route: ", r.URL.Path)
+	log.Print("Serving route: ", r.URL.Path, " : ", r.Method)
 
 	s.routes.ServeHTTP(w, r)
 }

@@ -8,23 +8,26 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
     static initialState: IUserEditPageState = {
         data: null,
         updateDisabled: false,
-        username: "",
-        state: "",
-        city: "",
+        inputs:{
+            username: "",
+            state: "",
+            city: "",
+        }
     }
 
     constructor(props: IUserEditPageProps) {
         super(props);
         this.state = UserEditPage.initialState;
-        this.getUser = this.getUser.bind(this);
+        this.bindActions();
 
 
     }
 
     componentDidMount(): void {
-        this.getUser().then(() => {
-            console.log("UserEditPage mounted ", this);
+        this.getUser().then((success)=>{
+            success && this.initializeInputs();
         })
+        console.log("UserEditPage mounted ", this);
     }
 
     // Private Methods
@@ -32,6 +35,13 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
         this.goBack = this.goBack.bind(this);
         this.updateInfo = this.updateInfo.bind(this);
         this.delete = this.delete.bind(this);
+    }
+    private initializeInputs():void{
+        const inputs:any = this.state.inputs;
+        inputs.username = this.state.data.username;
+        inputs.state = this.state.data.location.state;
+        inputs.city = this.state.data.location.city;
+        this.setState(()=>({inputs:inputs}));
     }
     private header(): JSX.Element {
         return (
@@ -61,7 +71,7 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
         return new Promise((resolve) => {
             api.updateUserInfo(updateReq)
                 .then(res => {
-                    !res.success ? errors.handle(res.payload) : this.goBack;
+                    !res.success ? errors.handle(res.payload) : this.props.history.push("/profile/"+this.state.data._id);
                     resolve(res.success)
                 });
         });
@@ -74,24 +84,24 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
         confirmation &&
             this.updateInfo({
                 _id: this.state.data._id,
-                username: this.state.username,
+                username: this.state.inputs.username,
                 location: {
-                    state: this.state.state,
-                    city: this.state.city,
+                    state: this.state.inputs.state,
+                    city: this.state.inputs.city,
                 }
             });
     }
-    private handleChange(e: any): void {
-        const newState: any = this.state;
-        newState[e.target.name] = e.target.value;
-        this.setState(() => newState);
+    private handleInputChange(e: any): void {
+        const inputs: any = this.state.inputs;
+        inputs[e.target.name] = e.target.value;
+        this.setState(() => ({inputs:inputs}));
     }
 
     private delete(): Promise<boolean> {
         return new Promise((resolve) => {
             api.deleteUser(this.state.data._id)
                 .then(res => {
-                    res.success ? this.props.history.push("/") :
+                    res.success ? this.props.logout(1) :
                         errors.handle(res.payload);
                     resolve(res.success)
                 });
@@ -104,12 +114,12 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
             this.delete();
     }
     // Views
-    private content(): JSX.Element {
+    private updateForm(): JSX.Element {
         return (
-            <form className="updateForm">
-                <input onChange={this.handleChange.bind(this)} type="text" name="username" defaultValue={this.state.data.username} />
-                <input onChange={this.handleChange.bind(this)} type="text" name="state" defaultValue={this.state.data.location.state} />
-                <input onChange={this.handleChange.bind(this)} type="text" name="city" defaultValue={this.state.data.location.city} />
+            <form  onSubmit={this.handleSubmit.bind(this)} className="updateForm">
+                <input onChange={this.handleInputChange.bind(this)} type="text" name="username" value={this.state.inputs.username} />
+                <input onChange={this.handleInputChange.bind(this)} type="text" name="state" value={this.state.inputs.state} />
+                <input onChange={this.handleInputChange.bind(this)} type="text" name="city" value={this.state.inputs.city} />
                 <input type="submit" value="update user" />
             </form>
         );
@@ -119,7 +129,7 @@ export default class UserEditPage extends React.Component<IUserEditPageProps, IU
         return (
             <div className="userEditPage">
                 {this.header()}
-                {this.content()}
+                {this.updateForm()}
             </div>
         );
     }

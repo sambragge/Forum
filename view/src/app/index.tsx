@@ -9,6 +9,7 @@ import {
     IComment,
     ILoginCredentials,
     IUpdateUserInfoRequest,
+    IUpdateForumRequest
 } from './interfaces';
 import { api, jwt, errors } from './util';
 
@@ -27,6 +28,7 @@ import ProfilePage from './components/pages/profile_page';
 import UserEditPage from './components/pages/user_edit_page';
 import ForumEditPage from './components/pages/forum_edit_page';
 import ForumCreatePage from './components/pages/forum_create_page';
+import PostEditPage from './components/pages/post_edit_page';
 
 class App extends React.Component<any, IAppState> {
 
@@ -36,34 +38,28 @@ class App extends React.Component<any, IAppState> {
         loading: true,
     }
 
-    private controller:any = {
-        setUser:(data:IUser):Promise<void>=>{
-            return new Promise((resolve)=>{
-                this.setState(()=>({user:data}));
+    private controller: any = {
+        setUser: (data: IUser): Promise<void> => {
+            return new Promise((resolve) => {
+                this.setState(() => ({ user: data }));
                 resolve()
             });
         },
-        setForums:(data:IForum[]):Promise<void>=>{
-            return new Promise((resolve)=>{
-                this.setState(()=>({forums:data}));
+        setForums: (data: IForum[]): Promise<void> => {
+            return new Promise((resolve) => {
+                this.setState(() => ({ forums: data }));
                 resolve()
             });
         },
-        addForum:(data:IForum):Promise<void>=>{
-            return new Promise((resolve)=>{
-                this.setState((state)=>({forums:[...state.forums, data]}));
-                resolve();
-            });
-        },
-        removeForum:(data:string):Promise<void>=>{
-            return new Promise((resolve)=>{
-                this.setState((state)=>({forums:state.forums.filter((forum)=>forum._id !== data)}));
+        addForum: (data: IForum): Promise<void> => {
+            return new Promise((resolve) => {
+                this.setState((state) => ({ forums: [...state.forums, data] }));
                 resolve();
             });
         },
     }
 
-    constructor(props:any) {
+    constructor(props: any) {
         super(props)
         this.state = App.initialState;
         this.bindActions();
@@ -91,8 +87,11 @@ class App extends React.Component<any, IAppState> {
         this.createForum = this.createForum.bind(this);
         this.deleteForum = this.deleteForum.bind(this);
         this.getForums = this.getForums.bind(this);
+        this.updateForum = this.updateForum.bind(this);
+        // nav
+        this.goHome = this.goHome.bind(this);
 
-        for(let i in this.controller){
+        for (let i in this.controller) {
             this.controller[i] = this.controller[i].bind(this);
         }
 
@@ -125,28 +124,48 @@ class App extends React.Component<any, IAppState> {
                 })
         });
     }
+    private goHome():Promise<void>{
+        return new Promise((resolve)=>{
+            this.props.history.push("/")
+            resolve();
+        });
+    }
     //===== Public Methods =====\\
 
     // Forums
     public createForum(forum: IForum): void {
+        console.log("creating forum");
         api.createForum(forum)
             .then(res => {
                 res.success ?
-                    this.controller.addForum(res.payload).then(()=>{
-                        this.props.history.push("/");
-                    }) :
-                    errors.handle(res.payload);
+                    this.controller.addForum(res.payload).then(() => {
+                        this.goHome();
+                    }) : errors.handle(res.payload);
             })
     };
     public deleteForum(id: string): void {
+        console.log("Deleting forum");
         api.deleteForum(id)
             .then(res => {
-                res.success ?
-                    this.controller.removeForum(res.payload).then(()=>{
-                        this.props.history.push("/");
-                    }) :
+                if(res.success){
+                    this.goHome();
+                    this.getForums();
+                    
+                }else{
                     errors.handle(res.payload);
+                }
             });
+    }
+    public updateForum(updateReq:IUpdateForumRequest):void{
+        api.updateForum(updateReq)
+        .then(res=>{
+            if(res.success){
+                this.props.history.push("/forum/"+res.payload);
+                this.getForums();
+            }else{
+                errors.handle(res.payload)
+            }
+        });
     }
 
     // Auth
@@ -160,7 +179,7 @@ class App extends React.Component<any, IAppState> {
                         this.authenticate()
                             .then((authenticated) => {
                                 authenticated &&
-                                    this.props.history.push("/profile/"+this.state.user._id);
+                                    this.props.history.push("/profile/" + this.state.user._id);
                                 resolve();
                             });
                     } else {
@@ -171,17 +190,20 @@ class App extends React.Component<any, IAppState> {
         });
 
     }
-    public logout(): Promise<void> {
+    public logout(mode?: number): Promise<void> {
         return new Promise((resolve) => {
             jwt.remove()
                 .then(() => {
-                    this.props.history.push("/");
+                    this.goHome();
                     this.setState(() => ({ user: null }));
+                    mode === 1 && this.getForums();
                     resolve();
                 })
         });
 
     }
+
+    // Views
     private main(): JSX.Element {
         const headerProps = {
             logout: this.logout,
@@ -196,7 +218,9 @@ class App extends React.Component<any, IAppState> {
         }
         const profilePageProps = {
             user: this.state.user,
-
+        }
+        const userEditPageProps = {
+            logout: this.logout,
         }
         const forumPageProps = {
             user: this.state.user,
@@ -206,11 +230,15 @@ class App extends React.Component<any, IAppState> {
 
         }
         const createForumPageProps = {
-            user:this.state.user,
-            createForum:this.createForum,
+            user: this.state.user,
+            createForum: this.createForum,
+        }
+        const ForumEditPageProps = {
+            deleteForum: this.deleteForum,
+            updateForum:this.updateForum,
         }
         return (
-            <div className="app container">
+            <div className="app">
                 <Header {...headerProps} />
                 <Switch>
                     <Route
@@ -218,16 +246,19 @@ class App extends React.Component<any, IAppState> {
                         component={(props) => <HomePage {...props}  {...homePageProps} />} />
                     <Route
                         exact path="/user/:id/edit"
-                        component={(props) => <UserEditPage {...props} />} />
+                        component={(props) => <UserEditPage {...props} {...userEditPageProps} />} />
                     <Route
                         exact path="/forum/:id/edit"
-                        component={(props) => <ForumEditPage {...props} />} />
+                        component={(props) => <ForumEditPage {...props} {...ForumEditPageProps} />} />
+                    <Route
+                        exact path="/post/:id/edit"
+                        component={(props) => <PostEditPage {...props} />} />
                     <Route
                         exact path="/forum/:topic"
                         component={(props) => <ForumPage {...props} {...forumPageProps} />} />
                     <Route
                         exact path="/forums/create"
-                        component={(props) => <ForumCreatePage {...props} {...createForumPageProps}  />} />
+                        component={(props) => <ForumCreatePage {...props} {...createForumPageProps} />} />
                     <Route
                         exact path="/post/:id"
                         component={(props) => <PostPage {...props} {...postPageProps} />} />
@@ -251,8 +282,6 @@ class App extends React.Component<any, IAppState> {
             </div>
         );
     }
-
-    // Views
     public render(): JSX.Element {
         return !this.state.loading ? this.main() : <Loading />
     }

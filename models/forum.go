@@ -29,6 +29,8 @@ func (f *Forum) Sync(_forums *mgo.Collection) error {
 	err := _forums.FindId(f.ID).One(&f)
 	return err
 }
+
+// SyncByTopic : use Topic string to generate the rest of the forum
 func (f *Forum) SyncByTopic(_forums *mgo.Collection) error {
 	query := bson.M{"topic": f.Topic}
 	err := _forums.Find(query).One(&f)
@@ -68,6 +70,19 @@ func (f *Forum) Populate(_forums, _users, _posts, _comments *mgo.Collection) {
 			post.Populate(_forums, _users, _comments)
 		}
 	}
+}
+
+// Update : updates a forums info
+func (f *Forum) Update(_forums *mgo.Collection) []string {
+	if errors := f.validate(_forums); errors != nil {
+		return errors
+	}
+	query := bson.M{"_id": f.ID}
+	change := bson.M{"$set": bson.M{"topic": f.Topic, "description": f.Description, "_updatedAt": time.Now()}}
+	if err := _forums.Update(query, change); err != nil {
+		return []string{"Error updating forum: ", err.Error()}
+	}
+	return nil
 }
 
 // Validate : pre save validation

@@ -13,7 +13,6 @@ ul {
 .header .navbar, .header .authbar {
   list-style-type: none; }
   .header .navbar li, .header .authbar li {
-    border-right: 1px groove rgba(0, 0, 0, 0.5);
     padding-right: 1em;
     margin: 1em;
     display: inline-block;
@@ -32,9 +31,24 @@ ul {
   .header .navbar .creationLink {
     color: rgba(0, 128, 0, 0.5); }
     .header .navbar .creationLink:hover {
-      color: lime; }
+      color: rgba(0, 128, 0, 0.5); }
 .header .authbar {
-  border: 1px dotted red; }
+  text-align: right; }
+  .header .authbar .authLightOff {
+    height: 15px;
+    z-index: 1;
+    float: right;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid black; }
+  .header .authbar .authLightOn {
+    height: 15px;
+    z-index: 1;
+    float: right;
+    border-radius: 50%;
+    background-color: rgba(0, 128, 0, 0.5);
+    border: 2px solid black;
+    box-shadow: 0 0 25px rgba(0, 128, 0, 0.5); }
 
 form * {
   display: block; }

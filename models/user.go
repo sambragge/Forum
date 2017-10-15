@@ -24,7 +24,6 @@ type User struct {
 	Gender       string          `json:"gender" bson:"gender"`
 	Username     string          `json:"username" bson:"username"`
 	Email        string          `json:"email" bson:"email"`
-	Birthday     time.Time       `json:"birthday" bson:"birthday"`
 	Location     Location        `json:"location" bson:"location"`
 	FollowingIDs []bson.ObjectId `json:"_following" bson:"_following"`
 	Password     string          `json:"password" bson:"password"`
