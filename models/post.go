@@ -87,7 +87,7 @@ func (p *Post) Update(_posts *mgo.Collection) []string {
 		return errors
 	}
 	query := bson.M{"_id": p.ID}
-	change := bson.M{"$set": bson.M{"title": p.Title, "content": p.Content}}
+	change := bson.M{"$set": bson.M{"title": p.Title, "content": p.Content, "_updatedAt": time.Now()}}
 
 	if err := _posts.Update(query, change); err != nil {
 		return []string{"Error updating post", err.Error()}

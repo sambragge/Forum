@@ -556,7 +556,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 var _prodInvariant = __webpack_require__(4);
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var ReactDOMComponentFlags = __webpack_require__(83);
 
 var invariant = __webpack_require__(1);
@@ -1748,6 +1748,65 @@ module.exports = ReactCurrentOwner;
 
 /***/ }),
 /* 16 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__ = __webpack_require__(130);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BrowserRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HashRouter__ = __webpack_require__(133);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "HashRouter", function() { return __WEBPACK_IMPORTED_MODULE_1__HashRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Link__ = __webpack_require__(79);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_2__Link__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__ = __webpack_require__(135);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NavLink__ = __webpack_require__(138);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "NavLink", function() { return __WEBPACK_IMPORTED_MODULE_4__NavLink__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Prompt__ = __webpack_require__(141);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_5__Prompt__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Redirect__ = __webpack_require__(143);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_6__Redirect__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Route__ = __webpack_require__(80);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_7__Route__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(47);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_8__Router__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__StaticRouter__ = __webpack_require__(149);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__StaticRouter__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Switch__ = __webpack_require__(151);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_10__Switch__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__matchPath__ = __webpack_require__(153);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_11__matchPath__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__withRouter__ = __webpack_require__(154);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_12__withRouter__["a"]; });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2004,7 +2063,7 @@ module.exports = ReactUpdates;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2276,66 +2335,258 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__ = __webpack_require__(130);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "BrowserRouter", function() { return __WEBPACK_IMPORTED_MODULE_0__BrowserRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__HashRouter__ = __webpack_require__(133);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "HashRouter", function() { return __WEBPACK_IMPORTED_MODULE_1__HashRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Link__ = __webpack_require__(79);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Link", function() { return __WEBPACK_IMPORTED_MODULE_2__Link__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__ = __webpack_require__(135);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "MemoryRouter", function() { return __WEBPACK_IMPORTED_MODULE_3__MemoryRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__NavLink__ = __webpack_require__(138);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "NavLink", function() { return __WEBPACK_IMPORTED_MODULE_4__NavLink__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__Prompt__ = __webpack_require__(141);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Prompt", function() { return __WEBPACK_IMPORTED_MODULE_5__Prompt__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__Redirect__ = __webpack_require__(143);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Redirect", function() { return __WEBPACK_IMPORTED_MODULE_6__Redirect__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__Route__ = __webpack_require__(80);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Route", function() { return __WEBPACK_IMPORTED_MODULE_7__Route__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__Router__ = __webpack_require__(47);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Router", function() { return __WEBPACK_IMPORTED_MODULE_8__Router__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__StaticRouter__ = __webpack_require__(149);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "StaticRouter", function() { return __WEBPACK_IMPORTED_MODULE_9__StaticRouter__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__Switch__ = __webpack_require__(151);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "Switch", function() { return __WEBPACK_IMPORTED_MODULE_10__Switch__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__matchPath__ = __webpack_require__(153);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "matchPath", function() { return __WEBPACK_IMPORTED_MODULE_11__matchPath__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__withRouter__ = __webpack_require__(154);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "withRouter", function() { return __WEBPACK_IMPORTED_MODULE_12__withRouter__["a"]; });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __webpack_require__(244);
+const _users = "/api-users/", _forums = "/api-forums/", _posts = "/api-posts/", _comments = "/api-comments/", _auth = "/api-auth/";
+exports.api = {
+    // Users
+    login: (creds) => {
+        return axios_1.default
+            .post(_auth, creds)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in login!", err);
+        });
+    },
+    getUsers: () => {
+        return axios_1.default
+            .get(_users)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in getUsers!", err);
+        });
+    },
+    getUser: (id) => {
+        console.log("Getting user with id of: ", id);
+        return axios_1.default
+            .get(_users + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(err);
+        });
+    },
+    createUser: (user) => {
+        return axios_1.default.post(_users, user)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createUser", err);
+        });
+    },
+    updateUserInfo: (updateReq) => {
+        return axios_1.default.post(_users + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updateUserInfo", err);
+        });
+    },
+    deleteUser: (id) => {
+        console.log("== In deleteUser ( util )", id);
+        return axios_1.default.delete(_users + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deleteUser", err);
+        });
+    },
+    followUser: (followRequest) => {
+        console.log("Getting to followUser in util");
+        return axios_1.default.post(_users + 'follow', followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) followUser", err);
+        });
+    },
+    unFollowUser: (followRequest) => {
+        return axios_1.default.post(_users + 'unfollow', followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) unFollowUser", err);
+        });
+    },
+    // Forums
+    getForums: () => {
+        return axios_1.default.get(_forums)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForums", err);
+        });
+    },
+    getForum: (id) => {
+        return axios_1.default.get(_forums + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForum", err);
+        });
+    },
+    updateForum: (updateReq) => {
+        return axios_1.default.post(_forums + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updateForum", err);
+        });
+    },
+    createForum: (forum) => {
+        return axios_1.default.post(_forums, forum)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForum", err);
+        });
+    },
+    deleteForum: (id) => {
+        return axios_1.default.delete(_forums + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("Error deleting Forum", err);
+        });
+    },
+    // Posts
+    getPost: (id) => {
+        return axios_1.default.get(_posts + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getPost", err);
+        });
+    },
+    updatePost: (updateReq) => {
+        return axios_1.default.post(_posts + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updatePost", err);
+        });
+    },
+    getPosts: () => {
+        return axios_1.default.get(_posts)
+            .then(res => res.data)
+            .catch(err => {
+            console.error(new Error("=== Error in (util) getForumPost: " + err));
+        });
+    },
+    deletePost: (id) => {
+        return axios_1.default.delete(_posts + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deletePost", err);
+        });
+    },
+    createPost: (post) => {
+        return axios_1.default.post(_posts, post)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForumPost", err);
+        });
+    },
+    // Comments
+    getComment: (id) => {
+        return axios_1.default.get(_comments + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) getComment", err);
+        });
+    },
+    updateComment: (updateReq) => {
+        return axios_1.default.post(_comments + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) updateComment", err);
+        });
+    },
+    createComment: (comment) => {
+        return axios_1.default.post(_comments, comment)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) createForumComment", err);
+        });
+    },
+    deleteComment: (id) => {
+        return axios_1.default.delete(_comments + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) deleteComment", err);
+        });
+    },
+};
+exports.jwt = {
+    check: () => {
+        const token = localStorage.getItem('token');
+        return token ? true : false;
+    },
+    authenticate: (token) => {
+        return axios_1.default
+            .get("/api-auth/" + token)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== err getting user id from token!", err);
+            return;
+        });
+    },
+    set: (token) => {
+        localStorage.setItem('token', token);
+        return;
+    },
+    get: () => {
+        const token = localStorage.getItem('token');
+        return token;
+    },
+    remove: () => {
+        return new Promise((resolve) => {
+            localStorage.removeItem('token');
+            resolve();
+        });
+    },
+};
+function capitalizeOne(data) {
+    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
+}
+exports.helpers = {
+    inArray: (str, arr) => {
+        for (let i = 0; i < arr.length; i++) {
+            if (str === arr[i]) {
+                return true;
+            }
+        }
+        return false;
+    },
+    capitalize: (data) => {
+        const split = data.split(" ");
+        for (let i in split) {
+            split[i] = capitalizeOne(split[i]);
+        }
+        return split.join(" ");
+    },
+};
+exports.errors = {
+    handle: (errors) => {
+        return new Promise(resolve => {
+            for (let errString of errors) {
+                console.error(new Error(errString));
+            }
+            alert(errors.join("\n"));
+            resolve();
+        });
+    },
+};
 
 
 /***/ }),
-/* 19 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+const Loading = () => {
+    return React.createElement("h1", null, "Loading...");
+};
+exports.default = Loading;
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2548,242 +2799,6 @@ var DOMProperty = {
 
 module.exports = DOMProperty;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __webpack_require__(244);
-const _users = "/api-users/", _forums = "/api-forums/", _posts = "/api-posts/", _comments = "/api-comments/", _auth = "/api-auth/";
-exports.api = {
-    // Users
-    login: (creds) => {
-        return axios_1.default
-            .post(_auth, creds)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in login!", err);
-        });
-    },
-    getUsers: () => {
-        return axios_1.default
-            .get(_users)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in getUsers!", err);
-        });
-    },
-    getUser: (id) => {
-        console.log("Getting user with id of: ", id);
-        return axios_1.default
-            .get(_users + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(err);
-        });
-    },
-    createUser: (user) => {
-        return axios_1.default.post(_users, user)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createUser", err);
-        });
-    },
-    updateUserInfo: (updateReq) => {
-        return axios_1.default.post(_users + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updateUserInfo", err);
-        });
-    },
-    deleteUser: (id) => {
-        console.log("== In deleteUser ( util )", id);
-        return axios_1.default.delete(_users + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deleteUser", err);
-        });
-    },
-    followUser: (followRequest) => {
-        console.log("Getting to followUser in util");
-        return axios_1.default.post(_users + 'follow', followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) followUser", err);
-        });
-    },
-    unFollowUser: (followRequest) => {
-        return axios_1.default.post(_users + 'unfollow', followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) unFollowUser", err);
-        });
-    },
-    // Forums
-    getForums: () => {
-        return axios_1.default.get(_forums)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForums", err);
-        });
-    },
-    getForum: (id) => {
-        return axios_1.default.get(_forums + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForum", err);
-        });
-    },
-    updateForum: (updateReq) => {
-        return axios_1.default.post(_forums + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updateForum", err);
-        });
-    },
-    createForum: (forum) => {
-        return axios_1.default.post(_forums, forum)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForum", err);
-        });
-    },
-    deleteForum: (id) => {
-        return axios_1.default.delete(_forums + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("Error deleting Forum", err);
-        });
-    },
-    // Posts
-    getPost: (id) => {
-        return axios_1.default.get(_posts + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getPost", err);
-        });
-    },
-    updatePost: (updateReq) => {
-        return axios_1.default.post(_posts + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updatePost", err);
-        });
-    },
-    getPosts: () => {
-        return axios_1.default.get(_posts)
-            .then(res => res.data)
-            .catch(err => {
-            console.error(new Error("=== Error in (util) getForumPost: " + err));
-        });
-    },
-    deletePost: (id) => {
-        return axios_1.default.delete(_posts + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deletePost", err);
-        });
-    },
-    createPost: (post) => {
-        return axios_1.default.post(_posts, post)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForumPost", err);
-        });
-    },
-    // Comments
-    createComment: (comment) => {
-        return axios_1.default.post(_comments, comment)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) createForumComment", err);
-        });
-    },
-    deleteComment: (id) => {
-        return axios_1.default.delete(_comments + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) deleteComment", err);
-        });
-    },
-};
-exports.jwt = {
-    check: () => {
-        const token = localStorage.getItem('token');
-        return token ? true : false;
-    },
-    authenticate: (token) => {
-        return axios_1.default
-            .get("/api-auth/" + token)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== err getting user id from token!", err);
-            return;
-        });
-    },
-    set: (token) => {
-        localStorage.setItem('token', token);
-        return;
-    },
-    get: () => {
-        const token = localStorage.getItem('token');
-        return token;
-    },
-    remove: () => {
-        return new Promise((resolve) => {
-            localStorage.removeItem('token');
-            resolve();
-        });
-    },
-};
-function capitalizeOne(data) {
-    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
-}
-exports.helpers = {
-    inArray: (str, arr) => {
-        for (let i = 0; i < arr.length; i++) {
-            if (str === arr[i]) {
-                return true;
-            }
-        }
-        return false;
-    },
-    capitalize: (data) => {
-        const split = data.split(" ");
-        for (let i in split) {
-            split[i] = capitalizeOne(split[i]);
-        }
-        return split.join(" ");
-    },
-};
-exports.errors = {
-    handle: (errors) => {
-        for (let errString of errors) {
-            console.error(new Error(errString));
-        }
-        alert(errors.join("\n"));
-    },
-};
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-class Loading extends React.Component {
-    render() {
-        return (React.createElement("h1", null, "Loading..."));
-    }
-}
-exports.default = Loading;
-
 
 /***/ }),
 /* 22 */
@@ -4302,7 +4317,7 @@ module.exports = EventPluginHub;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 var getEventTarget = __webpack_require__(53);
 
@@ -7383,7 +7398,7 @@ var _prodInvariant = __webpack_require__(4);
 var ReactCurrentOwner = __webpack_require__(15);
 var ReactInstanceMap = __webpack_require__(33);
 var ReactInstrumentation = __webpack_require__(12);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -10656,7 +10671,7 @@ module.exports = CSSProperty;
 
 
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactInstrumentation = __webpack_require__(12);
 
@@ -10923,7 +10938,7 @@ var _assign = __webpack_require__(5);
 
 var LinkedValueUtils = __webpack_require__(59);
 var ReactDOMComponentTree = __webpack_require__(6);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var warning = __webpack_require__(2);
 
@@ -11855,7 +11870,7 @@ module.exports = getActiveElement;
 var _prodInvariant = __webpack_require__(4);
 
 var DOMLazyTree = __webpack_require__(27);
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var React = __webpack_require__(24);
 var ReactBrowserEventEmitter = __webpack_require__(42);
 var ReactCurrentOwner = __webpack_require__(15);
@@ -11868,7 +11883,7 @@ var ReactInstrumentation = __webpack_require__(12);
 var ReactMarkupChecksum = __webpack_require__(235);
 var ReactReconciler = __webpack_require__(26);
 var ReactUpdateQueue = __webpack_require__(64);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var emptyObject = __webpack_require__(35);
 var instantiateReactComponent = __webpack_require__(98);
@@ -12691,15 +12706,13 @@ module.exports = Cancel;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
+const react_router_dom_1 = __webpack_require__(16);
 class Post extends React.Component {
     constructor(props) {
         super(props);
     }
     // Lifecycle
-    componentDidMount() {
-        console.log("Post Mounted: ", this);
-    }
+    componentDidMount() { }
     // Private Methods
     handleParentClick(e) {
         console.log("in handleParentClick with this.props.data.parent.topic as: ", this.props.data.parent.topic);
@@ -12756,7 +12769,7 @@ module.exports = __webpack_require__(115);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
+const react_router_dom_1 = __webpack_require__(16);
 const react_dom_1 = __webpack_require__(157);
 const app_1 = __webpack_require__(243);
 __webpack_require__(279);
@@ -17841,7 +17854,7 @@ var ReactDOMComponentTree = __webpack_require__(6);
 var ReactDefaultInjection = __webpack_require__(159);
 var ReactMount = __webpack_require__(106);
 var ReactReconciler = __webpack_require__(26);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 var ReactVersion = __webpack_require__(237);
 
 var findDOMNode = __webpack_require__(238);
@@ -18611,7 +18624,7 @@ module.exports = FallbackCompositionState;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 /**
  * @interface Event
@@ -18652,7 +18665,7 @@ module.exports = SyntheticCompositionEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 /**
  * @interface Event
@@ -18698,8 +18711,8 @@ var EventPluginHub = __webpack_require__(31);
 var EventPropagators = __webpack_require__(30);
 var ExecutionEnvironment = __webpack_require__(7);
 var ReactDOMComponentTree = __webpack_require__(6);
-var ReactUpdates = __webpack_require__(16);
-var SyntheticEvent = __webpack_require__(17);
+var ReactUpdates = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 var inputValueTracking = __webpack_require__(89);
 var getEventTarget = __webpack_require__(53);
@@ -19854,7 +19867,7 @@ module.exports = EnterLeaveEventPlugin;
 
 
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 
 var MUST_USE_PROPERTY = DOMProperty.injection.MUST_USE_PROPERTY;
 var HAS_BOOLEAN_VALUE = DOMProperty.injection.HAS_BOOLEAN_VALUE;
@@ -20551,7 +20564,7 @@ var AutoFocusUtils = __webpack_require__(183);
 var CSSPropertyOperations = __webpack_require__(184);
 var DOMLazyTree = __webpack_require__(27);
 var DOMNamespaces = __webpack_require__(57);
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var DOMPropertyOperations = __webpack_require__(95);
 var EventPluginHub = __webpack_require__(31);
 var EventPluginRegistry = __webpack_require__(37);
@@ -22272,7 +22285,7 @@ var _prodInvariant = __webpack_require__(4),
 var DOMPropertyOperations = __webpack_require__(95);
 var LinkedValueUtils = __webpack_require__(59);
 var ReactDOMComponentTree = __webpack_require__(6);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -22692,7 +22705,7 @@ var _prodInvariant = __webpack_require__(4),
 
 var LinkedValueUtils = __webpack_require__(59);
 var ReactDOMComponentTree = __webpack_require__(6);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var invariant = __webpack_require__(1);
 var warning = __webpack_require__(2);
@@ -25291,7 +25304,7 @@ module.exports = ReactDOMTextComponent;
 
 var _assign = __webpack_require__(5);
 
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 var Transaction = __webpack_require__(38);
 
 var emptyFunction = __webpack_require__(10);
@@ -25368,7 +25381,7 @@ var EventListener = __webpack_require__(103);
 var ExecutionEnvironment = __webpack_require__(7);
 var PooledClass = __webpack_require__(23);
 var ReactDOMComponentTree = __webpack_require__(6);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var getEventTarget = __webpack_require__(53);
 var getUnboundedScrollPosition = __webpack_require__(213);
@@ -25566,14 +25579,14 @@ module.exports = getUnboundedScrollPosition;
 
 
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var EventPluginHub = __webpack_require__(31);
 var EventPluginUtils = __webpack_require__(51);
 var ReactComponentEnvironment = __webpack_require__(60);
 var ReactEmptyComponent = __webpack_require__(100);
 var ReactBrowserEventEmitter = __webpack_require__(42);
 var ReactHostComponent = __webpack_require__(101);
-var ReactUpdates = __webpack_require__(16);
+var ReactUpdates = __webpack_require__(17);
 
 var ReactInjection = {
   Component: ReactComponentEnvironment.injection,
@@ -26501,7 +26514,7 @@ var EventPropagators = __webpack_require__(30);
 var ExecutionEnvironment = __webpack_require__(7);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactInputSelection = __webpack_require__(104);
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 var getActiveElement = __webpack_require__(105);
 var isTextInputElement = __webpack_require__(90);
@@ -26698,7 +26711,7 @@ var EventPropagators = __webpack_require__(30);
 var ReactDOMComponentTree = __webpack_require__(6);
 var SyntheticAnimationEvent = __webpack_require__(224);
 var SyntheticClipboardEvent = __webpack_require__(225);
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 var SyntheticFocusEvent = __webpack_require__(226);
 var SyntheticKeyboardEvent = __webpack_require__(227);
 var SyntheticMouseEvent = __webpack_require__(39);
@@ -26922,7 +26935,7 @@ module.exports = SimpleEventPlugin;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 /**
  * @interface Event
@@ -26966,7 +26979,7 @@ module.exports = SyntheticAnimationEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 /**
  * @interface Event
@@ -27347,7 +27360,7 @@ module.exports = SyntheticTouchEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(17);
+var SyntheticEvent = __webpack_require__(18);
 
 /**
  * @interface Event
@@ -27720,7 +27733,7 @@ module.exports = ReactMount.renderSubtreeIntoContainer;
 
 
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var EventPluginRegistry = __webpack_require__(37);
 var ReactComponentTreeHook = __webpack_require__(9);
 
@@ -27887,7 +27900,7 @@ module.exports = ReactDOMNullInputValuePropHook;
 
 
 
-var DOMProperty = __webpack_require__(19);
+var DOMProperty = __webpack_require__(21);
 var ReactComponentTreeHook = __webpack_require__(9);
 
 var warning = __webpack_require__(2);
@@ -27977,23 +27990,22 @@ module.exports = ReactDOMInvalidARIAHook;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
-const util_1 = __webpack_require__(20);
+const react_router_dom_1 = __webpack_require__(16);
+const util_1 = __webpack_require__(19);
 const header_1 = __webpack_require__(263);
-const loading_1 = __webpack_require__(21);
+const loading_1 = __webpack_require__(20);
 // Pages
 const home_page_1 = __webpack_require__(266);
 const forum_page_1 = __webpack_require__(267);
 const post_page_1 = __webpack_require__(268);
-const blog_page_1 = __webpack_require__(270);
-const about_page_1 = __webpack_require__(271);
-const login_page_1 = __webpack_require__(272);
-const register_page_1 = __webpack_require__(273);
-const profile_page_1 = __webpack_require__(274);
-const user_edit_page_1 = __webpack_require__(276);
-const forum_edit_page_1 = __webpack_require__(277);
-const forum_create_page_1 = __webpack_require__(278);
-const post_edit_page_1 = __webpack_require__(285);
+const login_page_1 = __webpack_require__(270);
+const register_page_1 = __webpack_require__(271);
+const profile_page_1 = __webpack_require__(272);
+const user_edit_page_1 = __webpack_require__(274);
+const forum_edit_page_1 = __webpack_require__(275);
+const forum_create_page_1 = __webpack_require__(276);
+const post_edit_page_1 = __webpack_require__(277);
+const comment_edit_page_1 = __webpack_require__(278);
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -28193,11 +28205,10 @@ class App extends React.Component {
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/user/:id/edit", component: (props) => React.createElement(user_edit_page_1.default, Object.assign({}, props, userEditPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:id/edit", component: (props) => React.createElement(forum_edit_page_1.default, Object.assign({}, props, ForumEditPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/post/:id/edit", component: (props) => React.createElement(post_edit_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { path: "/comment/:id/edit", component: (props) => React.createElement(comment_edit_page_1.default, Object.assign({}, props)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forum/:topic", component: (props) => React.createElement(forum_page_1.default, Object.assign({}, props, forumPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forums/create", component: (props) => React.createElement(forum_create_page_1.default, Object.assign({}, props, createForumPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/post/:id", component: (props) => React.createElement(post_page_1.default, Object.assign({}, props, postPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { exact: true, path: "/blog", component: blog_page_1.default }),
-                React.createElement(react_router_dom_1.Route, { exact: true, path: "/about", component: about_page_1.default }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/login", component: (props) => React.createElement(login_page_1.default, Object.assign({}, props, loginPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/profile/:id", component: (props) => React.createElement(profile_page_1.default, Object.assign({}, props, profilePageProps)) }))));
@@ -29124,8 +29135,8 @@ exports.default = Header;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
-const loading_1 = __webpack_require__(21);
+const react_router_dom_1 = __webpack_require__(16);
+const loading_1 = __webpack_require__(20);
 class Navbar extends React.Component {
     main() {
         let forums = this.props.forums.map((forum, i) => {
@@ -29157,7 +29168,7 @@ exports.default = Navbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
+const react_router_dom_1 = __webpack_require__(16);
 class Authbar extends React.Component {
     loggedOutView() {
         return (React.createElement("ul", { className: "authbar four columns" },
@@ -29195,9 +29206,9 @@ exports.default = Authbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(19);
 const post_1 = __webpack_require__(113);
-const loading_1 = __webpack_require__(21);
+const loading_1 = __webpack_require__(20);
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -29269,9 +29280,9 @@ exports.default = HomePage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
-const react_router_dom_1 = __webpack_require__(18);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(19);
+const react_router_dom_1 = __webpack_require__(16);
+const loading_1 = __webpack_require__(20);
 const post_1 = __webpack_require__(113);
 class ForumPage extends React.Component {
     constructor(props) {
@@ -29403,9 +29414,9 @@ exports.default = ForumPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
-const util_1 = __webpack_require__(20);
-const loading_1 = __webpack_require__(21);
+const react_router_dom_1 = __webpack_require__(16);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
 const comment_1 = __webpack_require__(269);
 class ForumPostPage extends React.Component {
     constructor(props) {
@@ -29421,10 +29432,8 @@ class ForumPostPage extends React.Component {
         this.getPost();
     }
     getPost() {
-        console.log("getting post with id of : ", this.props.match.params.id);
         util_1.api.getPost(this.props.match.params.id)
             .then(res => {
-            console.log(res);
             if (res.success) {
                 this.setState(() => ({ data: res.payload }));
             }
@@ -29510,60 +29519,22 @@ exports.default = ForumPostPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-class ForumComment extends React.Component {
-    render() {
-        const x = this.props.data;
-        return (React.createElement("div", { className: this.props.className },
-            React.createElement("ul", null,
-                React.createElement("li", null, x.content),
-                React.createElement("li", null,
-                    "By: ",
-                    x.creator.username)),
-            this.props.editable && this.edit()));
-    }
-    edit() {
-        return React.createElement("a", { className: "edit", href: "#" }, "Edit");
-    }
-}
-exports.default = ForumComment;
+const react_router_dom_1 = __webpack_require__(16);
+const Comment = (props) => {
+    return (React.createElement("div", { className: props.className },
+        React.createElement("ul", null,
+            React.createElement("li", null, props.data.content),
+            React.createElement("li", null,
+                "By: ",
+                props.data.creator.username)),
+        props.editable &&
+            React.createElement(react_router_dom_1.Link, { className: "edit", to: "/comment/" + props.data._id + "/edit" }, "Edit Comment")));
+};
+exports.default = Comment;
 
 
 /***/ }),
 /* 270 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-class BlogPage extends React.Component {
-    render() {
-        return (React.createElement("div", { className: "blogPage" },
-            React.createElement("h1", null, "BlogPage Working!")));
-    }
-}
-exports.default = BlogPage;
-
-
-/***/ }),
-/* 271 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-class AboutPage extends React.Component {
-    render() {
-        return (React.createElement("div", { className: "aboutPage" },
-            React.createElement("h1", null, "AboutUsPage Working!")));
-    }
-}
-exports.default = AboutPage;
-
-
-/***/ }),
-/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29599,14 +29570,14 @@ exports.default = LoginPage;
 
 
 /***/ }),
-/* 273 */
+/* 271 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(19);
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29667,17 +29638,17 @@ exports.default = RegisterPage;
 
 
 /***/ }),
-/* 274 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
-const util_1 = __webpack_require__(20);
-const loading_1 = __webpack_require__(21);
-const user_1 = __webpack_require__(275);
+const react_router_dom_1 = __webpack_require__(16);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
+const user_1 = __webpack_require__(273);
 const defaultAvatarMale = "https://i.imgur.com/Z80mud6.jpg", defaultAvatarFemale = "https://i.imgur.com/ZzdPYbE.jpg";
 class ProfilePage extends React.Component {
     constructor(props) {
@@ -29821,14 +29792,14 @@ exports.default = ProfilePage;
 
 
 /***/ }),
-/* 275 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const react_router_dom_1 = __webpack_require__(18);
+const react_router_dom_1 = __webpack_require__(16);
 class User extends React.Component {
     render() {
         const x = this.props.data;
@@ -29852,15 +29823,15 @@ exports.default = react_router_dom_1.withRouter(User);
 
 
 /***/ }),
-/* 276 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
 class UserEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29980,15 +29951,15 @@ exports.default = UserEditPage;
 
 
 /***/ }),
-/* 277 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
-const loading_1 = __webpack_require__(21);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
 class ForumEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30079,7 +30050,7 @@ exports.default = ForumEditPage;
 
 
 /***/ }),
-/* 278 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30121,6 +30092,237 @@ class ForumCreatePage extends React.Component {
     }
 }
 exports.default = ForumCreatePage;
+
+
+/***/ }),
+/* 277 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
+class PostEditPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: null,
+            inputs: {
+                title: "",
+                content: "",
+            }
+        };
+        this.bindActions();
+    }
+    componentDidMount() {
+        this.getPost().then((success) => {
+            success && this.initializeInputs();
+        });
+        console.log("PostEditPage Mounted : ", this);
+    }
+    bindActions() {
+        this.getPost = this.getPost.bind(this);
+        this.goBack = this.goBack.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
+        this.delete = this.delete.bind(this);
+    }
+    initializeInputs() {
+        const inputs = this.state.inputs;
+        inputs.title = this.state.data.title;
+        inputs.content = this.state.data.content;
+        this.setState(() => ({ inputs: inputs }));
+    }
+    getPost() {
+        return new Promise((resolve) => {
+            util_1.api.getPost(this.props.match.params.id)
+                .then(res => {
+                res.success ?
+                    this.setState(() => ({ data: res.payload })) : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    goBack() {
+        this.props.history.goBack();
+    }
+    updateInfo() {
+        return new Promise((resolve) => {
+            util_1.api.updatePost(Object.assign({}, this.state.inputs, { _id: this.state.data._id }))
+                .then(res => {
+                res.success ?
+                    this.goBack() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    delete() {
+        return new Promise((resolve) => {
+            util_1.api.deletePost(this.state.data._id)
+                .then(res => {
+                res.success ?
+                    this.props.history.push("/") : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    header() {
+        return (React.createElement("div", { className: "pageHeader row" },
+            React.createElement("ul", null,
+                React.createElement("li", null,
+                    React.createElement("button", { onClick: this.goBack }, "Cancel")),
+                React.createElement("li", null,
+                    React.createElement("button", { onClick: this.handleDelete.bind(this) }, "Delete")))));
+    }
+    handleInputChange(e) {
+        const inputs = this.state.inputs;
+        inputs[e.target.name] = e.target.value;
+        this.setState(() => ({ inputs: inputs }));
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        const confirmation = confirm("Are you sure you want to save these changes?");
+        confirmation && this.updateInfo();
+    }
+    handleDelete(e) {
+        const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
+        confirmation && this.delete();
+    }
+    updateForm() {
+        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
+            React.createElement("input", { onChange: this.handleInputChange.bind(this), type: "text", name: "title", placeholder: "post title...", value: this.state.inputs.title }),
+            React.createElement("textarea", { onChange: this.handleInputChange.bind(this), name: "content", placeholder: "post content...", value: this.state.inputs.content }),
+            React.createElement("input", { type: "submit", value: "update post" })));
+    }
+    main() {
+        return (React.createElement("div", { className: "postEditPage" },
+            this.header(),
+            this.updateForm()));
+    }
+    render() {
+        return this.state.data ? this.main() : React.createElement(loading_1.default, null);
+    }
+}
+exports.default = PostEditPage;
+
+
+/***/ }),
+/* 278 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+class CommentEditPage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: null,
+            inputs: {
+                content: "",
+            }
+        };
+        // this.bindActions();
+    }
+    componentDidMount() {
+        // this.getComment().then(success=>{
+        //     success && this.initializeInputs();
+        // });
+        console.log("COMMENT EDIT PAGE MOUNTED! : ", this);
+    }
+    // private bindActions(): void {
+    //     console.log("=== binding actions ===");
+    //     this.getComment = this.getComment.bind(this);
+    //     this.goBack = this.goBack.bind(this);
+    //     this.updateInfo = this.updateInfo.bind(this);
+    //     this.delete = this.delete.bind(this);
+    // }
+    // private initializeInputs():void{
+    //     console.log("=== initializing inputs ===");
+    //     const inputs:any = this.state.inputs;
+    //     inputs.content = this.state.data.content
+    //     this.setState(()=>({inputs:inputs}));
+    // }
+    // private getComment():Promise<boolean>{
+    //     console.log("=== getting comment ===");
+    //     return new Promise(resolve=>{
+    //         api.getComment(this.props.match.params.id)
+    //         .then(res=>{
+    //             res.success ?
+    //             this.setState(()=>({data:res.payload})):errors.handle(res.payload);
+    //             resolve(res.success);
+    //         });
+    //     });
+    // }
+    // private goBack():void{
+    //     this.props.history.goBack();
+    // }
+    // private updateInfo():Promise<boolean>{
+    //     return new Promise((resolve)=>{
+    //         api.updatePost({
+    //             ...this.state.inputs,
+    //             _id:this.state.data._id,
+    //         })
+    //         .then(res=>{
+    //             res.success ?
+    //             this.goBack():errors.handle(res.payload);
+    //             resolve(res.success)
+    //         });
+    //     });
+    // }
+    // private delete():Promise<boolean>{
+    //     return new Promise((resolve)=>{
+    //         api.deleteComment(this.state.data._id)
+    //         .then(res=>{
+    //             res.success ?
+    //             this.props.history.push("/"):errors.handle(res.payload);
+    //             resolve(res.success);
+    //         });
+    //     });
+    // }
+    // private header():JSX.Element{
+    //     return(
+    //         <div className="pageHeader row">
+    //             <ul>
+    //                 <li><button onClick={this.goBack} >Cancel</button></li>
+    //                 <li><button onClick={this.handleDelete.bind(this)} >Delete</button></li>
+    //             </ul>
+    //         </div>
+    //     );
+    // }
+    // private handleInputChange(e:any):void{
+    //     const inputs:any = this.state.inputs;
+    //     inputs[e.target.name] = e.target.value;
+    //     this.setState(()=>({inputs:inputs}));
+    // }
+    // private handleSubmit(e:Event):void{
+    //     e.preventDefault();
+    //     const confirmation = confirm("Are you sure you want to save these changes?");
+    //     confirmation && this.updateInfo();
+    // }
+    // private handleDelete(e:Event):void{
+    //     const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
+    //     confirmation && this.delete();
+    // }
+    // private updateForm():JSX.Element{
+    //     return(
+    //         <form onSubmit={this.handleSubmit.bind(this)} >
+    //             <textarea onChange={this.handleInputChange.bind(this)} name="content" value={this.state.inputs.content}/>
+    //             <input type="submit" value="update comment"/>
+    //         </form>
+    //     );
+    // }
+    main() {
+        return (React.createElement("div", { className: "commentEditPage" },
+            React.createElement("h1", null, "Testing")));
+    }
+    render() {
+        return this.main();
+    }
+}
+exports.default = CommentEditPage;
 
 
 /***/ }),
@@ -30662,119 +30864,6 @@ module.exports = function (css) {
 	// send back the fixed css
 	return fixedCss;
 };
-
-
-/***/ }),
-/* 285 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-const util_1 = __webpack_require__(20);
-const loading_1 = __webpack_require__(21);
-class PostEditPage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: null,
-            inputs: {
-                title: "",
-                content: "",
-            }
-        };
-        this.bindActions();
-    }
-    componentDidMount() {
-        this.getPost().then((success) => {
-            success && this.initializeInputs();
-        });
-        console.log("PostEditPage Mounted : ", this);
-    }
-    bindActions() {
-        this.getPost = this.getPost.bind(this);
-        this.goBack = this.goBack.bind(this);
-        this.updateInfo = this.updateInfo.bind(this);
-        this.delete = this.delete.bind(this);
-    }
-    initializeInputs() {
-        const inputs = this.state.inputs;
-        inputs.title = this.state.data.title;
-        inputs.content = this.state.data.content;
-        this.setState(() => ({ inputs: inputs }));
-    }
-    getPost() {
-        return new Promise((resolve) => {
-            util_1.api.getPost(this.props.match.params.id)
-                .then(res => {
-                res.success ?
-                    this.setState(() => ({ data: res.payload })) : util_1.errors.handle(res.payload);
-                resolve(res.success);
-            });
-        });
-    }
-    goBack() {
-        this.props.history.goBack();
-    }
-    updateInfo() {
-        return new Promise((resolve) => {
-            util_1.api.updatePost(Object.assign({}, this.state.inputs, { _id: this.state.data._id }))
-                .then(res => {
-                res.success ?
-                    this.goBack() : util_1.errors.handle(res.payload);
-                resolve(res.success);
-            });
-        });
-    }
-    delete() {
-        return new Promise((resolve) => {
-            util_1.api.deletePost(this.state.data._id)
-                .then(res => {
-                res.success ?
-                    this.props.history.push("/") : util_1.errors.handle(res.payload);
-                resolve(res.success);
-            });
-        });
-    }
-    header() {
-        return (React.createElement("div", { className: "pageHeader row" },
-            React.createElement("ul", null,
-                React.createElement("li", null,
-                    React.createElement("button", { onClick: this.goBack }, "Cancel")),
-                React.createElement("li", null,
-                    React.createElement("button", { onClick: this.handleDelete.bind(this) }, "Delete")))));
-    }
-    handleInputChange(e) {
-        const inputs = this.state.inputs;
-        inputs[e.target.name] = e.target.value;
-        this.setState(() => ({ inputs: inputs }));
-    }
-    handleSubmit(e) {
-        e.preventDefault();
-        const confirmation = confirm("Are you sure you want to save these changes?");
-        confirmation && this.updateInfo();
-    }
-    handleDelete(e) {
-        const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
-        confirmation && this.delete();
-    }
-    updateForm() {
-        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
-            React.createElement("input", { onChange: this.handleInputChange.bind(this), type: "text", name: "title", placeholder: "post title...", value: this.state.inputs.title }),
-            React.createElement("textarea", { onChange: this.handleInputChange.bind(this), name: "content", placeholder: "post content...", value: this.state.inputs.content }),
-            React.createElement("input", { type: "submit", value: "update post" })));
-    }
-    main() {
-        return (React.createElement("div", { className: "postEditPage" },
-            this.header(),
-            this.updateForm()));
-    }
-    render() {
-        return this.state.data ? this.main() : React.createElement(loading_1.default, null);
-    }
-}
-exports.default = PostEditPage;
 
 
 /***/ })

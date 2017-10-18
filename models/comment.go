@@ -40,6 +40,18 @@ func (c *Comment) Populate(_users *mgo.Collection) {
 	}
 }
 
+func (c *Comment) Update(_comments *mgo.Collection) []string {
+	if errors := c.validate(); errors != nil {
+		return errors
+	}
+	query := bson.M{"_id": c.ID}
+	change := bson.M{"$set": bson.M{"content": c.Content, "_updatedAt": time.Now()}}
+	if err := _comments.Update(query, change); err != nil {
+		return []string{"Error updating comment", err.Error()}
+	}
+	return nil
+}
+
 // Validate : the pre save validation process
 func (c *Comment) validate() []string {
 	errors := make([]string, 0)

@@ -259,4 +259,8 @@ export interface IUpdatePostRequest {
     title:string,
     content:string,
 }
+export interface IUpdateCommentRequest {
+    _id:string,
+    content:string,
+}
 

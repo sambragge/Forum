@@ -1,9 +1,7 @@
 import * as React from 'react';
 
-export default class Loading extends React.Component<{}, {}> {
-    public render(){
-        return(
-            <h1>Loading...</h1>
-        );
-    }
+const Loading = () => {
+    return  <h1>Loading...</h1>;
 }
+
+export default Loading;

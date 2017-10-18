@@ -48,8 +48,10 @@ func Router(_users *controllers.UserController, _forums *controllers.ForumContro
 	r.Methods(post).Path("/api-posts/update").HandlerFunc(_forums.UpdatePost)
 
 	// Comments
+	r.Methods(get).Path("/api-comments/{id}").HandlerFunc(_forums.GetComment)
 	r.Methods(post).Path("/api-comments/").HandlerFunc(_forums.CreateComment)
 	r.Methods(delete).Path("/api-comments/{id}").HandlerFunc(_forums.DeleteComment)
+	r.Methods(post).Path("/api-comments/update").HandlerFunc(_forums.UpdateComment)
 
 	// Auth
 	r.Methods(post).Path("/api-auth/").HandlerFunc(_auth.Login)

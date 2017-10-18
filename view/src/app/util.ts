@@ -10,6 +10,7 @@ import {
     IUpdateUserInfoRequest,
     IUpdateForumRequest,
     IUpdatePostRequest,
+    IUpdateCommentRequest
 } from './interfaces';
 
 const _users = "/api-users/",
@@ -160,6 +161,23 @@ export const api = {
     },
 
     // Comments
+
+    getComment:(id:string):Promise<IStandardResponse>=>{
+        return axios.get(_comments + id)
+        .then(res=>res.data)
+        .catch(err => {
+            console.log(" === Error in (util) getComment", err);
+        });
+    },
+
+    updateComment:(updateReq:IUpdateCommentRequest):Promise<IStandardResponse>=>{
+        return axios.post(_comments + 'update', updateReq)
+        .then(res=>res.data)
+        .catch(err => {
+            console.log(" === Error in (util) updateComment", err);
+        });
+    },
+
     createComment: (comment: IComment): Promise<IStandardResponse> => {
         return axios.post(_comments, comment)
             .then(res => res.data)
@@ -233,11 +251,14 @@ export const helpers = {
 }
 
 export const errors = {
-    handle: (errors: string[]) => {
-        for (let errString of errors) {
-            console.error(new Error(errString));
-        }
-        alert(errors.join("\n"));
+    handle: (errors: string[]):Promise<void> => {
+        return new Promise(resolve=>{
+            for (let errString of errors) {
+                console.error(new Error(errString));
+            }
+            alert(errors.join("\n"));
+            resolve();
+        });
     },
 }
 

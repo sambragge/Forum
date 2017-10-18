@@ -1,22 +1,20 @@
 import * as React from 'react';
 import { ICommentProps } from '../interfaces';
+import { Link } from 'react-router-dom';
 
 
-export default class ForumComment extends React.Component<ICommentProps, {}> {
-    public render():JSX.Element{
-        const x = this.props.data;
-        return(
-            <div className={this.props.className}>
-                <ul>
-                    <li>{x.content}</li>
-                    <li>By: {x.creator.username}</li>
-                </ul>
-                {this.props.editable && this.edit()}
-            </div>
-        );
-    }
+const Comment:React.SFC<ICommentProps> = (props) => {
+    return(
+        <div className={props.className}>
+            <ul>
+                <li>{props.data.content}</li>
+                <li>By: {props.data.creator.username}</li>
+            </ul>
+            {props.editable && 
+            <Link className="edit" to={"/comment/"+props.data._id+"/edit"}>Edit Comment</Link>}
+        </div>
+    );
 
-    private edit():JSX.Element{
-        return <a className="edit" href="#">Edit</a>;
-    }
 }
+
+export default Comment;

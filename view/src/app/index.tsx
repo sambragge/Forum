@@ -20,8 +20,6 @@ import Loading from './components/loading';
 import HomePage from './components/pages/home_page';
 import ForumPage from './components/pages/forum_page';
 import PostPage from './components/pages/post_page';
-import BlogPage from './components/pages/blog_page';
-import AboutPage from './components/pages/about_page';
 import LoginPage from './components/pages/login_page';
 import RegisterPage from './components/pages/register_page';
 import ProfilePage from './components/pages/profile_page';
@@ -29,6 +27,7 @@ import UserEditPage from './components/pages/user_edit_page';
 import ForumEditPage from './components/pages/forum_edit_page';
 import ForumCreatePage from './components/pages/forum_create_page';
 import PostEditPage from './components/pages/post_edit_page';
+import CommentEditPage from './components/pages/comment_edit_page';
 
 class App extends React.Component<any, IAppState> {
 
@@ -256,6 +255,9 @@ class App extends React.Component<any, IAppState> {
                         exact path="/post/:id/edit"
                         component={(props) => <PostEditPage {...props} />} />
                     <Route
+                        path="/comment/:id/edit"
+                        component={(props) => <CommentEditPage {...props} />} />
+                    <Route
                         exact path="/forum/:topic"
                         component={(props) => <ForumPage {...props} {...forumPageProps} />} />
                     <Route
@@ -264,12 +266,6 @@ class App extends React.Component<any, IAppState> {
                     <Route
                         exact path="/post/:id"
                         component={(props) => <PostPage {...props} {...postPageProps} />} />
-                    <Route
-                        exact path="/blog"
-                        component={BlogPage} />
-                    <Route
-                        exact path="/about"
-                        component={AboutPage} />
                     <Route
                         exact path="/login"
                         component={(props) => <LoginPage {...props} {...loginPageProps} />} />

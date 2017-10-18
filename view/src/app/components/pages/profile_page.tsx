@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as FormData from 'form-data';
 import { IProfilePageProps, IProfilePageState } from '../../interfaces';
 import { Link } from 'react-router-dom';
 import { api, helpers, errors } from '../../util';

@@ -22,11 +22,8 @@ export default class ForumPostPage extends React.Component<IPostPageProps, IPost
     }
 
     private getPost(): void {
-        console.log("getting post with id of : ", this.props.match.params.id);
         api.getPost(this.props.match.params.id)
-            .then(res => {
-                console.log(res);
-                
+            .then(res => {                
                 if(res.success){
                     this.setState(() => ({ data: res.payload }))
                 }else{

@@ -178,6 +178,26 @@ func (fc *ForumController) decodeComment(body io.Reader) *models.Comment {
 	return &comment
 }
 
+func (fc *ForumController) GetComment(w http.ResponseWriter, r *http.Request) {
+	comment := &models.Comment{
+		ID: bson.ObjectIdHex(mux.Vars(r)["id"]),
+	}
+	if err := comment.Sync(fc.comments); err != nil {
+		SendAsJSON(w, false, []string{"Error getting comment", err.Error()})
+		return
+	}
+	comment.Populate(fc.users)
+	SendAsJSON(w, true, comment)
+}
+func (fc *ForumController) UpdateComment(w http.ResponseWriter, r *http.Request) {
+	comment := fc.decodeComment(r.Body)
+	if errors := comment.Update(fc.comments); errors != nil {
+		SendAsJSON(w, false, errors)
+		return
+	}
+	SendAsJSON(w, true, comment.ID)
+}
+
 // CreateComment : creates a new comment
 func (fc *ForumController) CreateComment(w http.ResponseWriter, r *http.Request) {
 	comment := fc.decodeComment(r.Body)
