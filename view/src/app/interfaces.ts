@@ -62,6 +62,7 @@ export interface IRegisterPageState {
 }
 export interface IRegisterPageProps {
     history?:any,
+    login:Function,
 }
 
 // ForumsPage

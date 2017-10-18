@@ -85,7 +85,10 @@ export default class RegisterPage extends React.Component<IRegisterPageProps, IR
                 password:this.state.password,
                 confirmPassword:this.state.confirmPassword,
             }).then(res=>{
-                res.success ? this.props.history.push("/"):errors.handle(res.payload);
+                res.success ? this.props.login({
+                    email:this.state.email,
+                    password:this.state.password,
+                }):errors.handle(res.payload);
                 resolve(res.payload);
             });
         });

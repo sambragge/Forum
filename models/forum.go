@@ -98,7 +98,9 @@ func (f *Forum) validate(_forums *mgo.Collection) []string {
 	}
 	var existingForum *Forum
 	if err := _forums.Find(bson.M{"topic": f.Topic}).One(&existingForum); err == nil {
-		errors = append(errors, "A forum with that topic already exists, try posting there.")
+		if f.ID != existingForum.ID {
+			errors = append(errors, "A forum with that topic already exists, try posting there.")
+		}
 	}
 	if match := topicRegex.Match([]byte(f.Topic)); match {
 		errors = append(errors, "Topic may not contain whitespace, please use '-' or '_' instead. How did you even get back here?")

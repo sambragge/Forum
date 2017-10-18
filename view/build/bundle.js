@@ -12708,11 +12708,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(16);
 class Post extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-    // Lifecycle
-    componentDidMount() { }
     // Private Methods
     handleParentClick(e) {
         console.log("in handleParentClick with this.props.data.parent.topic as: ", this.props.data.parent.topic);
@@ -28181,6 +28176,9 @@ class App extends React.Component {
         const profilePageProps = {
             user: this.state.user,
         };
+        const registerPageProps = {
+            login: this.login,
+        };
         const userEditPageProps = {
             logout: this.logout,
         };
@@ -28210,7 +28208,7 @@ class App extends React.Component {
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/forums/create", component: (props) => React.createElement(forum_create_page_1.default, Object.assign({}, props, createForumPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/post/:id", component: (props) => React.createElement(post_page_1.default, Object.assign({}, props, postPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/login", component: (props) => React.createElement(login_page_1.default, Object.assign({}, props, loginPageProps)) }),
-                React.createElement(react_router_dom_1.Route, { exact: true, path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props)) }),
+                React.createElement(react_router_dom_1.Route, { exact: true, path: "/register", component: (props) => React.createElement(register_page_1.default, Object.assign({}, props, registerPageProps)) }),
                 React.createElement(react_router_dom_1.Route, { exact: true, path: "/profile/:id", component: (props) => React.createElement(profile_page_1.default, Object.assign({}, props, profilePageProps)) }))));
     }
     render() {
@@ -29361,7 +29359,7 @@ class ForumPage extends React.Component {
         return (React.createElement("div", { className: "pageHeader row" },
             React.createElement("input", { onChange: this.handleFilterChange.bind(this), name: "filter", type: "text", placeholder: "Search..." }),
             this.props.user && this.isMyForum() && // Show the edit button if user is logged in and the creator of this forum
-                React.createElement(react_router_dom_1.Link, { to: '/forum/' + this.state.data.topic + '/edit' }, "Edit")));
+                React.createElement(react_router_dom_1.Link, { to: '/forum/' + this.state.data.topic + '/edit' }, "Edit Forum")));
     }
     postCreationForm() {
         return (React.createElement("form", { id: "postCreationForm", onSubmit: this.handleSubmit.bind(this), className: "postCreationForm" },
@@ -29610,7 +29608,10 @@ class RegisterPage extends React.Component {
                 password: this.state.password,
                 confirmPassword: this.state.confirmPassword,
             }).then(res => {
-                res.success ? this.props.history.push("/") : util_1.errors.handle(res.payload);
+                res.success ? this.props.login({
+                    email: this.state.email,
+                    password: this.state.password,
+                }) : util_1.errors.handle(res.payload);
                 resolve(res.payload);
             });
         });
@@ -30021,7 +30022,7 @@ class ForumEditPage extends React.Component {
                 React.createElement("li", null,
                     React.createElement("button", { onClick: this.goBack.bind(this) }, "Cancel")),
                 React.createElement("li", null,
-                    React.createElement("button", { onClick: this.handleDelete.bind(this), disabled: this.state.updateDisabled }, "Delete Forum")))));
+                    React.createElement("button", { onClick: this.handleDelete.bind(this) }, "Delete Forum")))));
     }
     content() {
         return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this), className: "updateForm" },
@@ -30215,6 +30216,8 @@ exports.default = PostEditPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
+const util_1 = __webpack_require__(19);
+const loading_1 = __webpack_require__(20);
 class CommentEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30224,102 +30227,95 @@ class CommentEditPage extends React.Component {
                 content: "",
             }
         };
-        // this.bindActions();
+        this.bindActions();
     }
     componentDidMount() {
-        // this.getComment().then(success=>{
-        //     success && this.initializeInputs();
-        // });
+        this.getComment().then(success => {
+            success && this.initializeInputs();
+        });
         console.log("COMMENT EDIT PAGE MOUNTED! : ", this);
     }
-    // private bindActions(): void {
-    //     console.log("=== binding actions ===");
-    //     this.getComment = this.getComment.bind(this);
-    //     this.goBack = this.goBack.bind(this);
-    //     this.updateInfo = this.updateInfo.bind(this);
-    //     this.delete = this.delete.bind(this);
-    // }
-    // private initializeInputs():void{
-    //     console.log("=== initializing inputs ===");
-    //     const inputs:any = this.state.inputs;
-    //     inputs.content = this.state.data.content
-    //     this.setState(()=>({inputs:inputs}));
-    // }
-    // private getComment():Promise<boolean>{
-    //     console.log("=== getting comment ===");
-    //     return new Promise(resolve=>{
-    //         api.getComment(this.props.match.params.id)
-    //         .then(res=>{
-    //             res.success ?
-    //             this.setState(()=>({data:res.payload})):errors.handle(res.payload);
-    //             resolve(res.success);
-    //         });
-    //     });
-    // }
-    // private goBack():void{
-    //     this.props.history.goBack();
-    // }
-    // private updateInfo():Promise<boolean>{
-    //     return new Promise((resolve)=>{
-    //         api.updatePost({
-    //             ...this.state.inputs,
-    //             _id:this.state.data._id,
-    //         })
-    //         .then(res=>{
-    //             res.success ?
-    //             this.goBack():errors.handle(res.payload);
-    //             resolve(res.success)
-    //         });
-    //     });
-    // }
-    // private delete():Promise<boolean>{
-    //     return new Promise((resolve)=>{
-    //         api.deleteComment(this.state.data._id)
-    //         .then(res=>{
-    //             res.success ?
-    //             this.props.history.push("/"):errors.handle(res.payload);
-    //             resolve(res.success);
-    //         });
-    //     });
-    // }
-    // private header():JSX.Element{
-    //     return(
-    //         <div className="pageHeader row">
-    //             <ul>
-    //                 <li><button onClick={this.goBack} >Cancel</button></li>
-    //                 <li><button onClick={this.handleDelete.bind(this)} >Delete</button></li>
-    //             </ul>
-    //         </div>
-    //     );
-    // }
-    // private handleInputChange(e:any):void{
-    //     const inputs:any = this.state.inputs;
-    //     inputs[e.target.name] = e.target.value;
-    //     this.setState(()=>({inputs:inputs}));
-    // }
-    // private handleSubmit(e:Event):void{
-    //     e.preventDefault();
-    //     const confirmation = confirm("Are you sure you want to save these changes?");
-    //     confirmation && this.updateInfo();
-    // }
-    // private handleDelete(e:Event):void{
-    //     const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
-    //     confirmation && this.delete();
-    // }
-    // private updateForm():JSX.Element{
-    //     return(
-    //         <form onSubmit={this.handleSubmit.bind(this)} >
-    //             <textarea onChange={this.handleInputChange.bind(this)} name="content" value={this.state.inputs.content}/>
-    //             <input type="submit" value="update comment"/>
-    //         </form>
-    //     );
-    // }
+    bindActions() {
+        console.log("=== binding actions ===");
+        this.getComment = this.getComment.bind(this);
+        this.goBack = this.goBack.bind(this);
+        this.updateInfo = this.updateInfo.bind(this);
+        this.delete = this.delete.bind(this);
+    }
+    initializeInputs() {
+        console.log("=== initializing inputs ===");
+        const inputs = this.state.inputs;
+        inputs.content = this.state.data.content;
+        this.setState(() => ({ inputs: inputs }));
+    }
+    getComment() {
+        console.log("=== getting comment ===");
+        return new Promise(resolve => {
+            util_1.api.getComment(this.props.match.params.id)
+                .then(res => {
+                res.success ?
+                    this.setState(() => ({ data: res.payload })) : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    goBack() {
+        this.props.history.goBack();
+    }
+    updateInfo() {
+        return new Promise((resolve) => {
+            util_1.api.updateComment(Object.assign({}, this.state.inputs, { _id: this.state.data._id }))
+                .then(res => {
+                res.success ?
+                    this.goBack() : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    delete() {
+        return new Promise((resolve) => {
+            util_1.api.deleteComment(this.state.data._id)
+                .then(res => {
+                res.success ?
+                    this.props.history.push("/") : util_1.errors.handle(res.payload);
+                resolve(res.success);
+            });
+        });
+    }
+    header() {
+        return (React.createElement("div", { className: "pageHeader row" },
+            React.createElement("ul", null,
+                React.createElement("li", null,
+                    React.createElement("button", { onClick: this.goBack }, "Cancel")),
+                React.createElement("li", null,
+                    React.createElement("button", { onClick: this.handleDelete.bind(this) }, "Delete")))));
+    }
+    handleInputChange(e) {
+        const inputs = this.state.inputs;
+        inputs[e.target.name] = e.target.value;
+        this.setState(() => ({ inputs: inputs }));
+    }
+    handleSubmit(e) {
+        e.preventDefault();
+        const confirmation = confirm("Are you sure you want to save these changes?");
+        confirmation && this.updateInfo();
+    }
+    handleDelete(e) {
+        const confirmation = confirm("Are you sure you want to delete this post? This will also delete any comments associated with it.");
+        confirmation && this.delete();
+    }
+    updateForm() {
+        return (React.createElement("form", { onSubmit: this.handleSubmit.bind(this) },
+            React.createElement("textarea", { onChange: this.handleInputChange.bind(this), name: "content", value: this.state.inputs.content }),
+            React.createElement("input", { type: "submit", value: "update comment" })));
+    }
     main() {
         return (React.createElement("div", { className: "commentEditPage" },
-            React.createElement("h1", null, "Testing")));
+            this.header(),
+            this.updateForm()));
     }
     render() {
-        return this.main();
+        return this.state.data ? this.main() : React.createElement(loading_1.default, null);
     }
 }
 exports.default = CommentEditPage;

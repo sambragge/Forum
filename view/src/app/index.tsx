@@ -220,6 +220,9 @@ class App extends React.Component<any, IAppState> {
         const profilePageProps = {
             user: this.state.user,
         }
+        const registerPageProps = {
+            login:this.login,
+        }
         const userEditPageProps = {
             logout: this.logout,
         }
@@ -271,7 +274,7 @@ class App extends React.Component<any, IAppState> {
                         component={(props) => <LoginPage {...props} {...loginPageProps} />} />
                     <Route
                         exact path="/register"
-                        component={(props) => <RegisterPage {...props} />} />
+                        component={(props) => <RegisterPage {...props} {...registerPageProps} />} />
                     <Route
                         exact path="/profile/:id"
                         component={(props) => <ProfilePage {...props} {...profilePageProps} />} />

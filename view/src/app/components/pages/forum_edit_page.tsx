@@ -81,7 +81,7 @@ export default class ForumEditPage extends React.Component<IForumEditPageProps, 
             <div className="pageHeader row">
                 <ul>
                     <li><button onClick={this.goBack.bind(this)}>Cancel</button></li>
-                    <li><button onClick={this.handleDelete.bind(this)} disabled={this.state.updateDisabled} >Delete Forum</button></li>
+                    <li><button onClick={this.handleDelete.bind(this)} >Delete Forum</button></li>
                 </ul>
             </div>
         );

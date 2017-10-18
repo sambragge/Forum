@@ -94,7 +94,7 @@ export default class ForumPage extends React.Component<IForumPageProps, IForumPa
             <div className="pageHeader row">
                 <input onChange={this.handleFilterChange.bind(this)} name="filter" type="text" placeholder="Search..."/>
                 {this.props.user && this.isMyForum() && // Show the edit button if user is logged in and the creator of this forum
-                <Link to={'/forum/'+this.state.data.topic+'/edit'}>Edit</Link>}
+                <Link to={'/forum/'+this.state.data.topic+'/edit'}>Edit Forum</Link>}
             </div>
         );
     }

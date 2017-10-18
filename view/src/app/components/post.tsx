@@ -4,14 +4,6 @@ import { withRouter } from 'react-router-dom';
 
 class Post extends React.Component<IPostProps, any> {
 
-    constructor(props: IPostProps) {
-        super(props);
-
-    }
-
-    // Lifecycle
-    componentDidMount() { }
-
     // Private Methods
 
     private handleParentClick(e: Event): void {
