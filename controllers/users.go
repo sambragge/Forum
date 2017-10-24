@@ -84,7 +84,7 @@ func (uc *UserController) UpdateInfo(w http.ResponseWriter, r *http.Request) {
 		SendAsJSON(w, false, []string{"Error updating users personal info: ", err.Error()})
 		return
 	}
-	SendAsJSON(w, true, user.ID)
+	SendAsJSON(w, true, nil)
 }
 
 // Delete : deletes a user

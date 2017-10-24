@@ -124,7 +124,7 @@ export default class ProfilePage extends React.Component<IProfilePageProps, IPro
             <div className={className}>
                 <h3>~Following~</h3>
                 <ul>
-                    {users ? users : <li>No Following Anyone...</li>}
+                    {users ? users : <li>Not Following Anyone...</li>}
                 </ul>
             </div>
         );

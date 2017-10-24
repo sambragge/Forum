@@ -2067,6 +2067,257 @@ module.exports = ReactUpdates;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __webpack_require__(244);
+const _users = "/api-users/", _forums = "/api-forums/", _posts = "/api-posts/", _comments = "/api-comments/", _auth = "/api-auth/";
+exports.api = {
+    // Users
+    login: (creds) => {
+        return axios_1.default
+            .post(_auth, creds)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in login!", err);
+        });
+    },
+    getUsers: () => {
+        return axios_1.default
+            .get(_users)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("=== err in getUsers!", err);
+        });
+    },
+    getUser: (id) => {
+        console.log("Getting user with id of: ", id);
+        return axios_1.default
+            .get(_users + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(err);
+        });
+    },
+    createUser: (user) => {
+        return axios_1.default.post(_users, user)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createUser", err);
+        });
+    },
+    updateUserInfo: (updateReq) => {
+        return axios_1.default.post(_users + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updateUserInfo", err);
+        });
+    },
+    deleteUser: (id) => {
+        console.log("== In deleteUser ( util )", id);
+        return axios_1.default.delete(_users + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deleteUser", err);
+        });
+    },
+    followUser: (followRequest) => {
+        console.log("Getting to followUser in util");
+        return axios_1.default.post(_users + 'follow', followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) followUser", err);
+        });
+    },
+    unFollowUser: (followRequest) => {
+        return axios_1.default.post(_users + 'unfollow', followRequest)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) unFollowUser", err);
+        });
+    },
+    // Forums
+    getForums: () => {
+        return axios_1.default.get(_forums)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForums", err);
+        });
+    },
+    getForum: (id) => {
+        return axios_1.default.get(_forums + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getForum", err);
+        });
+    },
+    updateForum: (updateReq) => {
+        return axios_1.default.post(_forums + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updateForum", err);
+        });
+    },
+    createForum: (forum) => {
+        return axios_1.default.post(_forums, forum)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForum", err);
+        });
+    },
+    deleteForum: (id) => {
+        return axios_1.default.delete(_forums + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log("Error deleting Forum", err);
+        });
+    },
+    // Posts
+    getPost: (id) => {
+        return axios_1.default.get(_posts + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) getPost", err);
+        });
+    },
+    updatePost: (updateReq) => {
+        return axios_1.default.post(_posts + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) updatePost", err);
+        });
+    },
+    getPosts: () => {
+        return axios_1.default.get(_posts)
+            .then(res => res.data)
+            .catch(err => {
+            console.error(new Error("=== Error in (util) getForumPost: " + err));
+        });
+    },
+    deletePost: (id) => {
+        return axios_1.default.delete(_posts + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) deletePost", err);
+        });
+    },
+    createPost: (post) => {
+        return axios_1.default.post(_posts, post)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== Error in (util) createForumPost", err);
+        });
+    },
+    // Comments
+    getComment: (id) => {
+        return axios_1.default.get(_comments + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) getComment", err);
+        });
+    },
+    updateComment: (updateReq) => {
+        return axios_1.default.post(_comments + 'update', updateReq)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) updateComment", err);
+        });
+    },
+    createComment: (comment) => {
+        return axios_1.default.post(_comments, comment)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) createForumComment", err);
+        });
+    },
+    deleteComment: (id) => {
+        return axios_1.default.delete(_comments + id)
+            .then(res => res.data)
+            .catch(err => {
+            console.log(" === Error in (util) deleteComment", err);
+        });
+    },
+};
+exports.jwt = {
+    check: () => {
+        const token = localStorage.getItem('token');
+        return token ? true : false;
+    },
+    authenticate: (token) => {
+        return axios_1.default
+            .get("/api-auth/" + token)
+            .then(res => res.data)
+            .catch(err => {
+            console.error("=== err getting user id from token!", err);
+            return;
+        });
+    },
+    set: (token) => {
+        localStorage.setItem('token', token);
+        return;
+    },
+    get: () => {
+        const token = localStorage.getItem('token');
+        return token;
+    },
+    remove: () => {
+        return new Promise((resolve) => {
+            localStorage.removeItem('token');
+            resolve();
+        });
+    },
+};
+function capitalizeOne(data) {
+    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
+}
+exports.helpers = {
+    inArray: (str, arr) => {
+        for (let i = 0; i < arr.length; i++) {
+            if (str === arr[i]) {
+                return true;
+            }
+        }
+        return false;
+    },
+    capitalize: (data) => {
+        const split = data.split(" ");
+        for (let i in split) {
+            split[i] = capitalizeOne(split[i]);
+        }
+        return split.join(" ");
+    },
+};
+exports.errors = {
+    handle: (errors) => {
+        return new Promise(resolve => {
+            for (let errString of errors) {
+                console.error(new Error(errString));
+            }
+            alert(errors.join("\n"));
+            resolve();
+        });
+    },
+};
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const React = __webpack_require__(3);
+const Loading = () => {
+    return React.createElement("h1", null, "Loading...");
+};
+exports.default = Loading;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/**
  * Copyright 2013-present, Facebook, Inc.
  * All rights reserved.
@@ -2333,257 +2584,6 @@ function getPooledWarningPropertyDefinition(propName, getVal) {
   }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const axios_1 = __webpack_require__(244);
-const _users = "/api-users/", _forums = "/api-forums/", _posts = "/api-posts/", _comments = "/api-comments/", _auth = "/api-auth/";
-exports.api = {
-    // Users
-    login: (creds) => {
-        return axios_1.default
-            .post(_auth, creds)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in login!", err);
-        });
-    },
-    getUsers: () => {
-        return axios_1.default
-            .get(_users)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("=== err in getUsers!", err);
-        });
-    },
-    getUser: (id) => {
-        console.log("Getting user with id of: ", id);
-        return axios_1.default
-            .get(_users + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(err);
-        });
-    },
-    createUser: (user) => {
-        return axios_1.default.post(_users, user)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createUser", err);
-        });
-    },
-    updateUserInfo: (updateReq) => {
-        return axios_1.default.post(_users + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updateUserInfo", err);
-        });
-    },
-    deleteUser: (id) => {
-        console.log("== In deleteUser ( util )", id);
-        return axios_1.default.delete(_users + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deleteUser", err);
-        });
-    },
-    followUser: (followRequest) => {
-        console.log("Getting to followUser in util");
-        return axios_1.default.post(_users + 'follow', followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) followUser", err);
-        });
-    },
-    unFollowUser: (followRequest) => {
-        return axios_1.default.post(_users + 'unfollow', followRequest)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) unFollowUser", err);
-        });
-    },
-    // Forums
-    getForums: () => {
-        return axios_1.default.get(_forums)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForums", err);
-        });
-    },
-    getForum: (id) => {
-        return axios_1.default.get(_forums + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getForum", err);
-        });
-    },
-    updateForum: (updateReq) => {
-        return axios_1.default.post(_forums + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updateForum", err);
-        });
-    },
-    createForum: (forum) => {
-        return axios_1.default.post(_forums, forum)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForum", err);
-        });
-    },
-    deleteForum: (id) => {
-        return axios_1.default.delete(_forums + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log("Error deleting Forum", err);
-        });
-    },
-    // Posts
-    getPost: (id) => {
-        return axios_1.default.get(_posts + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) getPost", err);
-        });
-    },
-    updatePost: (updateReq) => {
-        return axios_1.default.post(_posts + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) updatePost", err);
-        });
-    },
-    getPosts: () => {
-        return axios_1.default.get(_posts)
-            .then(res => res.data)
-            .catch(err => {
-            console.error(new Error("=== Error in (util) getForumPost: " + err));
-        });
-    },
-    deletePost: (id) => {
-        return axios_1.default.delete(_posts + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) deletePost", err);
-        });
-    },
-    createPost: (post) => {
-        return axios_1.default.post(_posts, post)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== Error in (util) createForumPost", err);
-        });
-    },
-    // Comments
-    getComment: (id) => {
-        return axios_1.default.get(_comments + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) getComment", err);
-        });
-    },
-    updateComment: (updateReq) => {
-        return axios_1.default.post(_comments + 'update', updateReq)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) updateComment", err);
-        });
-    },
-    createComment: (comment) => {
-        return axios_1.default.post(_comments, comment)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) createForumComment", err);
-        });
-    },
-    deleteComment: (id) => {
-        return axios_1.default.delete(_comments + id)
-            .then(res => res.data)
-            .catch(err => {
-            console.log(" === Error in (util) deleteComment", err);
-        });
-    },
-};
-exports.jwt = {
-    check: () => {
-        const token = localStorage.getItem('token');
-        return token ? true : false;
-    },
-    authenticate: (token) => {
-        return axios_1.default
-            .get("/api-auth/" + token)
-            .then(res => res.data)
-            .catch(err => {
-            console.error("=== err getting user id from token!", err);
-            return;
-        });
-    },
-    set: (token) => {
-        localStorage.setItem('token', token);
-        return;
-    },
-    get: () => {
-        const token = localStorage.getItem('token');
-        return token;
-    },
-    remove: () => {
-        return new Promise((resolve) => {
-            localStorage.removeItem('token');
-            resolve();
-        });
-    },
-};
-function capitalizeOne(data) {
-    return data.charAt(0).toUpperCase() + data.slice(1).toLowerCase();
-}
-exports.helpers = {
-    inArray: (str, arr) => {
-        for (let i = 0; i < arr.length; i++) {
-            if (str === arr[i]) {
-                return true;
-            }
-        }
-        return false;
-    },
-    capitalize: (data) => {
-        const split = data.split(" ");
-        for (let i in split) {
-            split[i] = capitalizeOne(split[i]);
-        }
-        return split.join(" ");
-    },
-};
-exports.errors = {
-    handle: (errors) => {
-        return new Promise(resolve => {
-            for (let errString of errors) {
-                console.error(new Error(errString));
-            }
-            alert(errors.join("\n"));
-            resolve();
-        });
-    },
-};
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-const React = __webpack_require__(3);
-const Loading = () => {
-    return React.createElement("h1", null, "Loading...");
-};
-exports.default = Loading;
-
 
 /***/ }),
 /* 21 */
@@ -4317,7 +4317,7 @@ module.exports = EventPluginHub;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 var getEventTarget = __webpack_require__(53);
 
@@ -18619,7 +18619,7 @@ module.exports = FallbackCompositionState;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 /**
  * @interface Event
@@ -18660,7 +18660,7 @@ module.exports = SyntheticCompositionEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 /**
  * @interface Event
@@ -18707,7 +18707,7 @@ var EventPropagators = __webpack_require__(30);
 var ExecutionEnvironment = __webpack_require__(7);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactUpdates = __webpack_require__(17);
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 var inputValueTracking = __webpack_require__(89);
 var getEventTarget = __webpack_require__(53);
@@ -26509,7 +26509,7 @@ var EventPropagators = __webpack_require__(30);
 var ExecutionEnvironment = __webpack_require__(7);
 var ReactDOMComponentTree = __webpack_require__(6);
 var ReactInputSelection = __webpack_require__(104);
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 var getActiveElement = __webpack_require__(105);
 var isTextInputElement = __webpack_require__(90);
@@ -26706,7 +26706,7 @@ var EventPropagators = __webpack_require__(30);
 var ReactDOMComponentTree = __webpack_require__(6);
 var SyntheticAnimationEvent = __webpack_require__(224);
 var SyntheticClipboardEvent = __webpack_require__(225);
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 var SyntheticFocusEvent = __webpack_require__(226);
 var SyntheticKeyboardEvent = __webpack_require__(227);
 var SyntheticMouseEvent = __webpack_require__(39);
@@ -26930,7 +26930,7 @@ module.exports = SimpleEventPlugin;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 /**
  * @interface Event
@@ -26974,7 +26974,7 @@ module.exports = SyntheticAnimationEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 /**
  * @interface Event
@@ -27355,7 +27355,7 @@ module.exports = SyntheticTouchEvent;
 
 
 
-var SyntheticEvent = __webpack_require__(18);
+var SyntheticEvent = __webpack_require__(20);
 
 /**
  * @interface Event
@@ -27986,9 +27986,9 @@ module.exports = ReactDOMInvalidARIAHook;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(16);
-const util_1 = __webpack_require__(19);
+const util_1 = __webpack_require__(18);
 const header_1 = __webpack_require__(263);
-const loading_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(19);
 // Pages
 const home_page_1 = __webpack_require__(266);
 const forum_page_1 = __webpack_require__(267);
@@ -29134,7 +29134,7 @@ exports.default = Header;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(16);
-const loading_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(19);
 class Navbar extends React.Component {
     main() {
         let forums = this.props.forums.map((forum, i) => {
@@ -29204,9 +29204,9 @@ exports.default = Authbar;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
+const util_1 = __webpack_require__(18);
 const post_1 = __webpack_require__(113);
-const loading_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(19);
 class HomePage extends React.Component {
     constructor(props) {
         super(props);
@@ -29278,9 +29278,9 @@ exports.default = HomePage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
+const util_1 = __webpack_require__(18);
 const react_router_dom_1 = __webpack_require__(16);
-const loading_1 = __webpack_require__(20);
+const loading_1 = __webpack_require__(19);
 const post_1 = __webpack_require__(113);
 class ForumPage extends React.Component {
     constructor(props) {
@@ -29413,8 +29413,8 @@ exports.default = ForumPage;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(16);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 const comment_1 = __webpack_require__(269);
 class ForumPostPage extends React.Component {
     constructor(props) {
@@ -29575,7 +29575,7 @@ exports.default = LoginPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
+const util_1 = __webpack_require__(18);
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29647,8 +29647,8 @@ exports.default = RegisterPage;
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
 const react_router_dom_1 = __webpack_require__(16);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 const user_1 = __webpack_require__(273);
 const defaultAvatarMale = "https://i.imgur.com/Z80mud6.jpg", defaultAvatarFemale = "https://i.imgur.com/ZzdPYbE.jpg";
 class ProfilePage extends React.Component {
@@ -29755,7 +29755,7 @@ class ProfilePage extends React.Component {
         }
         return (React.createElement("div", { className: className },
             React.createElement("h3", null, "~Following~"),
-            React.createElement("ul", null, users ? users : React.createElement("li", null, "No Following Anyone..."))));
+            React.createElement("ul", null, users ? users : React.createElement("li", null, "Not Following Anyone..."))));
     }
     edit() {
         const id = this.state.data._id;
@@ -29831,8 +29831,8 @@ exports.default = react_router_dom_1.withRouter(User);
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 class UserEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -29959,8 +29959,8 @@ exports.default = UserEditPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 class ForumEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30103,8 +30103,8 @@ exports.default = ForumCreatePage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 class PostEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30216,8 +30216,8 @@ exports.default = PostEditPage;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __webpack_require__(3);
-const util_1 = __webpack_require__(19);
-const loading_1 = __webpack_require__(20);
+const util_1 = __webpack_require__(18);
+const loading_1 = __webpack_require__(19);
 class CommentEditPage extends React.Component {
     constructor(props) {
         super(props);
@@ -30362,7 +30362,7 @@ exports.i(__webpack_require__(281), "");
 exports.i(__webpack_require__(282), "");
 
 // module
-exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.header .navbar, .header .authbar {\n  list-style-type: none; }\n  .header .navbar li, .header .authbar li {\n    padding-right: 1em;\n    margin: 1em;\n    display: inline-block;\n    cursor: pointer; }\n    .header .navbar li a, .header .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .header .navbar li a:hover, .header .authbar li a:hover {\n        color: deepskyblue; }\n    .header .navbar li .activePage, .header .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n.header .navbar {\n  white-space: nowrap;\n  overflow-x: scroll; }\n  .header .navbar .creationLink {\n    color: rgba(0, 128, 0, 0.5); }\n    .header .navbar .creationLink:hover {\n      color: rgba(0, 128, 0, 0.5); }\n.header .authbar {\n  text-align: right; }\n  .header .authbar .authLightOff {\n    height: 15px;\n    z-index: 1;\n    float: right;\n    border-radius: 50%;\n    background-color: rgba(0, 0, 0, 0.5);\n    border: 2px solid black; }\n  .header .authbar .authLightOn {\n    height: 15px;\n    z-index: 1;\n    float: right;\n    border-radius: 50%;\n    background-color: rgba(0, 128, 0, 0.5);\n    border: 2px solid black;\n    box-shadow: 0 0 25px rgba(0, 128, 0, 0.5); }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardPost {\n  padding: 5px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardPost .itemLink {\n    cursor: pointer; }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center; }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%;\n      padding: 1%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          height: 100%;\n          box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);\n          overflow-y: scroll; }\n", ""]);
+exports.push([module.i, ".flexrow {\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: space-around; }\n\nul {\n  list-style-type: none; }\n  ul li {\n    margin: 0; }\n\n.header .navbar, .header .authbar {\n  list-style-type: none; }\n  .header .navbar li, .header .authbar li {\n    padding-right: 1em;\n    margin: 1em;\n    display: inline-block;\n    cursor: pointer; }\n    .header .navbar li a, .header .authbar li a {\n      text-decoration: none;\n      color: blue; }\n      .header .navbar li a:hover, .header .authbar li a:hover {\n        color: deepskyblue; }\n    .header .navbar li .activePage, .header .authbar li .activePage {\n      font-weight: bold;\n      color: deepskyblue; }\n.header .navbar {\n  white-space: nowrap;\n  overflow-x: scroll; }\n  .header .navbar .creationLink {\n    color: rgba(0, 128, 0, 0.5); }\n    .header .navbar .creationLink:hover {\n      color: rgba(0, 128, 0, 0.5); }\n.header .authbar {\n  text-align: right; }\n  .header .authbar .authLightOff {\n    height: 15px;\n    z-index: 1;\n    float: right;\n    border-radius: 50%;\n    background-color: rgba(0, 0, 0, 0.5);\n    border: 2px solid black; }\n  .header .authbar .authLightOn {\n    height: 15px;\n    z-index: 1;\n    float: right;\n    border-radius: 50%;\n    background-color: rgba(0, 128, 0, 0.5);\n    border: 2px solid black;\n    box-shadow: 0 0 25px rgba(0, 128, 0, 0.5); }\n\nform * {\n  display: block; }\nform textarea {\n  width: 100%;\n  resize: vertical; }\n\n.button-danger {\n  color: red;\n  background-color: rgba(255, 255, 255, 0.5);\n  border: 1px solid red; }\n  .button-danger:hover {\n    color: rgba(255, 255, 255, 0.5);\n    background-color: red;\n    border: 1px solid rgba(0, 0, 0, 0.5); }\n\n.standardForum {\n  cursor: pointer;\n  text-align: center;\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardForum:hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.standardPost {\n  padding: 5px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardPost .itemLink {\n    cursor: pointer; }\n\n.standardForumComment {\n  padding: 10px;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5);\n  text-align: center; }\n\n.standardUser {\n  cursor: pointer;\n  padding: 10px;\n  text-align: center;\n  border-bottom: 1px ridge rgba(0, 0, 0, 0.5); }\n  .standardUser:Hover {\n    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); }\n\n.edit {\n  text-decoration: none;\n  color: deepskyblue; }\n\n.app {\n  height: 100vh; }\n  .app .pageHeader {\n    border-bottom: 1px groove rgba(0, 0, 0, 0.5);\n    margin-bottom: 2%; }\n  .app .itemContent {\n    text-align: center; }\n  .app .homePage, .app .forumsPage, .app .forumPage, .app .forumPostPage, .app .profilePage {\n    padding: 1%; }\n  .app .profilePage {\n    height: 100%; }\n    .app .profilePage .avatar {\n      display: inline-block;\n      height: 250px;\n      width: 250px;\n      padding: 5px; }\n      .app .profilePage .avatar img {\n        height: 100%;\n        width: 100%; }\n    .app .profilePage .info {\n      display: inline-block; }\n    .app .profilePage .connections {\n      height: 50%; }\n      .app .profilePage .connections .connectionBox {\n        height: 100%; }\n        .app .profilePage .connections .connectionBox ul {\n          padding: 10px;\n          height: 100%;\n          overflow-y: scroll; }\n          .app .profilePage .connections .connectionBox ul border {\n            top: 1px solid rgba(0, 0, 0, 0.5);\n            right: 1px solid rgba(0, 0, 0, 0.5); }\n", ""]);
 
 // exports
 

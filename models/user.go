@@ -1,9 +1,11 @@
 package models
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"regexp"
+	"strings"
 	"time"
 
 	"golang.org/x/crypto/bcrypt"
@@ -58,8 +60,29 @@ func (u *User) Populate(_users *mgo.Collection) {
 
 }
 
+func (u *User) validateUpdateInfo() []string {
+	errors := make([]string, 0)
+	if u.Location.City == "" {
+		errors = append(errors, "City is required!")
+	}
+	if u.Location.State == "" {
+		errors = append(errors, "State is required!")
+	}
+	if u.Username == "" {
+		errors = append(errors, "Username is required!")
+	}
+	if len(errors) > 0 {
+		return errors
+	}
+	return nil
+
+}
+
 // UpdateInfo : update users firstName, lastName, location
 func (u *User) UpdateInfo(_users *mgo.Collection) error {
+	if errs := u.validateUpdateInfo(); errs != nil {
+		return errors.New(strings.Join(errs, ", "))
+	}
 	query := bson.M{"_id": u.ID}
 	change := bson.M{"$set": bson.M{"username": u.Username, "location": u.Location, "_updatedAt": time.Now()}}
 	err := _users.Update(query, change)
